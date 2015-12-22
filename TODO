@@ -1,0 +1,10 @@
+
+* core:
+    * separate hierarchies: childs vs. frames
+    * rethink message routing to su-widgets
+
+* window-widget:
+    * window decorations and buttons
+
+* misc widgets:
+    * pixmap button
