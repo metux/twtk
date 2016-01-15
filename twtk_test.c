@@ -11,6 +11,7 @@
 #include <twtk/widgets/movebox.h>
 #include <twtk-private/debug-widget.h>
 
+
 static void _create_position(twtk_widget_t* parent)
 {
     return twtk_widget_add_child_unref(
@@ -18,11 +19,6 @@ static void _create_position(twtk_widget_t* parent)
         twtk_movebox_widget_create(twtk_position_widget_create(100, 100)),
         "position"
     );
-}
-
-static twtk_widget_t *_create_pattern()
-{
-    return twtk_pattern_widget_create(400, 400, 100, 100);
 }
 
 static twtk_widget_t *_create_red_box()
@@ -58,7 +54,6 @@ static twtk_widget_t *_create_text_1()
     twtk_widget_set_border_color(widget, TWTK_COLOR_BLACK);
     twtk_widget_set_border_width(widget, 1);
     twtk_widget_set_background_color(widget, TWTK_COLOR_YELLOW);
-    twtk_widget_rotate(widget, 23);
     return widget;
 }
 
@@ -83,7 +78,6 @@ static twtk_widget_t *_create_image_lara()
 static twtk_widget_t *_create_image_black()
 {
     twtk_widget_t *widget = twtk_image_widget_create("resources/002.jpg", 50, 50, 0, 0);
-    twtk_widget_rotate (widget, 45);
     return widget;
 }
 
@@ -99,7 +93,6 @@ static twtk_widget_t *_create_box2()
 static twtk_widget_t *_create_win()
 {
     twtk_widget_t *img = twtk_image_widget_create("resources/002.jpg", 30, 30, 0, 0);
-    twtk_widget_rotate(img, 45);
 
     twtk_widget_t *win = twtk_window_widget_create(1000, 400, 200, 200);
     twtk_widget_set_background_color(win, TWTK_COLOR_BLACK);
@@ -126,7 +119,6 @@ static void _init_boxes()
     twtk_widget_add_child_unref(root, _create_box2(),        "box2");
     twtk_widget_add_child_unref(root, _create_debug(),       "debug");
     twtk_widget_add_child_unref(root, _create_win(),         "win");
-    twtk_widget_add_child_unref(root, _create_pattern(),     "pattern");
 
     _create_position(root);
 }
