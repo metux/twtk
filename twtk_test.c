@@ -121,7 +121,6 @@ static void _init_boxes()
     twtk_widget_add_child_unref(root, _create_position(),    "position");
     twtk_widget_add_child_unref(root, _create_debug(),       "debug");
     twtk_widget_add_child_unref(root, _create_win(),         "win");
-    twtk_widget_add_child_unref(root, _create_pattern(),     "pattern");
 }
 
 int main(void)
