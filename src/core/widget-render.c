@@ -20,8 +20,121 @@
 #include <twtk-private/debug-widget.h>
 #include <twtk-private/cairo_util.h>
 
-static void _widget_prepare_frame(twtk_widget_t *widget, cairo_t *cr)
+static inline const char *_widget_name(twtk_widget_t *widget)
 {
+    return (widget ? widget->name : "<NULL>");
+}
+
+static inline const char *_widget_parent_name(twtk_widget_t* widget)
+{
+    if (widget == NULL)
+	return "<NULL>";
+
+    if (widget->parent == NULL)
+	return "<ROOT>";
+
+    return widget->parent->name;
+}
+
+/* clip-out a single frame */
+static void _widget_clip_frame(
+    twtk_widget_t *parent,
+    twtk_widget_t *frame,
+    cairo_t *cr)
+{
+	/* first sub-path: the whole area */
+	cairo_new_sub_path(cr);
+	cairo_rectangle(cr, 0, 0, parent->viewport.size.x, parent->viewport.size.y);
+	cairo_close_path(cr);
+
+	/* second sub-path: the neighbor widget area */
+	cairo_new_sub_path(cr);
+	cairo_matrix_t w_matrix = _twtk_widget_calc_matrix(parent);
+	cairo_set_matrix(cr, &w_matrix);
+	cairo_rectangle(cr,
+	    frame->viewport.pos.x,
+	    frame->viewport.pos.y,
+	    frame->viewport.size.x,
+	    frame->viewport.size.y);
+	cairo_close_path(cr);
+
+	/* set the clip */
+	cairo_clip(cr);
+}
+
+/* clip-out all sub-windows */
+static void _widget_clip_subs(
+    twtk_widget_t *widget /* NOTNULL */,
+    cairo_t *cr)
+{
+    assert(widget);
+    assert(cr);
+
+    cairo_matrix_t save_matrix;
+    cairo_get_matrix(cr, &save_matrix);
+
+    cairo_fill_rule_t save_rule = cairo_get_fill_rule(cr);
+    cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+
+    twtk_widget_list_entry_t *walk;
+    for (walk = widget->frames.first; (walk != NULL); walk = walk->prev)
+    {
+	_DEBUG("clipping out sub %s from %s",
+	    _widget_name(walk->widget),
+	    _widget_name(widget));
+
+	_widget_clip_frame(widget, walk->widget, cr);
+    }
+
+    /* restore old settings */
+    cairo_set_fill_rule(cr, save_rule);
+    cairo_set_matrix(cr, &save_matrix);
+}
+
+/* clip-out neighboring windows */
+static void _widget_clip_neigh(
+    twtk_widget_t *widget /* NOTNULL */,
+    cairo_t *cr /* NOTNULL */)
+{
+    assert(widget);
+    assert(cr);
+
+    /* the root window has no parent, thus no neighbours */
+    if (widget->frame == NULL)
+	return;
+
+    twtk_widget_list_entry_t *walk;
+
+    cairo_matrix_t save_matrix;
+    cairo_get_matrix(cr, &save_matrix);
+
+    cairo_fill_rule_t save_rule = cairo_get_fill_rule(cr);
+    cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+
+    /* iterate backwards until we find ourselves ... */
+    for (walk = widget->frame->frames.last; (walk != NULL) && (walk->widget != widget); walk = walk->prev)
+    {
+	_DEBUG("clipping out neigh %s from %s [parent: %s]",
+	    _widget_name(walk->widget),
+	    _widget_name(widget),
+	    _widget_parent_name(widget));
+
+	_widget_clip_frame(widget->frame, walk->widget, cr);
+    }
+
+    assert(walk);
+
+    /* restore old settings */
+    cairo_set_fill_rule(cr, save_rule);
+    cairo_set_matrix(cr, &save_matrix);
+}
+
+static void _widget_prepare_frame(
+    twtk_widget_t *widget,
+    cairo_t *cr)
+{
+    _widget_clip_neigh(widget, cr);
+
     cairo_matrix_t matrix = _twtk_widget_calc_matrix(widget);
     cairo_set_matrix(cr, &matrix);
     cairo_rectangle(cr, 0, 0, widget->viewport.size.x, widget->viewport.size.y);
@@ -95,8 +208,11 @@ static int _widget_render(twtk_widget_t *widget, cairo_t *cr)
     /* we'll have to re-render the widget */
     cairo_push_group (cr);
 
+    cairo_save(cr);
+    _widget_clip_subs(widget, cr);
     _widget_fill_background(widget, cr);
     _widget_paint(widget, cr);
+    cairo_restore(cr);
 
     /* paint the childs on their given positions */
     {
