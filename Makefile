@@ -36,7 +36,7 @@ clean:
 	@rm -f twtk_test
 
 twtk_test:	$(SRCS) $(HEADERS)
-	@$(CC) $(SRCS) -o $@ $(CAIRO_LIBS) $(CAIRO_CFLAGS) -Iinclude -levdev -pthread -lm
+	@$(CC) $(SRCS) -o $@ $(CFLAGS) $(CAIRO_LIBS) $(CAIRO_CFLAGS) -Iinclude -levdev -pthread -lm
 
 run:	twtk_test
 	@LD_LIBRARY_PATH=/home/nekrad/.usr/cairo/lib TWTK_MOUSE_DEVICE=$(MOUSE_DEVICE) CAIRO_DRM_BASIC_FORCE=1 ./twtk_test
