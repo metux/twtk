@@ -11,6 +11,7 @@
 #include <twtk/color.h>
 #include <twtk/events.h>
 #include <twtk/widget-list.h>
+#include <twtk-private/strutil.h>
 #include <twtk-private/debug.h>
 #include <twtk-private/debug-widget.h>
 #include <twtk-private/widget.h>
@@ -195,6 +196,12 @@ int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
 
     /* nothing to do */
     return 0;
+}
+
+int twtk_widget_set_name(twtk_widget_t *widget, const char *name)
+{
+    STRBUF_SET(widget->name, name);
+    return 1;
 }
 
 int twtk_widget_set_border_color(twtk_widget_t *widget, twtk_color_t color)

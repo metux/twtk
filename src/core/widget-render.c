@@ -47,9 +47,11 @@ static void _widget_paint(twtk_widget_t *widget, cairo_t *cr)
 }
 
 /* compose widget onto parent's context */
-static void _widget_compose(twtk_widget_t *widget, cairo_t *cr, const char *parent_name, const char *child_name)
+static void _widget_compose(twtk_widget_t *widget, cairo_t *cr)
 {
-    _DEBUG("composing %s onto %s", child_name, parent_name);
+    _DEBUG("composing %s onto %s",
+	widget->name,
+	(widget->parent ? widget->parent->name : "<NONE>"));
 
     assert(cr);
     assert(widget);
@@ -62,7 +64,7 @@ static void _widget_compose(twtk_widget_t *widget, cairo_t *cr, const char *pare
     cairo_restore(cr);
 }
 
-static int _widget_render(twtk_widget_t *widget, cairo_t *cr, const char* name)
+static int _widget_render(twtk_widget_t *widget, cairo_t *cr)
 {
     assert(widget);
 
@@ -72,7 +74,7 @@ static int _widget_render(twtk_widget_t *widget, cairo_t *cr, const char* name)
     {
 	twtk_widget_list_entry_t *ent;
 	for (ent = widget->frames.first; ent != NULL; ent = ent->next)
-	    ret |= _widget_render(ent->widget, cr, ent->name);
+	    ret |= _widget_render(ent->widget, cr);
     }
 
     if (ret && widget->paint_cache)
@@ -84,7 +86,7 @@ static int _widget_render(twtk_widget_t *widget, cairo_t *cr, const char* name)
     if (widget->paint_cache != NULL)
 	return 0;
 
-    _DEBUG("need to render: %s", name);
+    _DEBUG("need to render: %s", widget->name);
 
     /* we'll have to re-render the widget */
     cairo_push_group (cr);
@@ -96,7 +98,7 @@ static int _widget_render(twtk_widget_t *widget, cairo_t *cr, const char* name)
     {
 	twtk_widget_list_entry_t *ent;
 	for (ent = widget->frames.first; ent != NULL; ent = ent->next)
-	    _widget_compose(ent->widget, cr, name, ent->name);
+	    _widget_compose(ent->widget, cr);
     }
 
     widget->flags &= ~TWTK_WIDGET_FLAG_DIRTY;
@@ -108,18 +110,18 @@ static int _widget_render(twtk_widget_t *widget, cairo_t *cr, const char* name)
 }
 
 // FIXME: redraw should be made asynchronous
-int twtk_widget_do_draw(twtk_widget_t *widget, cairo_t* cr, const char *name)
+int twtk_widget_do_draw(twtk_widget_t *widget, cairo_t* cr)
 {
     if (widget == NULL)
 	return -EFAULT;
 
     /* render the widget and all its subs */
-    _DEBUG("recursive render: %s", name);
-    _widget_render(widget, cr, name);
+    _DEBUG("recursive render: %s", widget->name);
+    _widget_render(widget, cr);
 
     /* now paint the whole image */
-    _DEBUG("final compose: %s", name);
-    _widget_compose(widget, cr, "<root>", name);
+    _DEBUG("final compose: %s", widget->name);
+    _widget_compose(widget, cr);
 
     return 0;
 }
