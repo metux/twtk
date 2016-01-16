@@ -6,7 +6,6 @@
 
 struct __twtk_widget_list_entry
 {
-    char* name;
     twtk_widget_t *widget;
     twtk_widget_list_entry_t *next;
     twtk_widget_list_entry_t *prev;

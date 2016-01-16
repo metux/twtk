@@ -122,6 +122,7 @@ struct __twtk_widget
     twtk_widget_class_t *cls;
     void *priv;
     int refcnt;
+    char *name;
 
     twtk_widget_t *parent;
     twtk_widget_t *frame;
@@ -135,7 +136,7 @@ struct __twtk_widget
 
 twtk_widget_t *twtk_widget_alloc(twtk_widget_class_t *cls);
 
-int twtk_widget_do_draw(twtk_widget_t *widget, cairo_t *cr, const char *name);
+int twtk_widget_do_draw(twtk_widget_t *widget, cairo_t *cr);
 
 #define TWTK_WIDGET_PRIV(widget, type)	\
     ((type)(widget->priv))
@@ -168,6 +169,7 @@ static inline void twtk_widget_unref(twtk_widget_t *widget)
  */
 void twtk_widget_dirty(twtk_widget_t *widget);
 
+int  twtk_widget_set_name(twtk_widget_t *widget, const char *name);
 int  twtk_widget_set_border_color(twtk_widget_t *widget, twtk_color_t color);
 int  twtk_widget_set_background_color(twtk_widget_t *widget, twtk_color_t color);
 int  twtk_widget_set_font_color(twtk_widget_t *widget, twtk_color_t color);

@@ -39,6 +39,8 @@ twtk_widget_t *_twtk_platform_generic_get_root(twtk_platform_t *platform)
 	    cairo_drm_surface_get_width(platform->surface),
 	    cairo_drm_surface_get_height(platform->surface));
 
+	twtk_widget_set_name(platform->root, "<ROOT>");
+
 	twtk_widget_set_background_color(
 	    platform->root,
 	    (twtk_color_t){.alpha = 0xff, .red = 0x15, .green = 0x22, .blue = 0x33}

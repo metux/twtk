@@ -37,7 +37,6 @@ void twtk_widget_list_fini(twtk_widget_list_t *list)
     while (walk)
     {
 	twtk_widget_list_entry_t *next = walk;
-	STRBUF_FREE(walk->name);
 	twtk_widget_unref(walk->widget);
 	free(walk);
 	walk = next;
@@ -55,7 +54,7 @@ void twtk_widget_list_add(twtk_widget_list_t *list, twtk_widget_t *widget, const
 
     // FIXME: should use free-list for more optimal allocation
     twtk_widget_list_entry_t *ent = (twtk_widget_list_entry_t*)calloc(1,sizeof(twtk_widget_list_entry_t));
-    STRBUF_SET(ent->name, name);
+    STRBUF_SET(widget->name, name);
     ent->widget = twtk_widget_ref(widget);
 
     TWTK_LOCK(list);
@@ -85,7 +84,7 @@ twtk_widget_t *twtk_widget_list_find_by_name(twtk_widget_list_t *list, const cha
 
     for (ent=list->first; ent != NULL; ent=ent->next)
     {
-	if ((ent->name != NULL) && (strcmp(ent->name, name)))
+	if ((ent->widget->name != NULL) && (strcmp(ent->widget->name, name)))
 	{
 	    twtk_widget_t *widget = twtk_widget_ref(ent->widget);
 	    TWTK_UNLOCK(list);
@@ -119,16 +118,16 @@ int twtk_widget_list_find_pos(
     {
 	assert(walk);
 	assert(walk->widget);
-	_DEBUG("find_pos: trying: %-15s ", walk->name);
+	_DEBUG("find_pos: trying: %-15s ", walk->widget->name);
 	if (twtk_widget_translate_pos(walk->widget, pos, ret_pos))
 	{
 	    _DEBUG("find_pos: match:  %-15s pos=[%4.0f:%4.0f]",
-		walk->name,
+		walk->widget->name,
 		ret_pos->x,
 		ret_pos->y
 	    );
 	    *ret_widget = twtk_widget_ref(walk->widget);
-	    *ret_name = walk->name;
+	    *ret_name = walk->widget->name;
 
 	    TWTK_UNLOCK(list)
 	    return 1;
