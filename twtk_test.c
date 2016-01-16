@@ -98,7 +98,7 @@ static twtk_widget_t *_create_win()
 //    twtk_widget_rotate(img, 45);
 
     twtk_widget_t *win = twtk_window_widget_create(1000, 400, 200, 200);
-    twtk_widget_set_background_color(win, TWTK_COLOR_BLACK);
+    twtk_widget_set_background_color(win, TWTK_COLOR_GREEN);
     twtk_widget_set_border_color(win, TWTK_COLOR_BLACK);
     twtk_widget_set_border_width(win, 30);
 
@@ -118,9 +118,9 @@ static void _init_boxes()
     twtk_widget_add_child_unref(root, _create_image_lara(),  "image-lara");
     twtk_widget_add_child_unref(root, _create_image_black(), "image-black");
     twtk_widget_add_child_unref(root, _create_box2(),        "box2");
+    twtk_widget_add_child_unref(root, _create_win(),         "win");
     twtk_widget_add_child_unref(root, _create_position(),    "position");
     twtk_widget_add_child_unref(root, _create_debug(),       "debug");
-    twtk_widget_add_child_unref(root, _create_win(),         "win");
 }
 
 int main(void)
