@@ -26,6 +26,8 @@ SRCS = \
 
 HEADERS	:= $(shell find ./include -name "*.h")
 
+CFLAGS += -DENABLE_DEBUG
+
 all:	twtk_test
 
 dump:
