@@ -12,187 +12,191 @@
 #include <twtk/events.h>
 #include <twtk-private/debug.h>
 
-const char* twtk_evdev_get_event_type_name(uint16_t type)
-{
-    switch (type)
+
+#define SYM_MAP_BEGIN \
+    static char buffer[16]; \
+    switch (code) \
     {
-	case EV_SYN:		return "EV_SYN";
-	case EV_KEY:		return "EV_KEY";
-	case EV_REL:		return "EV_REL";
-	case EV_ABS:		return "EV_ABS";
-	case EV_MSC:		return "EV_MSC";
-	case EV_SW:		return "EV_SW";
-	case EV_LED:		return "EV_LED";
-	case EV_SND:		return "EV_SND";
-	case EV_REP:		return "EV_REP";
-	case EV_FF:		return "EV_FF";
-	case EV_PWR:		return "EV_PWR";
-	case EV_FF_STATUS:	return "EV_FF_STATUS";
-	default:		return "???";
+
+#define SYM_MAP_FINI(name) \
+        default: \
+            snprintf(buffer, sizeof(buffer), "(" name "#%d)", code); \
+            return buffer; \
     }
+
+#define SYM_MAP_ENT(sym) \
+    case sym: return #sym;
+
+
+const char* twtk_evdev_get_event_type_name(uint16_t code)
+{
+    SYM_MAP_BEGIN
+    SYM_MAP_ENT(EV_SYN);
+    SYM_MAP_ENT(EV_KEY);
+    SYM_MAP_ENT(EV_REL);
+    SYM_MAP_ENT(EV_ABS);
+    SYM_MAP_ENT(EV_MSC);
+    SYM_MAP_ENT(EV_SW);
+    SYM_MAP_ENT(EV_LED);
+    SYM_MAP_ENT(EV_SND);
+    SYM_MAP_ENT(EV_REP);
+    SYM_MAP_ENT(EV_FF);
+    SYM_MAP_ENT(EV_PWR);
+    SYM_MAP_ENT(EV_FF_STATUS);
+    SYM_MAP_FINI("EV");
 }
 
 static const char *_ev_code_syn(uint16_t code)
 {
-    switch (code)
-    {
-	case SYN_REPORT:	return "SYN_REPORT";
-	case SYN_CONFIG:	return "SYN_CONFIG";
-	case SYN_MT_REPORT:	return "SYN_MT_REPORT";
-	case SYN_DROPPED:	return "SYN_DROPPED";
-	default:		return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_ENT(SYN_REPORT);
+    SYM_MAP_ENT(SYN_CONFIG);
+    SYM_MAP_ENT(SYN_MT_REPORT);
+    SYM_MAP_ENT(SYN_DROPPED);
+    SYM_MAP_FINI("SYN")
 }
 
 static const char *_ev_code_key(uint16_t code)
 {
-    static char buffer[64];
-    switch (code)
-    {
-	case BTN_TOOL_PEN:		return "BTN_TOOL_PEN";
-	case BTN_TOOL_RUBBER:		return "BTN_TOOL_RUBBER";
-	case BTN_TOOL_BRUSH:		return "BTN_TOOL_BRUSH";
-	case BTN_TOOL_PENCIL:		return "BTN_TOOL_PENCIL";
-	case BTN_TOOL_AIRBRUSH:		return "BTN_TOOL_AIRBRUSH";
-	case BTN_TOOL_FINGER:		return "BTN_TOOL_FINGER";
-	case BTN_TOOL_MOUSE:		return "BTN_TOOL_MOUSE";
-	case BTN_TOOL_LENS:		return "BTN_TOOL_LENS";
-	case BTN_TOOL_QUINTTAP:		return "BTN_TOOL_QUINTTAP";
-	case BTN_TOOL_DOUBLETAP:	return "BTN_TOOL_DOUBLETAP";
-	case BTN_TOOL_TRIPLETAP:	return "BTN_TOOL_TRIPLETAP";
-	case BTN_TOOL_QUADTAP:		return "BTN_TOOL_QUADTAP";
-	case BTN_TOUCH:			return "BTN_TOUCH";
-	case BTN_LEFT:			return "BTN_LEFT";
-	case BTN_RIGHT:			return "BTN_RIGHT";
-	case BTN_MIDDLE:		return "BTN_MIDDLE";
-	case BTN_SIDE:			return "BTN_SIDE";
-	case BTN_EXTRA:			return "BTN_EXTRA";
-	case BTN_FORWARD:		return "BTN_FORDWARD";
-	case BTN_BACK:			return "BTN_BACK";
-	case BTN_TASK:			return "BTN_TASK";
-	default:
-	    snprintf(buffer, sizeof(buffer), "%d", code);
-	    return buffer;
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_ENT(BTN_TOOL_PEN);
+    SYM_MAP_ENT(BTN_TOOL_RUBBER);
+    SYM_MAP_ENT(BTN_TOOL_BRUSH);
+    SYM_MAP_ENT(BTN_TOOL_PENCIL);
+    SYM_MAP_ENT(BTN_TOOL_AIRBRUSH);
+    SYM_MAP_ENT(BTN_TOOL_FINGER);
+    SYM_MAP_ENT(BTN_TOOL_MOUSE);
+    SYM_MAP_ENT(BTN_TOOL_LENS);
+    SYM_MAP_ENT(BTN_TOOL_QUINTTAP);
+    SYM_MAP_ENT(BTN_TOOL_DOUBLETAP);
+    SYM_MAP_ENT(BTN_TOOL_TRIPLETAP);
+    SYM_MAP_ENT(BTN_TOOL_QUADTAP);
+    SYM_MAP_ENT(BTN_TOUCH);
+    SYM_MAP_ENT(BTN_LEFT);
+    SYM_MAP_ENT(BTN_RIGHT);
+    SYM_MAP_ENT(BTN_MIDDLE);
+    SYM_MAP_ENT(BTN_SIDE);
+    SYM_MAP_ENT(BTN_EXTRA);
+    SYM_MAP_ENT(BTN_FORWARD);
+    SYM_MAP_ENT(BTN_BACK);
+    SYM_MAP_ENT(BTN_TASK);
+    SYM_MAP_FINI("BTN")
 }
 
 static const char *_ev_code_rel(uint16_t code)
 {
-    switch (code)
-    {
-	case REL_X:		return "REL_X";
-	case REL_Y:		return "REL_Y";
-	case REL_Z:		return "REL_Z";
-	case REL_RX:		return "REL_RX";
-	case REL_RY:		return "REL_RY";
-	case REL_RZ:		return "REL_RZ";
-	case REL_HWHEEL:	return "REL_HWHEEL";
-	case REL_DIAL:		return "REL_DIAL";
-	case REL_WHEEL:		return "REL_WHEEL";
-	case REL_MISC:		return "REL_MISC";
-	default:		return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_ENT(REL_X);
+    SYM_MAP_ENT(REL_Y);
+    SYM_MAP_ENT(REL_Z);
+    SYM_MAP_ENT(REL_RX);
+    SYM_MAP_ENT(REL_RY);
+    SYM_MAP_ENT(REL_RZ);
+    SYM_MAP_ENT(REL_HWHEEL);
+    SYM_MAP_ENT(REL_DIAL);
+    SYM_MAP_ENT(REL_WHEEL);
+    SYM_MAP_ENT(REL_MISC);
+    SYM_MAP_FINI("REL");
 }
 
 static const char *_ev_code_abs(uint16_t code)
 {
-    switch (code)
-    {
-	case ABS_DISTANCE:		return "ABS_DISTANCE";
-	case ABS_MT_SLOT:		return "ABS_MT_SLOT";
-	case ABS_MT_TOUCH_MAJOR:	return "ABS_MT_TOUCH_MAJOR";
-	case ABS_MT_TOUCH_MINOR:	return "ABS_MT_TOUCH_MINOR";
-	case ABS_MT_WIDTH_MAJOR:	return "ABS_MT_WIDTH_MAJOR";
-	case ABS_MT_WIDTH_MINOR:	return "ABS_MT_WIDTH_MINOR";
-	case ABS_MT_ORIENTATION:	return "ABS_MT_ORIENTATION";
-	case ABS_MT_POSITION_X:		return "ABS_MT_POSITION_X";
-	case ABS_MT_POSITION_Y:		return "ABS_MT_POSITION_Y";
-	case ABS_MT_TOOL_TYPE:		return "ABS_MT_TOOL_TYPE";
-	case ABS_MT_BLOB_ID:		return "ABS_MT_BLOB_ID";
-	case ABS_MT_TRACKING_ID:	return "ABS_MT_TRACKING_ID";
-	case ABS_MT_PRESSURE:		return "ABS_MT_PRESSURE";
-	case ABS_MT_DISTANCE:		return "ABS_MT_DISTANCE";
-	case ABS_MT_TOOL_X:		return "ABS_MT_TOOL_X";
-	case ABS_MT_TOOL_Y:		return "ABS_MT_TOOL_Y";
-	default:			return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_ENT(ABS_DISTANCE);
+    SYM_MAP_ENT(ABS_X);
+    SYM_MAP_ENT(ABS_Y);
+    SYM_MAP_ENT(ABS_Z);
+    SYM_MAP_ENT(ABS_PRESSURE);
+    SYM_MAP_ENT(ABS_MT_SLOT);
+    SYM_MAP_ENT(ABS_MT_TOUCH_MAJOR);
+    SYM_MAP_ENT(ABS_MT_TOUCH_MINOR);
+    SYM_MAP_ENT(ABS_MT_WIDTH_MAJOR);
+    SYM_MAP_ENT(ABS_MT_WIDTH_MINOR);
+    SYM_MAP_ENT(ABS_MT_ORIENTATION);
+    SYM_MAP_ENT(ABS_MT_POSITION_X);
+    SYM_MAP_ENT(ABS_MT_POSITION_Y);
+    SYM_MAP_ENT(ABS_MT_TOOL_TYPE);
+    SYM_MAP_ENT(ABS_MT_BLOB_ID);
+    SYM_MAP_ENT(ABS_MT_TRACKING_ID);
+    SYM_MAP_ENT(ABS_MT_PRESSURE);
+    SYM_MAP_ENT(ABS_MT_DISTANCE);
+    SYM_MAP_ENT(ABS_MT_TOOL_X);
+    SYM_MAP_ENT(ABS_MT_TOOL_Y);
+    SYM_MAP_ENT(ABS_RX);
+    SYM_MAP_ENT(ABS_RY);
+    SYM_MAP_ENT(ABS_RZ);
+    SYM_MAP_ENT(ABS_HAT0X);
+    SYM_MAP_ENT(ABS_HAT0Y);
+    SYM_MAP_ENT(ABS_HAT1X);
+    SYM_MAP_ENT(ABS_HAT1Y);
+    SYM_MAP_ENT(ABS_HAT2X);
+    SYM_MAP_ENT(ABS_HAT2Y);
+    SYM_MAP_ENT(ABS_TILT_X);
+    SYM_MAP_ENT(ABS_TILT_Y);
+    SYM_MAP_ENT(ABS_TOOL_WIDTH);
+    SYM_MAP_FINI("ABS");
 }
 
 static const char *_ev_code_msc(uint16_t code)
 {
-    switch (code)
-    {
-	case MSC_TIMESTAMP:	return "MSC_TIMESTAMP";
-	case MSC_PULSELED:	return "MSC_PULSELED";
-	case MSC_SERIAL:	return "MSC_SERIAL";
-	case MSC_GESTURE:	return "MSC_GESTURE";
-	case MSC_RAW:		return "MSC_RAW";
-	case MSC_SCAN:		return "MSC_SCAN";
-	case MSC_MAX:		return "MSC_MAX";
-	case MSC_CNT:		return "MSC_CNT";
-	default:		return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_ENT(MSC_TIMESTAMP);
+    SYM_MAP_ENT(MSC_PULSELED);
+    SYM_MAP_ENT(MSC_SERIAL);
+    SYM_MAP_ENT(MSC_GESTURE);
+    SYM_MAP_ENT(MSC_RAW);
+    SYM_MAP_ENT(MSC_SCAN);
+    SYM_MAP_ENT(MSC_MAX);
+    SYM_MAP_ENT(MSC_CNT);
+    SYM_MAP_FINI("MSC");
 }
 
 static const char *_ev_code_sw(uint16_t code)
 {
-    switch (code)
-    {
-	case SW_LID:		return "SW_LID";
-	default:		return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_ENT(SW_LID);
+    SYM_MAP_FINI("SW");
 }
 
 static const char *_ev_code_led(uint16_t code)
 {
-    switch (code)
-    {
-	default:	return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_FINI("LED");
 }
 
 static const char *_ev_code_snd(uint16_t code)
 {
-    switch (code)
-    {
-	default:	return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_FINI("SND");
 }
 
 static const char *_ev_code_rep(uint16_t code)
 {
-    switch (code)
-    {
-	default:	return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_FINI("REP");
 }
 
 static const char *_ev_code_ff(uint16_t code)
 {
-    switch (code)
-    {
-	default:	return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_FINI("FF");
 }
 
 static const char *_ev_code_pwr(uint16_t code)
 {
-    switch (code)
-    {
-	default:	return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_FINI("PWR");
 }
 
 static const char *_ev_code_ff_status(uint16_t code)
 {
-    switch (code)
-    {
-	default:	return "???";
-    }
+    SYM_MAP_BEGIN
+    SYM_MAP_FINI("FF_STATUS");
 }
 
 const char* twtk_evdev_get_event_code_name(uint16_t type, uint16_t code)
 {
+    static char buffer[64];
     switch (type)
     {
 	case EV_SYN:		return _ev_code_syn(code);
@@ -207,7 +211,9 @@ const char* twtk_evdev_get_event_code_name(uint16_t type, uint16_t code)
 	case EV_FF:		return _ev_code_ff(code);
 	case EV_PWR:		return _ev_code_pwr(code);
 	case EV_FF_STATUS:	return _ev_code_ff_status(code);
-	default:		return "???";
+	default:
+	    snprintf(buffer, sizeof(buffer), "??? #%2x #%2x", type, code);
+	    return buffer;
     }
 }
 
