@@ -1,5 +1,5 @@
 
-MOUSE_DEVICE=/dev/input/event6
+MOUSE_DEVICE=/dev/input/event4
 
 PKG_CONFIG = PKG_CONFIG_PATH=/home/nekrad/.usr/cairo/lib/pkgconfig pkg-config 
 CAIRO_LIBS = `$(PKG_CONFIG) --libs cairo cairo-png cairo-drm`
