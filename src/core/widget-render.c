@@ -1,6 +1,10 @@
 
 #define _DEBUG_NAME	"widget-render"
 
+#ifdef ENABLE_DEBUG_WIDGET_RENDER
+#define ENABLE_DEBUG
+#endif
+
 #include <assert.h>
 #include <malloc.h>
 #include <errno.h>

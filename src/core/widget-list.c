@@ -1,6 +1,10 @@
 
 #define _DEBUG_NAME	"widget-list"
 
+#ifdef ENABLE_DEBUG_WIDGET_LIST
+#define ENABLE_DEBUG
+#endif
+
 #define _GNU_SOURCE
 
 #include <stdlib.h>
@@ -115,10 +119,10 @@ int twtk_widget_list_find_pos(
     {
 	assert(walk);
 	assert(walk->widget);
-	_DEBUG("trying: %-15s ", walk->name);
+	_DEBUG("find_pos: trying: %-15s ", walk->name);
 	if (twtk_widget_translate_pos(walk->widget, pos, ret_pos))
 	{
-	    _DEBUG("match:  %-15s pos=[%4.0f:%4.0f]",
+	    _DEBUG("find_pos: match:  %-15s pos=[%4.0f:%4.0f]",
 		walk->name,
 		ret_pos->x,
 		ret_pos->y

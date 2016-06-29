@@ -1,6 +1,10 @@
 
 #define _DEBUG_NAME	"drm"
 
+#ifdef ENABLE_DEBUG_PLATFORM_DRM
+#define ENABLE_DEBUG
+#endif
+
 #include <unistd.h>
 #include <stdint.h>
 #include <inttypes.h>

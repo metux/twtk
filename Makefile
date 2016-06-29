@@ -26,6 +26,11 @@ SRCS = \
 
 CFLAGS += -std=c99
 
+# CFLAGS += -DENABLE_DEBUG_WIDGET
+# CFLAGS += -DENABLE_DEBUG_WIDGET_LIST
+# CFLAGS += -DENABLE_DEBUG_WIDGET_RENDER
+# CFLAGS += -DENABLE_DEBUG_PLATFORM_DRM
+
 HEADERS	:= $(shell find ./include -name "*.h")
 
 all:	twtk_test

@@ -1,6 +1,10 @@
 
 #define _DEBUG_NAME	"widget"
 
+#ifdef ENABLE_DEBUG_WIDGET
+#define ENABLE_DEBUG
+#endif
+
 #define _GNU_SOURCE
 
 #include <assert.h>
