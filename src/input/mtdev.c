@@ -1,5 +1,5 @@
 
-#define _DEBUG_NAME	"evdev"
+#define _DEBUG_NAME	"mtdev"
 
 #include <stdio.h>
 #include <errno.h>
@@ -28,7 +28,7 @@
     case sym: return #sym;
 
 
-const char* twtk_evdev_get_event_type_name(uint16_t code)
+const char* twtk_mtdev_get_event_type_name(uint16_t code)
 {
     SYM_MAP_BEGIN
     SYM_MAP_ENT(EV_SYN);
@@ -194,7 +194,7 @@ static const char *_ev_code_ff_status(uint16_t code)
     SYM_MAP_FINI("FF_STATUS");
 }
 
-const char* twtk_evdev_get_event_code_name(uint16_t type, uint16_t code)
+const char* twtk_mtdev_get_event_code_name(uint16_t type, uint16_t code)
 {
     static char buffer[64];
     switch (type)
@@ -217,14 +217,15 @@ const char* twtk_evdev_get_event_code_name(uint16_t type, uint16_t code)
     }
 }
 
-struct evdev_state
+struct mtdev_state
 {
     pthread_t			thread;
+    struct mtdev		mtdev;
     twtk_vector_t		last_position;
     twtk_event_mouse_button_t	last_buttons;
     int				fd;
     int				id;
-    struct libevdev		*dev;
+    struct mtdev		*dev;
 };
 
 static inline twtk_event_mouse_button_t evcode_to_button(uint16_t code)
@@ -238,7 +239,7 @@ static inline twtk_event_mouse_button_t evcode_to_button(uint16_t code)
     }
 }
 
-static int _handle_mouse_event(struct evdev_state *state, struct input_event *ev)
+static int _handle_mouse_event(struct mtdev_state *state, struct input_event *ev)
 {
     twtk_event_t event = {
 	.type = TWTK_EVENT_MOUSE,
@@ -343,18 +344,18 @@ static int _handle_mouse_event(struct evdev_state *state, struct input_event *ev
     return 0;
 }
 
-void twtk_evdev_mouse_loop(struct evdev_state* state)
+void twtk_mtdev_mouse_loop(struct mtdev_state* state)
 {
     int rc = 0;
     do {
 	struct input_event ev;
-	if ((rc = libevdev_next_event(state->dev, LIBEVDEV_READ_FLAG_NORMAL, &ev)) == 0)
+	if ((rc = libmtdev_next_event(state->dev, LIBMTDEV_READ_FLAG_NORMAL, &ev)) == 0)
 	{
 	    if (!_handle_mouse_event(state, &ev))
 	    {
 		_DEBUG("Event: %-10s %-10s %5d",
-		    twtk_evdev_get_event_type_name(ev.type),
-		    twtk_evdev_get_event_code_name(ev.type, ev.code),
+		    twtk_mtdev_get_event_type_name(ev.type),
+		    twtk_mtdev_get_event_code_name(ev.type, ev.code),
 		    ev.value);
 	    }
 	}
@@ -364,42 +365,29 @@ void twtk_evdev_mouse_loop(struct evdev_state* state)
 
 static void *_mouse_thread(void *ptr)
 {
-    twtk_evdev_mouse_loop((struct evdev_state*)ptr);
+    twtk_mtdev_mouse_loop((struct mtdev_state*)ptr);
 }
 
-void twtk_evdev_mouse_start(const char* devname)
+void twtk_mtdev_mouse_start(const char* devname)
 {
     _DEBUG("Input device: %s", devname);
 
-    struct evdev_state *state = calloc(1, sizeof(struct evdev_state));
+    struct mtdev_state *state = calloc(1, sizeof(struct mtdev_state));
 
     static last_device_id = 0;
 
     state->id = ++last_device_id;
 
     if ((state->fd = open(devname, O_RDONLY | O_NONBLOCK)) == -1) {
-	_DEBUG("failed opening mouse device: %s", strerror(errno));
+	_DEBUG("failed opening event device: %s", strerror(errno));
 	return;
     }
 
-    int rc = libevdev_new_from_fd (state->fd, &state->dev);
-
-    if (state->dev == NULL)
+    int rc = mtdev_open (&state->dev, state->fd);
+    if (rc)
     {
-	_DEBUG("failed opening evdev: %s", strerror(-rc));
+	_DEBUG("failed opening mtdev: %s", strerror(-rc));
 	return;
-    }
-
-    _DEBUG("Input device name: \"%s\"", libevdev_get_name(state->dev));
-    _DEBUG("Input device ID: bus %#x vendor %#x product %#x",
-        libevdev_get_id_bustype(state->dev),
-        libevdev_get_id_vendor(state->dev),
-        libevdev_get_id_product(state->dev));
-
-    if (!libevdev_has_event_type(state->dev, EV_REL) ||
-        !libevdev_has_event_code(state->dev, EV_KEY, BTN_LEFT)) {
-	    _DEBUG("This device does not look like a mouse");
-//	    return;
     }
 
     int res = pthread_create(&state->thread, NULL, _mouse_thread, state);

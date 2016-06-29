@@ -24,6 +24,8 @@ SRCS = \
     src/widgets/pattern-widget.c	\
     twtk_test.c				\
 
+#    src/input/mtdev.c			\
+
 HEADERS	:= $(shell find ./include -name "*.h")
 
 CFLAGS += -DENABLE_DEBUG
