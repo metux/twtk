@@ -92,35 +92,20 @@ static twtk_widget_t *_create_box2()
     return box;
 }
 
-static twtk_widget_t *_create_win()
-{
-    twtk_widget_t *img = twtk_image_widget_create("resources/002.jpg", 30, 30, 0, 0);
-
-    twtk_widget_t *win = twtk_window_widget_create(1000, 400, 200, 200);
-    twtk_widget_set_background_color(win, TWTK_COLOR_GREEN);
-    twtk_widget_set_border_color(win, TWTK_COLOR_BLACK);
-    twtk_widget_set_border_width(win, 30);
-
-    twtk_widget_add_child(win, img, "image1");
-
-    return win;
-}
-
 static void _init_boxes()
 {
     twtk_widget_t *root = twtk_platform_get_root();
 
     twtk_widget_set_background_color(root, TWTK_COLOR_GREY);
 
-    twtk_widget_add_child_unref(root, _create_red_box(),     "red");
-    twtk_widget_add_child_unref(root, _create_blue_box(),    "blue");
-    twtk_widget_add_child_unref(root, _create_green_box(),   "green");
-    twtk_widget_add_child_unref(root, _create_text_1(),      "text-1");
-    twtk_widget_add_child_unref(root, _create_image_lara(),  "image-lara");
-    twtk_widget_add_child_unref(root, _create_image_black(), "image-black");
-    twtk_widget_add_child_unref(root, _create_box2(),        "box2");
-    twtk_widget_add_child_unref(root, _create_win(),         "win");
-    twtk_widget_add_child_unref(root, _create_debug(),       "debug");
+    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_red_box()),     "red");
+    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_blue_box()),    "blue");
+    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_green_box()),   "green");
+    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_text_1()),      "text-1");
+    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_image_lara()),  "image-lara");
+    twtk_widget_add_child_unref(root, twtk_movebox_widget_create(_create_image_black()), "image-black");
+    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_box2()),        "box2");
+    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_debug()),       "debug");
 
     _create_position(root);
 }

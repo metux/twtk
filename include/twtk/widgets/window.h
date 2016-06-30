@@ -4,10 +4,7 @@
 #include <twtk/types.h>
 
 
-twtk_widget_t *twtk_window_widget_create(
-    twtk_dim_t x,
-    twtk_dim_t y,
-    twtk_dim_t w,
-    twtk_dim_t h);
+twtk_widget_t *twtk_window_widget_create(twtk_widget_t *widget)
+    __attribute__((nonnull(1)));
 
 #endif /* __TWTK_WIDGET_WINDOW_H */

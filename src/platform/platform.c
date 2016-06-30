@@ -78,7 +78,7 @@ void twtk_platform_finish()
 }
 
 // FIXME: this only works if the widget is root or 1st level
-void twtk_platform_redraw_widget(twtk_widget_t *widget, const char *name)
+static void __twtk_platform_redraw_widget(twtk_widget_t *widget, const char *name)
 {
     assert(widget);
     assert(_twtk_current_platform);
@@ -94,7 +94,13 @@ void twtk_platform_redraw()
     if (!root)
 	return;
 
-    twtk_platform_redraw_widget(root, "<root>");
+    __twtk_platform_redraw_widget(root, "<root>");
+}
+
+// FIXME: for now we'll have to do a full repaint, until __twtk_platform_redraw_widget() is fixed
+void twtk_platform_redraw_widget(twtk_widget_t *widget, const char *name)
+{
+    twtk_platform_redraw();
 }
 
 void twtk_platform_loop()
