@@ -310,32 +310,69 @@ int twtk_widget_set_text(twtk_widget_t *widget, const char* text)
     return twtk_widget_set_str(widget, "text", text);
 }
 
+static inline void _invalidate(twtk_widget_t *widget, twtk_rect_t o, twtk_rect_t n)
+{
+    if (widget->frame == NULL)
+        return;
+
+    twtk_widget_invalidate_rect(widget, o);
+    twtk_widget_invalidate_rect(widget, n);
+}
+
 void twtk_widget_move(twtk_widget_t *widget, double x, double y)
 {
     assert(widget);
+    twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.pos = TWTK_VECTOR(x, y);
-    twtk_widget_dirty(widget);
+
+    /* invalidate our old and new region within our frame */
+    if (widget->frame)
+    {
+        twtk_widget_invalidate_rect(widget->frame, old_viewport);
+        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
+    }
 }
 
 void twtk_widget_move_rel(twtk_widget_t *widget, double x, double y)
 {
     assert(widget);
+    twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.pos = twtk_vector_add(widget->viewport.pos, TWTK_VECTOR(x, y));
-    twtk_widget_dirty(widget);
+
+    /* invalidate our old and new region within our frame */
+    if (widget->frame)
+    {
+        twtk_widget_invalidate_rect(widget->frame, old_viewport);
+        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
+    }
 }
 
 void twtk_widget_resize(twtk_widget_t *widget, double w, double h)
 {
     assert(widget);
+    twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.size = TWTK_VECTOR(w, h);
-    twtk_widget_dirty(widget);
+
+    /* invalidate our old and new region within our frame */
+    if (widget->frame)
+    {
+        twtk_widget_invalidate_rect(widget->frame, old_viewport);
+        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
+    }
 }
 
 void twtk_widget_rotate(twtk_widget_t *widget, double a)
 {
     assert(widget);
+    twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.angle = M_PI/180*a;
-    twtk_widget_dirty(widget);
+
+    /* invalidate our old and new region within our frame */
+    if (widget->frame)
+    {
+        twtk_widget_invalidate_rect(widget->frame, old_viewport);
+        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
+    }
 }
 
 void twtk_widget_vresize(twtk_widget_t *widget, double w, double h)
@@ -350,6 +387,9 @@ void twtk_widget_dirty(twtk_widget_t *widget)
     assert(widget);
     // FIXME: atomic operations ?
     widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
+
+    if (widget->frame)
+        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
 }
 
 int twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
@@ -362,4 +402,24 @@ int twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dis
         twtk_widget_dirty(widget);
 
     return ret;
+}
+
+int twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect)
+{
+    if (widget == NULL)
+        return 0;
+
+    _DEBUG("invalidate_rect: widget=%s rect=%f:%f:%f:%f/%f",
+        rect.pos.x,
+        rect.pos.y,
+        rect.size.x,
+        rect.size.y,
+        rect.angle);
+
+    // FIXME: atomic operations ?
+    // FIXME: clearly separate between content redrawn and recomposition
+    widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
+
+    // FIXME
+    return 0;
 }

@@ -214,6 +214,14 @@ int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
     __attribute__((nonnull(1,2)));
 
 /**
+ * Invalidate an rect within the given widget
+ * (will be repainted in next iteration)
+ *
+ * @param widget if null, do nothing
+ */
+int  twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect);
+
+/**
  * Add widget as a child
  * The child widget's refcount will be increased.
  */

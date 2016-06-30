@@ -114,7 +114,7 @@ static void _widget_clip_neigh(
     /* iterate backwards until we find ourselves ... */
     for (walk = widget->frame->frames.last; (walk != NULL) && (walk->widget != widget); walk = walk->prev)
     {
-	_DEBUG("clipping out neigh %s from %s [parent: %s]",
+	_DEBUG("clipping out neigh \"%s\" from \"%s\" [parent: \"%s\"]",
 	    _widget_name(walk->widget),
 	    _widget_name(widget),
 	    _widget_parent_name(widget));
@@ -166,7 +166,7 @@ static void _widget_paint(twtk_widget_t *widget, cairo_t *cr)
 /* compose widget onto parent's context */
 static void _widget_compose(twtk_widget_t *widget, cairo_t *cr)
 {
-    _DEBUG("composing %s onto %s",
+    _DEBUG("composing \"%s\" onto \"%s\"",
 	widget->name,
 	(widget->parent ? widget->parent->name : "<NONE>"));
 
