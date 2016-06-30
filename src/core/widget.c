@@ -244,35 +244,35 @@ int twtk_widget_set_text(twtk_widget_t *widget, const char* text)
 void twtk_widget_move(twtk_widget_t *widget, double x, double y)
 {
     assert(widget);
-    widget->viewport_pos = TWTK_VECTOR(x, y);
+    widget->viewport.pos = TWTK_VECTOR(x, y);
     twtk_widget_dirty(widget);
 }
 
 void twtk_widget_move_rel(twtk_widget_t *widget, double x, double y)
 {
     assert(widget);
-    widget->viewport_pos = twtk_vector_add(widget->viewport_pos, TWTK_VECTOR(x, y));
+    widget->viewport.pos = twtk_vector_add(widget->viewport.pos, TWTK_VECTOR(x, y));
     twtk_widget_dirty(widget);
 }
 
 void twtk_widget_resize(twtk_widget_t *widget, double w, double h)
 {
     assert(widget);
-    widget->viewport_size = TWTK_VECTOR(w, h);
+    widget->viewport.size = TWTK_VECTOR(w, h);
     twtk_widget_dirty(widget);
 }
 
 void twtk_widget_rotate(twtk_widget_t *widget, double a)
 {
     assert(widget);
-    widget->viewport_angle = M_PI/180*a;
+    widget->viewport.angle = M_PI/180*a;
     twtk_widget_dirty(widget);
 }
 
 void twtk_widget_vresize(twtk_widget_t *widget, double w, double h)
 {
     assert(widget);
-    widget->surface_size = TWTK_VECTOR(w, h);
+    widget->surface.size = TWTK_VECTOR(w, h);
     twtk_widget_dirty(widget);
 }
 

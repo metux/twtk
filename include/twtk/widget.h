@@ -6,6 +6,7 @@
 #include <twtk/threads.h>
 #include <twtk/types.h>
 #include <twtk/vector.h>
+#include <twtk/rect.h>
 #include <twtk/color.h>
 #include <twtk/widget-list.h>
 
@@ -111,13 +112,10 @@ struct __twtk_widget
     twtk_lock_t lock;
 
     /* viewport within the parent frame */
-    twtk_vector_t viewport_pos;
-    twtk_vector_t viewport_size;
-    double viewport_angle;
+    twtk_rect_t viewport;
 
     /* virtual surface */
-    twtk_vector_t surface_pos;
-    twtk_vector_t surface_size;
+    twtk_rect_t surface;
 
     twtk_color_t background_color;
 

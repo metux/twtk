@@ -24,7 +24,7 @@ static void _widget_prepare_frame(twtk_widget_t *widget, cairo_t *cr)
 {
     cairo_matrix_t matrix = _twtk_widget_calc_matrix(widget);
     cairo_set_matrix(cr, &matrix);
-    cairo_rectangle(cr, 0, 0, widget->viewport_size.x, widget->viewport_size.y);
+    cairo_rectangle(cr, 0, 0, widget->viewport.size.x, widget->viewport.size.y);
     cairo_clip(cr);
 }
 
@@ -35,7 +35,7 @@ static void _widget_fill_background(twtk_widget_t *widget, cairo_t *cr)
 	return;
 
     _twtk_ut_set_rgba(cr, widget->background_color);
-    cairo_rectangle (cr, 0, 0, widget->viewport_size.x, widget->viewport_size.y);
+    cairo_rectangle (cr, 0, 0, widget->viewport.size.x, widget->viewport.size.y);
     cairo_fill (cr);
 }
 

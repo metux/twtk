@@ -69,7 +69,7 @@ static int _op_paint(twtk_widget_t *widget, cairo_t *cr)
     {
 	_twtk_ut_set_rgba (cr, priv->border_color);
 	cairo_set_line_width (cr, priv->border_width);
-	cairo_rectangle (cr, 0, 0, widget->viewport_size.x, widget->viewport_size.y);
+	cairo_rectangle (cr, 0, 0, widget->viewport.size.x, widget->viewport.size.y);
 	cairo_stroke (cr);
     }
 
@@ -144,7 +144,7 @@ twtk_widget_t *twtk_image_widget_create(const char* fn, double x, double y, doub
     int img_w = cairo_image_surface_get_width (priv->image);
     int img_h = cairo_image_surface_get_height (priv->image);
 
-    widget->viewport_size = TWTK_VECTOR ((w==0) ? img_w : w, (h==0) ? img_h : h);
+    widget->viewport.size = TWTK_VECTOR ((w==0) ? img_w : w, (h==0) ? img_h : h);
 
     twtk_widget_move(widget, x, y);
     twtk_widget_vresize(widget, img_w, img_h);

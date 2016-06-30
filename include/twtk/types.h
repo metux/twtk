@@ -6,6 +6,7 @@
 typedef struct __twtk_widget		twtk_widget_t;
 typedef struct __twtk_widget_class	twtk_widget_class_t;
 typedef struct __twtk_vector		twtk_vector_t;
+typedef struct __twtk_rect		twtk_rect_t;
 typedef struct __twtk_event		twtk_event_t;
 typedef struct __twtk_platform		twtk_platform_t;
 typedef struct __twtk_color		twtk_color_t;

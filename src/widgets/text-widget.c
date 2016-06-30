@@ -71,8 +71,8 @@ static int _op_paint(twtk_widget_t *widget, cairo_t *cr)
 {
     TWTK_WIDGET_OP_BEGIN
 
-    int w = widget->viewport_size.x;
-    int h = widget->viewport_size.y;
+    int w = widget->viewport.size.x;
+    int h = widget->viewport.size.y;
 
     /* paint border */
     if (_twtk_ut_color_visible(priv->border_color))
