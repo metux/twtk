@@ -84,7 +84,7 @@ twtk_widget_t *twtk_widget_list_find_by_name(twtk_widget_list_t *list, const cha
 
     for (ent=list->first; ent != NULL; ent=ent->next)
     {
-	if ((ent->widget->name != NULL) && (strcmp(ent->widget->name, name)))
+	if ((ent->widget->name != NULL) && (strcmp(ent->widget->name, name)==0))
 	{
 	    twtk_widget_t *widget = twtk_widget_ref(ent->widget);
 	    TWTK_UNLOCK(list);
