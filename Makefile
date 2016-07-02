@@ -18,6 +18,7 @@ SRCS = \
     src/platform/debug-widget.c		\
     src/input/events.c			\
     src/input/evdev.c			\
+    src/widgets/movebox-widget.c	\
     src/widgets/text-widget.c		\
     src/widgets/image-widget.c		\
     src/widgets/window-widget.c		\
@@ -31,6 +32,7 @@ CFLAGS += -std=c99
 # CFLAGS += -DENABLE_DEBUG_WIDGET_LIST
 # CFLAGS += -DENABLE_DEBUG_WIDGET_RENDER
 # CFLAGS += -DENABLE_DEBUG_WIDGET_WINDOW
+# CFLAGS += -DENABLE_DEBUG_WIDGET_MOVEBOX
 # CFLAGS += -DENABLE_DEBUG_PLATFORM_DRM
 
 HEADERS	:= $(shell find ./include -name "*.h")
