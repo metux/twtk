@@ -103,32 +103,9 @@ static int _op_set_uint(twtk_widget_t *widget, const char* name, uint32_t value)
     TWTK_WIDGET_SET_END
 }
 
-static inline int _is_ext(const char* fn, const char* e)
-{
-    return (strcmp(&(fn[strlen(fn)-strlen(e)]), e)==0);
-}
-
-static cairo_surface_t *_try_load(const char* fn)
-{
-    if (fn == NULL)
-    {
-	_DEBUG("NULL filename");
-	return NULL;
-    }
-
-    if (_is_ext(fn, ".jpg") || _is_ext(fn, ".JPG") || _is_ext(fn, ".jpeg") || _is_ext(fn, ".JPEG"))
-	return cairo_image_surface_create_from_jpeg(fn);
-
-    if (_is_ext(fn, ".png") || _is_ext(fn, ".PNG"))
-	return cairo_image_surface_create_from_png(fn);
-
-    _DEBUG("failed to detect image format: \"%s\"", fn);
-    return NULL;
-}
-
 twtk_widget_t *twtk_image_widget_create(const char* fn, double x, double y, double w, double h)
 {
-    cairo_surface_t *img = _try_load(fn);
+    cairo_surface_t *img = _twtk_ut_load_image_surface(fn);
 
     if (img == NULL)
     {

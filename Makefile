@@ -6,6 +6,7 @@ CAIRO_LIBS = `$(PKG_CONFIG) --libs cairo cairo-png cairo-drm`
 CAIRO_CFLAGS = `$(PKG_CONFIG) --cflags cairo cairo-png cairo-drm`
 
 SRCS = \
+    src/core/util.c			\
     src/core/threads.c			\
     src/core/widget.c			\
     src/core/widget-matrix.c		\

@@ -15,4 +15,7 @@ static inline int _twtk_ut_color_visible(twtk_color_t rgba)
     return rgba.alpha != 0;
 }
 
+cairo_surface_t *_twtk_ut_load_image_surface(const char* fn)
+    __attribute__((nonnull(1)));
+
 #endif /* __TWTK_CAIRO_UTIL_H */
