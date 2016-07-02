@@ -1,6 +1,10 @@
 
 #define _DEBUG_NAME	"window-widget"
 
+#ifdef ENABLE_DEBUG_WIDGET_WINDOW
+#define ENABLE_DEBUG
+#endif
+
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
