@@ -30,10 +30,13 @@ static int _handler(twtk_event_t *ev, void *priv)
     twtk_platform_redraw_widget(pos_widget, "<pos>");
 }
 
-twtk_widget_t *twtk_position_widget_create(double x, double y, double w, double h)
+#define WIDGET_SIZE_X	250
+#define WIDGET_SIZE_Y	30
+
+twtk_widget_t *twtk_position_widget_create(double x, double y)
 {
     /* create the position widget */
-    twtk_widget_t *pos_widget = twtk_text_widget_create(NULL, x, y, w, h);
+    twtk_widget_t *pos_widget = twtk_text_widget_create(NULL, x, y, WIDGET_SIZE_X, WIDGET_SIZE_Y);
 
     twtk_widget_set_border_color(pos_widget, TWTK_COLOR_RED);
     twtk_widget_set_background_color(pos_widget, TWTK_COLOR_GREEN);
