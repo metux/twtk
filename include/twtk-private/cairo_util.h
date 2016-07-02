@@ -7,7 +7,8 @@
 
 static inline void _twtk_ut_set_rgba(cairo_t* cr, twtk_color_t rgba)
 {
-    cairo_set_source_rgb(cr, rgba.red, rgba.green, rgba.blue);
+    /* note: cairo uses float numbers between 0..1 */
+    cairo_set_source_rgba(cr, rgba.red, rgba.green, rgba.blue, rgba.alpha);
 }
 
 static inline int _twtk_ut_color_visible(twtk_color_t rgba)
