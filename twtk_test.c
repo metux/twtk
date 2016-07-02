@@ -57,8 +57,7 @@ static twtk_widget_t *_create_text_1()
     twtk_widget_set_font_size(widget, 40);
     twtk_widget_set_border_color(widget, TWTK_COLOR_BLACK);
     twtk_widget_set_border_width(widget, 1);
-
-    twtk_widget_set_background_color(widget, (twtk_color_t){.alpha = 0xff, .red = 0xff, .green = 0xff});
+    twtk_widget_set_background_color(widget, TWTK_COLOR_YELLOW);
     twtk_widget_rotate(widget, 23);
     return widget;
 }
@@ -70,8 +69,7 @@ static twtk_widget_t *_create_debug()
     twtk_widget_set_font_color(widget, TWTK_COLOR_BLACK);
     twtk_widget_set_border_color(widget, TWTK_COLOR_WHITE);
     twtk_widget_set_border_width(widget, 1);
-
-    twtk_widget_set_background_color(widget, (twtk_color_t){.alpha = 0xff, .red = 0xff, .green = 0xff});
+    twtk_widget_set_background_color(widget, TWTK_COLOR_YELLOW);
     twtk_debug_widget_install(widget);
     return widget;
 }
@@ -116,6 +114,8 @@ static twtk_widget_t *_create_win()
 static void _init_boxes()
 {
     twtk_widget_t *root = twtk_platform_get_root();
+
+    twtk_widget_set_background_color(root, TWTK_COLOR_GREY);
 
     twtk_widget_add_child_unref(root, _create_red_box(),     "red");
     twtk_widget_add_child_unref(root, _create_blue_box(),    "blue");
