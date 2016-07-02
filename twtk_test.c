@@ -7,11 +7,17 @@
 #include <twtk/widgets.h>
 #include <twtk/platform.h>
 #include <twtk/color.h>
+#include <twtk/widgets/position.h>
+#include <twtk/widgets/movebox.h>
 #include <twtk-private/debug-widget.h>
 
-static twtk_widget_t *_create_position()
+static void _create_position(twtk_widget_t* parent)
 {
-    return twtk_position_widget_create(100, 100, 250, 30);
+    return twtk_widget_add_child_unref(
+        parent,
+        twtk_movebox_widget_create(twtk_position_widget_create(100, 100)),
+        "position"
+    );
 }
 
 static twtk_widget_t *_create_pattern()
@@ -118,10 +124,11 @@ static void _init_boxes()
     twtk_widget_add_child_unref(root, _create_image_lara(),  "image-lara");
     twtk_widget_add_child_unref(root, _create_image_black(), "image-black");
     twtk_widget_add_child_unref(root, _create_box2(),        "box2");
-    twtk_widget_add_child_unref(root, _create_position(),    "position");
     twtk_widget_add_child_unref(root, _create_debug(),       "debug");
     twtk_widget_add_child_unref(root, _create_win(),         "win");
     twtk_widget_add_child_unref(root, _create_pattern(),     "pattern");
+
+    _create_position(root);
 }
 
 int main(void)
