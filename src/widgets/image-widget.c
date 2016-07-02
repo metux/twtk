@@ -1,6 +1,10 @@
 
 #define _DEBUG_NAME	"image-widget"
 
+#ifdef ENABLE_DEBUG_WIDGET_IMAGE
+#define ENABLE_DEBUG
+#endif
+
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
