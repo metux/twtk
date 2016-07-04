@@ -36,7 +36,9 @@ typedef struct
     int border_width;
 } _priv_t;
 
-static int _op_event(twtk_widget_t *widget, twtk_event_t *event);
+static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
+    __attribute__((nonnull(1,2)));
+
 static int _op_fini(twtk_widget_t *widget);
 static int _op_paint(twtk_widget_t *widget, cairo_t *cr);
 static int _op_set_color(twtk_widget_t *widget, const char* name, twtk_color_t value);
@@ -56,7 +58,7 @@ static twtk_widget_class_t _class_inf = {
     .priv_size    = sizeof(_priv_t)
 };
 
-static int _op_event(twtk_widget_t *widget, twtk_event_t *event)
+static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
 {
     TWTK_WIDGET_OP_BEGIN
     TWTK_WIDGET_OP_END(0);

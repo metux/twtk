@@ -164,44 +164,106 @@ void twtk_widget_destroy(twtk_widget_t *widget)
     free(widget);
 }
 
-int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
+static twtk_widget_t *last_mouse_consumer = NULL;
+
+/** update the debug widget **/
+static int _update_debug(twtk_widget_t *widget, twtk_event_t *event)
 {
-    /* fixme: we yet have to decide, under which circumstances messages
-       are passed to parent vs. child - maybe add some flags ? */
-    int ret = twtk_widget_event(parent, event);
+    assert(widget);
+    assert(event);
 
-    if (ret & TWTK_EVSTAT_CONSUMED)
-	return ret;
+    char buffer[1024];
 
-    if (event->type == TWTK_EVENT_MOUSE)
+    snprintf(
+        buffer,
+        sizeof(buffer),
+        "[%4.0f : %4.0f] %s",
+        event->mouse.pos.x,
+        event->mouse.pos.y,
+        widget->name);
+
+    twtk_debug_widget_set_text(buffer);
+
+    return 0;
+}
+
+/** dispatch LEAVE to the last active frame, if changed **/
+static int _dispatch_mouse_last(twtk_widget_t *parent, twtk_event_t *event)
+{
+    assert(parent);
+    assert(event);
+
+    if (parent == last_mouse_consumer)
+        return 0;
+
+    if (last_mouse_consumer != NULL)
     {
-	twtk_widget_t *child;
-	twtk_vector_t pos;
-	char *name = NULL;
-
-	if (!twtk_widget_list_find_pos(
-		&(parent->frames),
-		event->mouse.pos,
-		&child,
-		&pos,
-		&name))
-	    return ret;
-
-	twtk_event_t ev = *event;
-	ev.mouse.pos = pos;
-
-	char buffer[1024];
-	snprintf(buffer, sizeof(buffer), "[%4.0f : %4.0f] %s", pos.x, pos.y, name);
-	twtk_debug_widget_set_text(buffer);
-
-	/* pass to childs */
-	ret |= twtk_widget_dispatch(child, &ev);
-	twtk_widget_unref(child);
-	return ret;
+        twtk_event_t leave_event = { 0 };
+        leave_event.type = TWTK_EVENT_MOUSE;
+        leave_event.mouse.event = TWTK_EVENT_MOUSE_LEAVE;
+        twtk_widget_event(last_mouse_consumer, &leave_event, TWTK_EVENT_DISPATCH_DIRECT);
+        twtk_widget_unref(last_mouse_consumer);
     }
 
-    /* nothing to do */
+    last_mouse_consumer = twtk_widget_ref(parent);
+
     return 0;
+}
+
+static int _dispatch_mouse(twtk_widget_t *parent, twtk_event_t *event)
+{
+    twtk_widget_t *child;
+    twtk_vector_t pos;
+    char *name = NULL;
+
+    assert(parent);
+    assert(event);
+
+    /** check whether the position points into a subframe - in that case
+        pass down there event there
+     **/
+    if (twtk_widget_list_find_pos(
+        &(parent->frames),
+        event->mouse.pos,
+        &child,
+        &pos,
+        &name))
+    {
+        /* allow the event to be seen and optionally consumed by the parent */
+        int ret = twtk_widget_event(parent, event, TWTK_EVENT_DISPATCH_BEFORE);
+
+        if (ret & TWTK_EVSTAT_CONSUMED)
+            return ret;
+
+        /** position points into a subframe - pass it there **/
+        twtk_event_t ev = *event;
+        ev.mouse.pos = pos;
+
+        /* pass to childs */
+        ret = twtk_widget_dispatch(child, &ev);
+        twtk_widget_unref(child);
+
+        if (ret & TWTK_EVSTAT_CONSUMED)
+            return ret;
+
+        return twtk_widget_event(parent, event, TWTK_EVENT_DISPATCH_AFTER);
+    }
+    else
+    {
+        /** position points into current frame - process there **/
+        _dispatch_mouse_last(parent, event);
+        _update_debug(parent, event);
+
+        return twtk_widget_event(parent, event, TWTK_EVENT_DISPATCH_DIRECT);
+    }
+}
+
+int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
+{
+    if (event->type == TWTK_EVENT_MOUSE)
+        return _dispatch_mouse(parent, event);
+
+    return twtk_widget_event(parent, event, TWTK_EVENT_DISPATCH_AFTER);
 }
 
 int twtk_widget_set_name(twtk_widget_t *widget, const char *name)
@@ -290,10 +352,14 @@ void twtk_widget_dirty(twtk_widget_t *widget)
     widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
 }
 
-int twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event)
+int twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
 {
     if (widget->cls->op_event == NULL)  // ignored / pass to childs
         return 0;
 
-    return widget->cls->op_event(widget, event);
+    int ret = widget->cls->op_event(widget, event, d);
+    if (ret & TWTK_EVSTAT_DIRTY)
+        twtk_widget_dirty(widget);
+
+    return ret;
 }
