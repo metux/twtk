@@ -19,7 +19,7 @@
 #include <twtk-private/debug.h>
 
 
-#define MAGIC			0x504F5357504F5357      // "POSWPOSW"
+#define MAGIC			0x4554545830303030	// TEXT0000
 
 #define _WIDGET_PRIV_TYPE	_priv_t
 #define _WIDGET_CLASS_INF	_class_inf
