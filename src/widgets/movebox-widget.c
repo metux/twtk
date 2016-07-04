@@ -45,7 +45,7 @@ static int _op_event(twtk_widget_t *widget, twtk_event_t *event)
     {
 	if (event->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_MIDDLE)
 	{
-	    twtk_widget_move_rel(widget, event->mouse.relative.x, event->mouse.relative.y);
+	    twtk_widget_move_rel(widget, event->mouse.diff.x, event->mouse.diff.y);
 	    TWTK_WIDGET_OP_RETURN(TWTK_EVSTAT_CONSUMED | TWTK_EVSTAT_DIRTY);
 	}
     }
