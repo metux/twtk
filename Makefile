@@ -40,6 +40,7 @@ sources-y +=				\
     src/input/evdev.c			\
     src/widgets/movebox-widget.c	\
     src/widgets/text-widget.c		\
+    src/widgets/button-widget.c		\
     src/widgets/image-widget.c		\
     src/widgets/window-widget.c		\
     src/widgets/position-widget.c	\
@@ -66,6 +67,7 @@ CFLAGS += $(cflags-y) `$(PKG_CONFIG_CMD) --cflags $(pkgconfig-y)`
 # CFLAGS += -DENABLE_DEBUG_WIDGET_WINDOW
 # CFLAGS += -DENABLE_DEBUG_WIDGET_MOVEBOX
 # CFLAGS += -DENABLE_DEBUG_WIDGET_IMAGE
+# CFLAGS += -DENABLE_DEBUG_WIDGET_BUTTON
 # CFLAGS += -DENABLE_DEBUG_WIDGET_TEXT
 # CFLAGS += -DENABLE_DEBUG_PLATFORM_GENERIC
 # CFLAGS += -DENABLE_DEBUG_PLATFORM_DRM
