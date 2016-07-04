@@ -13,6 +13,7 @@ typedef enum
 
 typedef enum
 {
+    TWTK_EVENT_MOUSE_LEAVE		= 0,
     TWTK_EVENT_MOUSE_MOVE		= 1,
     TWTK_EVENT_MOUSE_BTN_UP		= 2,
     TWTK_EVENT_MOUSE_BTN_DOWN		= 4,

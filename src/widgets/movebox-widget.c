@@ -28,7 +28,7 @@ typedef struct
 {
 } _priv_t;
 
-static int _op_event(twtk_widget_t *widget, twtk_event_t *event)
+static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
     __attribute__((nonnull(1,2)));
 
 static twtk_widget_class_t _class_inf = {
@@ -37,7 +37,7 @@ static twtk_widget_class_t _class_inf = {
     .priv_size    = sizeof(_priv_t)
 };
 
-static int _op_event(twtk_widget_t *widget, twtk_event_t *event)
+static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
 {
     TWTK_WIDGET_OP_BEGIN
 

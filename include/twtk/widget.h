@@ -30,12 +30,30 @@
 #define TWTK_EVSTAT_DIRTY	1 << 3
 
 /**
+ * widget event dispatching points
+ */
+
+/* event will be sent before subframes are checked */
+typedef enum
+{
+    /* event is dispatched before subframes are tried */
+    TWTK_EVENT_DISPATCH_BEFORE = 1 << 0,
+
+    /* event is dispatched after subframes are tried */
+    TWTK_EVENT_DISPATCH_AFTER  = 1 << 2,
+
+    /* event is dispatched directly to the frame */
+    TWTK_EVENT_DISPATCH_DIRECT = 1 << 3,
+} twtk_event_dispatch_t;
+
+/**
  * widget operation callbacks
  *
  * these callbacks are always with the widget lock held - they may **NOT** lock them any further
  * (we're currently not using recursive locks yet)
  */
-typedef int (*twtk_widget_op_event_t)(twtk_widget_t *widget, twtk_event_t *event);
+typedef int (*twtk_widget_op_event_t)(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
+    __attribute__((nonnull(1,2)));
 typedef int (*twtk_widget_op_paint_t)(twtk_widget_t *widget, cairo_t *ctx);
 typedef int (*twtk_widget_op_fini_t)(twtk_widget_t *widget);
 typedef int (*twtk_widget_op_set_str_t)(twtk_widget_t *widget, const char* name, const char* value);
@@ -189,7 +207,8 @@ void twtk_widget_move_rel(twtk_widget_t *widget, double x, double y);
 void twtk_widget_resize(twtk_widget_t *widget, double w, double h);
 void twtk_widget_rotate(twtk_widget_t *widget, double a);
 void twtk_widget_vresize(twtk_widget_t *widget, double w, double h);
-int  twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event);
+int  twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
+    __attribute__((nonnull(1,2)));
 
 int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
     __attribute__((nonnull(1,2)));

@@ -35,7 +35,7 @@ const char *twtk_event_mouse_type_name(twtk_event_mouse_type_t t)
 {
     switch (t)
     {
-	case 0:					return 0;
+	case TWTK_EVENT_MOUSE_LEAVE:		return "LEAVE";
 	case TWTK_EVENT_MOUSE_MOVE:		return "MOVE";
 	case TWTK_EVENT_MOUSE_BTN_UP:		return "BUTTON-UP";
 	case TWTK_EVENT_MOUSE_BTN_DOWN:		return "BUTTON-DOWN";
