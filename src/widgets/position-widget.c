@@ -18,8 +18,8 @@ static int _handler(twtk_event_t *ev, void *priv)
     snprintf(buffer,
         sizeof(buffer)-1,
         "%4ld : %4ld %s %s %s",
-        _do_round(ev->mouse.absolute.x),
-        _do_round(ev->mouse.absolute.y),
+        _do_round(ev->mouse.pos.x),
+        _do_round(ev->mouse.pos.y),
         (ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_LEFT)   ? "L" : " ",
         (ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_MIDDLE) ? "M" : " ",
         (ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_RIGHT)  ? "R" : " ");

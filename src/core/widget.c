@@ -181,14 +181,14 @@ int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
 
 	if (!twtk_widget_list_find_pos(
 		&(parent->frames),
-		event->mouse.absolute,
+		event->mouse.pos,
 		&child,
 		&pos,
 		&name))
 	    return ret;
 
 	twtk_event_t ev = *event;
-	ev.mouse.absolute = pos;
+	ev.mouse.pos = pos;
 
 	char buffer[1024];
 	snprintf(buffer, sizeof(buffer), "[%4.0f : %4.0f] %s", pos.x, pos.y, name);

@@ -253,17 +253,17 @@ static int _handle_mouse_event(struct evdev_state *state, struct input_event *ev
 	    {
 		case REL_X:
 		    state->last_position.x += ev->value;
-		    event.mouse.relative.x = ev->value;
+		    event.mouse.diff.x = ev->value;
 		break;
 		case REL_Y:
 		    state->last_position.y += ev->value;
-		    event.mouse.relative.y = ev->value;
+		    event.mouse.diff.y = ev->value;
 		break;
 		default:
 		    return 0;
 	    }
 	    event.mouse.event = TWTK_EVENT_MOUSE_MOVE;
-	    event.mouse.absolute = state->last_position;
+	    event.mouse.pos = state->last_position;
 	    event.mouse.all_buttons = state->last_buttons;
 	    return twtk_event_raise(&event);
 	}
@@ -271,7 +271,7 @@ static int _handle_mouse_event(struct evdev_state *state, struct input_event *ev
 	case EV_KEY:
 	{
 	    event.mouse.button = evcode_to_button(ev->code);
-	    event.mouse.absolute = state->last_position;
+	    event.mouse.pos = state->last_position;
 
 	    if (ev->value)
 	    {

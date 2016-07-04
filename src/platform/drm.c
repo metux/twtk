@@ -106,7 +106,7 @@ int twtk_drm_cursor_handler(twtk_event_t* ev, void *p)
     if ((ev->type == TWTK_EVENT_MOUSE) &&
 	(ev->mouse.event == TWTK_EVENT_MOUSE_MOVE))
     {
-	int ret = drmModeMoveCursor(inf->fd, inf->crtc_id, ev->mouse.absolute.x, ev->mouse.absolute.y);
+	int ret = drmModeMoveCursor(inf->fd, inf->crtc_id, ev->mouse.pos.x, ev->mouse.pos.y);
 	if (ret)
 	    _DEBUG("movecursor failed: %s", strerror(-ret));
     }

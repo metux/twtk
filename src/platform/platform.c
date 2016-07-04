@@ -81,8 +81,8 @@ static int _dispatch_handler(twtk_event_t *event, void *priv)
 	{
 	    char buffer[1024];
 	    snprintf(buffer, sizeof(buffer), "[ %4.0f : %4.0f ] <ROOT>",
-		event->mouse.absolute.x,
-		event->mouse.absolute.y);
+		event->mouse.pos.x,
+		event->mouse.pos.y);
 
 	    twtk_debug_widget_set_text(buffer);
 	}

@@ -63,10 +63,10 @@ static void twtk_dump_event_mouse (twtk_event_t *ev)
 
     snprintf(buffer, sizeof(buffer), "mouse: %-15s X=%4f Y=%4f dX=%4f dY=%4f [%s%s%s]",
 	twtk_event_mouse_type_name(ev->mouse.event),
-	ev->mouse.absolute.x,
-	ev->mouse.absolute.y,
-	ev->mouse.relative.x,
-	ev->mouse.relative.y,
+	ev->mouse.pos.x,
+	ev->mouse.pos.y,
+	ev->mouse.diff.x,
+	ev->mouse.diff.y,
 	(ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_LEFT)   ? "L" : " ",
 	(ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_MIDDLE) ? "M" : " ",
 	(ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_RIGHT)  ? "M" : " ");

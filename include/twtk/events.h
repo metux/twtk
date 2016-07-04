@@ -36,8 +36,8 @@ struct __twtk_event
     union {
 	struct {
 	    twtk_event_mouse_type_t event;
-	    twtk_vector_t absolute;
-	    twtk_vector_t relative;
+	    twtk_vector_t pos;
+	    twtk_vector_t diff;
 	    twtk_event_mouse_button_t all_buttons;
 	    twtk_event_mouse_button_t button;
 	} mouse;
