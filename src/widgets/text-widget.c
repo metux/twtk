@@ -1,5 +1,7 @@
 
+#ifdef ENABLE_DEBUG_WIDGET_TEXT
 #define _DEBUG_NAME	"text-widget"
+#endif
 
 #define _GNU_SOURCE
 
