@@ -2,7 +2,6 @@
 #define __TWTK_COLOR_H_
 
 #include <inttypes.h>
-#include <twtk/types.h>
 
 struct __twtk_color
 {
