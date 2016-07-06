@@ -214,6 +214,16 @@ int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
     __attribute__((nonnull(1,2)));
 
 /**
+ * low level functions for managing parent and frame references
+ *
+ * parameter target may be NULL
+ */
+int  twtk_widget_set_parent(twtk_widget_t *widget, twtk_widget_t *target, const char *name)
+    __attribute__((nonnull(1)));
+int  twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target, const char *name)
+    __attribute__((nonnull(1)));
+
+/**
  * Invalidate an rect within the given widget
  * (will be repainted in next iteration)
  *
