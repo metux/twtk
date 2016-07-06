@@ -115,6 +115,9 @@ void twtk_widget_add_child(twtk_widget_t *parent, twtk_widget_t *child, const ch
     TWTK_LOCK(parent);
     TWTK_LOCK(child);
 
+    if (child->parent)
+        twtk_widget_unref(child->parent);
+
     child->parent = twtk_widget_ref(parent);
 
     /* FIXME: handle popups */
