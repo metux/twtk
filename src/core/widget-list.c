@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <errno.h>
 #include <twtk/threads.h>
 #include <twtk/widget.h>
 #include <twtk/widget-list.h>
@@ -142,4 +143,80 @@ int twtk_widget_list_find_pos(
     TWTK_UNLOCK(list);
 
     return 0;
+}
+
+static int __remove_by_ref(twtk_widget_list_t *list, twtk_widget_t *widget)
+{
+    /** special case: empty list **/
+    if (list->first == NULL)
+        return -ENOENT;
+
+    /** special case: only one element **/
+    if (list->first == list->last)
+    {
+        if (list->first->widget != widget)
+            return -ENOENT;
+
+        twtk_widget_unref(widget);
+        free(list->first);
+        list->first = NULL;
+        list->last = NULL;
+        return 0;
+    }
+
+    /** special case: first element **/
+    if (list->first->widget == widget)
+    {
+        twtk_widget_list_entry_t *old = list->first;
+        twtk_widget_unref(old->widget);
+        list->first = old->next;
+        list->first->prev = NULL;
+        free(old);
+        return 0;
+    }
+
+    /** special case: last element **/
+    if (list->last->widget == widget)
+    {
+        twtk_widget_list_entry_t *old = list->last;
+        twtk_widget_unref(old->widget);
+        old->prev->next = NULL;
+        list->last = old->prev;
+        free(old);
+        return 0;
+    }
+
+    twtk_widget_list_entry_t *walk;
+    for (walk = list->first; walk->next != NULL; walk = walk->next)
+    {
+        if (walk->next->widget == NULL)
+        {
+            twtk_widget_list_entry_t *old = walk->next;
+            twtk_widget_unref(old->widget);
+
+            old->next->prev = walk;
+            walk->next = old->next;
+
+            if (walk->next == NULL)
+                list->last = walk;
+
+            return 0;
+        }
+    }
+
+    return -ENOENT;
+}
+
+int twtk_widget_list_remove_by_ref(twtk_widget_list_t *list, twtk_widget_t *widget)
+{
+    assert(list);
+    assert(widget);
+
+    TWTK_LOCK(list);
+
+    int ret = __remove_by_ref(list, widget);
+
+    TWTK_UNLOCK(list);
+
+    return ret;
 }

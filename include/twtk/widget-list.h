@@ -30,4 +30,7 @@ int twtk_widget_list_find_pos(twtk_widget_list_t *list,
 			      char **ret_name)
     __attribute__((nonnull(1,3,4,5)));
 
+int twtk_widget_list_remove_by_ref(twtk_widget_list_t *list, twtk_widget_t *widget)
+    __attribute__((nonnull(1,2)));
+
 #endif /* __TWTK_WIDGET_LIST_H_ */
