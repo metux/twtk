@@ -8,6 +8,7 @@ typedef enum
 {
     TWTK_EVENT_MOUSE	= 1,
     TWTK_EVENT_KEY	= 2,
+    TWTK_EVENT_ACTION	= 3,
 } twtk_event_type_t;
 
 
@@ -30,6 +31,13 @@ typedef enum
 } twtk_event_mouse_button_t;
 
 
+typedef enum
+{
+    TWTK_EVENT_ACTION_PUSH		= 1,
+    TWTK_EVENT_ACTION_PULL		= 2
+} twtk_event_action_type_t;
+
+
 struct __twtk_event
 {
     int device;
@@ -42,6 +50,11 @@ struct __twtk_event
 	    twtk_event_mouse_button_t all_buttons;
 	    twtk_event_mouse_button_t button;
 	} mouse;
+        struct {
+            twtk_event_action_type_t action;
+            twtk_widget_t *widget;
+            const char *signal;
+        } action;
     };
 };
 

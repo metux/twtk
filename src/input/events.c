@@ -27,6 +27,7 @@ const char *twtk_event_type_name(twtk_event_type_t t)
     {
 	case TWTK_EVENT_MOUSE:			return "MOUSE";
 	case TWTK_EVENT_KEY:			return "KEY";
+	case TWTK_EVENT_ACTION:			return "ACTION";
     }
     return "???";
 }
