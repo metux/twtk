@@ -423,3 +423,51 @@ int twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect)
     // FIXME
     return 0;
 }
+
+// FIXME: need to lock widget
+int twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target, const char *name)
+{
+    if (widget == NULL)
+        return 0;
+
+    /** drop old framing, if existing **/
+    if (widget->frame)
+    {
+        twtk_widget_list_remove_by_ref(&widget->frame->frames, widget);
+        twtk_widget_unref(widget->frame);
+        widget->frame = NULL;
+    }
+
+    /* default behaviour: add the child into the parent's frame */
+    if (target)
+    {
+        twtk_widget_list_add(&target->frames, widget, name);
+        widget->frame = twtk_widget_ref(target);
+    }
+
+    return 0;
+}
+
+// FIXME: need to lock widget
+int twtk_widget_set_parent(twtk_widget_t *widget, twtk_widget_t *target, const char *name)
+{
+    if (widget == NULL)
+        return 0;
+
+    /** drop old framing, if existing **/
+    if (widget->parent)
+    {
+        twtk_widget_list_remove_by_ref(&widget->childs, widget->parent);
+        twtk_widget_unref(widget->parent);
+        widget->parent = NULL;
+    }
+
+    /* default behaviour: add the child into the parent's frame */
+    if (target)
+    {
+        twtk_widget_list_add(&target->childs, widget, name);
+        widget->parent = twtk_widget_ref(target);
+    }
+
+    return 0;
+}
