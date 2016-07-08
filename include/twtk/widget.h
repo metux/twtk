@@ -180,7 +180,13 @@ static inline void twtk_widget_unref(twtk_widget_t *widget)
     // no locking needed here anymore - once it reaches zero, nobody
     // should have a ref to it
     if (widget->refcnt < 1)
+    {
+        printf("destroying widget: %s\n", widget->name);
 	twtk_widget_destroy(widget);
+    }
+    {
+//        printf("widget refcnt: %d -> %s\n", widget->refcnt, widget->name);
+    }
 }
 
 /**

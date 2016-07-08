@@ -45,6 +45,7 @@ sources-y +=				\
     src/core/widget-matrix.c		\
     src/core/widget-render.c		\
     src/core/widget-list.c		\
+    src/core/menu.c			\
     src/platform/generic.c		\
     src/platform/platform.c		\
     src/platform/debug-widget.c		\
@@ -57,6 +58,12 @@ sources-y +=				\
     src/widgets/window-widget.c		\
     src/widgets/position-widget.c	\
     src/widgets/pattern-widget.c	\
+    src/widgets/menu-widget.c		\
+    src/widgets/menu-widget-submenu.c	\
+    src/widgets/menu-widget-action.c	\
+    src/widgets/menu-widget-paint.c	\
+    src/widgets/menu-widget-boxes.c	\
+    src/widgets/menu-widget-mouse.c	\
     twtk_test.c				\
 
 cflags-y +=				\
@@ -82,6 +89,7 @@ CFLAGS += -DENABLE_DEBUG_WIDGET_WINDOW
 CFLAGS += -DENABLE_DEBUG_WIDGET_BUTTON
 # CFLAGS += -DENABLE_DEBUG_WIDGET_TEXT
 CFLAGS += -DENABLE_DEBUG_PLATFORM_GENERIC
+CFLAGS += -DENABLE_DEBUG_WIDGET_MENU
 # CFLAGS += -DENABLE_DEBUG_PLATFORM_DRM
 CFLAGS += -DENABLE_DEBUG_PLATFORM_XCB
 
