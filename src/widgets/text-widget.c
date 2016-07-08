@@ -64,15 +64,12 @@ static int _op_paint(twtk_widget_t *widget, cairo_t *cr)
 {
     TWTK_WIDGET_OP_BEGIN
 
-    int w = widget->viewport.size.x;
-    int h = widget->viewport.size.y;
-
     /* paint border */
     if (_twtk_ut_color_visible(priv->border_color))
     {
 	_twtk_ut_set_rgba(cr, priv->border_color);
 	cairo_set_line_width(cr, priv->border_width);
-	cairo_rectangle (cr, 0, 0, w, h);
+	_twtk_ut_rect_to_vec (cr, widget->viewport.size);
 	cairo_stroke (cr);
     }
 
