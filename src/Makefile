@@ -53,7 +53,13 @@ sources-y += \
     widgets/image-widget.c \
     widgets/window-widget.c \
     widgets/position-widget.c \
-    widgets/pattern-widget.c
+    widgets/pattern-widget.c \
+    widgets/menu-widget.c \
+    widgets/menu-widget-submenu.c \
+    widgets/menu-widget-action.c \
+    widgets/menu-widget-paint.c \
+    widgets/menu-widget-boxes.c \
+    widgets/menu-widget-mouse.c
 
 includes-y += $(src_root)/include
 
