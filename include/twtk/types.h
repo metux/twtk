@@ -13,6 +13,8 @@ typedef struct __twtk_platform		twtk_platform_t;
 typedef struct __twtk_color		twtk_color_t;
 typedef struct __twtk_widget_list	twtk_widget_list_t;
 typedef struct __twtk_widget_list_entry	twtk_widget_list_entry_t;
+typedef struct __twtk_menu		twtk_menu_t;
+typedef struct __twtk_menu_entry	twtk_menu_entry_t;
 
 typedef pthread_mutex_t			twtk_lock_t;
 
