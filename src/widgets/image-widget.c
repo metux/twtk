@@ -73,7 +73,7 @@ static int _op_paint(twtk_widget_t *widget, cairo_t *cr)
     {
 	_twtk_ut_set_rgba (cr, priv->border_color);
 	cairo_set_line_width (cr, priv->border_width);
-	cairo_rectangle (cr, 0, 0, widget->viewport.size.x, widget->viewport.size.y);
+        _twtk_ut_rect_to_vec (cr, widget->viewport.size);
 	cairo_stroke (cr);
     }
 

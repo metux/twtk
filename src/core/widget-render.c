@@ -44,18 +44,14 @@ static void _widget_clip_frame(
 {
 	/* first sub-path: the whole area */
 	cairo_new_sub_path(cr);
-	cairo_rectangle(cr, 0, 0, parent->viewport.size.x, parent->viewport.size.y);
+	_twtk_ut_rect_to_vec(cr, parent->viewport.size);
 	cairo_close_path(cr);
 
 	/* second sub-path: the neighbor widget area */
 	cairo_new_sub_path(cr);
 	cairo_matrix_t w_matrix = _twtk_widget_calc_matrix(parent);
 	cairo_set_matrix(cr, &w_matrix);
-	cairo_rectangle(cr,
-	    frame->viewport.pos.x,
-	    frame->viewport.pos.y,
-	    frame->viewport.size.x,
-	    frame->viewport.size.y);
+	_twtk_ut_rect(cr, frame->viewport);
 	cairo_close_path(cr);
 
 	/* set the clip */
@@ -137,7 +133,7 @@ static void _widget_prepare_frame(
 
     cairo_matrix_t matrix = _twtk_widget_calc_matrix(widget);
     cairo_set_matrix(cr, &matrix);
-    cairo_rectangle(cr, 0, 0, widget->viewport.size.x, widget->viewport.size.y);
+    _twtk_ut_rect_to_vec(cr, widget->viewport.size);
     cairo_clip(cr);
 }
 
@@ -148,7 +144,8 @@ static void _widget_fill_background(twtk_widget_t *widget, cairo_t *cr)
 	return;
 
     _twtk_ut_set_rgba(cr, widget->background_color);
-    cairo_rectangle (cr, 0, 0, widget->viewport.size.x, widget->viewport.size.y);
+    _twtk_ut_rect_to_vec(cr, widget->viewport.size);
+
     cairo_fill (cr);
 }
 
