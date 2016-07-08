@@ -7,12 +7,42 @@
 #include <twtk/platform.h>
 #include <twtk/color.h>
 #include <twtk/widgets/button.h>
+#include <twtk/menu.h>
 #include <twtk/widgets/image.h>
 #include <twtk/widgets/text.h>
 #include <twtk/widgets/position.h>
 #include <twtk/widgets/movebox.h>
 #include <twtk/widgets/window.h>
+#include <twtk/widgets/menu.h>
 #include <twtk-private/debug-widget.h>
+#include <twtk-private/strutil.h>
+
+
+twtk_menu_entry_t submenu_file_entries[] = {
+    TWTK_DECLARE_MENU_STATIC_ENTRY("new", "New"),
+    TWTK_DECLARE_MENU_STATIC_ENTRY("open", "Open"),
+    TWTK_DECLARE_MENU_STATIC_ENTRY("close", "Close"),
+    TWTK_DECLARE_MENU_STATIC_ENTRY("print", "Print"),
+};
+
+TWTK_DECLARE_MENU_STATIC(submenu_edit, "file", submenu_file_entries);
+
+twtk_menu_entry_t submenu_edit_entries[] = {
+    TWTK_DECLARE_MENU_STATIC_ENTRY("copy", "Copy"),
+    TWTK_DECLARE_MENU_STATIC_ENTRY("insert", "Insert"),
+    TWTK_DECLARE_MENU_STATIC_ENTRY("delete", "Delete"),
+};
+
+TWTK_DECLARE_MENU_STATIC(submenu_file, "file", submenu_edit_entries)
+
+twtk_menu_entry_t menu_main_entries[] = {
+    TWTK_DECLARE_MENU_STATIC_SUBMENU("file", "File", &submenu_file),
+    TWTK_DECLARE_MENU_STATIC_SUBMENU("edit", "Edit", &submenu_edit),
+    TWTK_DECLARE_MENU_STATIC_ENTRY("settings", "settings"),
+    TWTK_DECLARE_MENU_STATIC_ENTRY("help", "Help")
+};
+
+TWTK_DECLARE_MENU_STATIC(menu_main, "main", menu_main_entries)
 
 
 static void _create_position(twtk_widget_t* parent)
@@ -22,6 +52,19 @@ static void _create_position(twtk_widget_t* parent)
         twtk_movebox_widget_create(twtk_position_widget_create(100, 100)),
         "position"
     );
+}
+
+static void _create_menu(twtk_widget_t *parent, twtk_menu_t *menu)
+{
+    assert(parent);
+    assert(menu);
+
+    twtk_widget_t *mw = twtk_menu_widget_create(
+        menu,
+        twtk_rect_by_coords(100, 400, -1, -1, 0)
+    );
+
+    return twtk_widget_add_child_unref(parent, mw, "mainmenu");
 }
 
 static void _create_red_box(twtk_widget_t *parent)
@@ -159,6 +202,7 @@ static void _init_boxes()
     _create_box2(root);
     _create_debug(root);
     _create_position(root);
+    _create_menu(root, &menu_main);
 }
 
 int main(void)
