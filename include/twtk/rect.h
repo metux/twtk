@@ -45,4 +45,13 @@ static inline twtk_rect_t twtk_rect_null()
     return (twtk_rect_t){ 0 };
 }
 
+static inline char twtk_vector_in_rect(twtk_vector_t vec, twtk_rect_t rect)
+{
+    return (
+        (vec.x >= rect.pos.x) &&
+        (vec.x <= (rect.pos.x + rect.size.x)) &&
+        (vec.y >= rect.pos.y) &&
+        (vec.y <= (rect.pos.y + rect.size.y)));
+}
+
 #endif /* __TWTK_RECT_H_ */
