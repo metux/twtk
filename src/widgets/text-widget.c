@@ -36,9 +36,6 @@ typedef struct
     int border_width;
 } _priv_t;
 
-static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
-    __attribute__((nonnull(1,2)));
-
 static int _op_fini(twtk_widget_t *widget);
 static int _op_paint(twtk_widget_t *widget, cairo_t *cr);
 static int _op_set_color(twtk_widget_t *widget, const char* name, twtk_color_t value);
@@ -48,7 +45,6 @@ static int _op_set_uint(twtk_widget_t *widget, const char* name, uint32_t value)
 
 static twtk_widget_class_t _class_inf = {
     .magic        = MAGIC,
-    .op_event     = _op_event,
     .op_fini      = _op_fini,
     .op_paint     = _op_paint,
     .op_set_color = _op_set_color,
@@ -57,12 +53,6 @@ static twtk_widget_class_t _class_inf = {
     .op_set_uint  = _op_set_uint,
     .priv_size    = sizeof(_priv_t)
 };
-
-static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
-{
-    TWTK_WIDGET_OP_BEGIN
-    TWTK_WIDGET_OP_END(0);
-}
 
 static int _op_fini(twtk_widget_t *widget)
 {
