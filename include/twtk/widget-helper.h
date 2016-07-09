@@ -52,4 +52,36 @@
 	return 0;				\
     }
 
+#define TWTK_WIDGET_SET_FONTSPEC_FLOAT_ATTRS		\
+    if (strcmp(name, "font-size") == 0)			\
+    {							\
+	twtk_fontspec_set_size(&priv->fontspec, value);	\
+	twtk_widget_dirty(widget);			\
+	return 0;					\
+    }
+
+#define TWTK_WIDGET_SET_FONTSPEC_INT_ATTRS		\
+    if (strcmp(name, "font-size") == 0)			\
+    {							\
+	twtk_fontspec_set_size(&priv->fontspec, value);	\
+	twtk_widget_dirty(widget);			\
+	return 0;					\
+    }
+
+#define TWTK_WIDGET_SET_FONTSPEC_COLOR_ATTRS		\
+    if (strcmp(name, "font-color") == 0)		\
+    {							\
+	twtk_fontspec_set_color(&priv->fontspec, value);\
+	twtk_widget_dirty(widget);			\
+	return 0;					\
+    }
+
+#define TWTK_WIDGET_SET_FONTSPEC_STR_ATTRS		\
+    if (strcmp(name, "font-name") == 0)			\
+    {							\
+	twtk_fontspec_set_name(&priv->fontspec, value);	\
+	twtk_widget_dirty(widget);			\
+	return 0;					\
+    }
+
 #endif /* __TWTK_PRIVATE_WIDGET_HELPER */
