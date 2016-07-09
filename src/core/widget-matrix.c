@@ -53,6 +53,6 @@ int twtk_widget_translate_pos(
 
     return twtk_vector_in_rect(
         pos,
-        (twtk_vector_t){ .x = 0, .y = 0 },
-        widget->viewport.size);
+        twtk_rect_by_vectors(TWTK_VECTOR(0,0), widget->viewport.size, 0)
+    );
 }

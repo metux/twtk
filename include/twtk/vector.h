@@ -48,13 +48,4 @@ static inline twtk_vector_t twtk_vector_rot(twtk_vector_t vec, double angle)
     };
 }
 
-static inline char twtk_vector_in_rect(twtk_vector_t vec, twtk_vector_t offset, twtk_vector_t size)
-{
-    return (
-	(vec.x >= offset.x) &&
-	(vec.x <= (offset.x + size.x)) &&
-	(vec.y >= offset.y) &&
-	(vec.y <= (offset.y + size.y)));
-}
-
 #endif /* __TWTK_VECTOR_H_ */
