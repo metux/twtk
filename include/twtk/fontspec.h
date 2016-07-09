@@ -52,4 +52,7 @@ static inline float twtk_fontspec_get_size(const twtk_fontspec_t *fs)
     return fs->size;
 }
 
+int twtk_fontspec_text_extents(const twtk_fontspec_t *fs, const char *text, cairo_text_extents_t *ret)
+    __attribute__((nonnull(1,2,3)));
+
 #endif /* __TWTK_FONTSPEC_H_ */
