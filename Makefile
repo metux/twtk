@@ -8,6 +8,7 @@ CAIRO_CFLAGS = `$(PKG_CONFIG) --cflags cairo cairo-png cairo-drm`
 SRCS = \
     src/core/util.c			\
     src/core/threads.c			\
+    src/core/fontspec.c			\
     src/core/widget.c			\
     src/core/widget-matrix.c		\
     src/core/widget-render.c		\
@@ -28,6 +29,7 @@ SRCS = \
 
 CFLAGS += -std=c99
 
+# CFLAGS += -DENABLE_DEBUG_FONTSPEC
 # CFLAGS += -DENABLE_DEBUG_WIDGET
 # CFLAGS += -DENABLE_DEBUG_WIDGET_LIST
 # CFLAGS += -DENABLE_DEBUG_WIDGET_RENDER

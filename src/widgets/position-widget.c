@@ -41,7 +41,6 @@ twtk_widget_t *twtk_position_widget_create(double x, double y)
     twtk_widget_set_border_color(pos_widget, TWTK_COLOR_RED);
     twtk_widget_set_background_color(pos_widget, TWTK_COLOR_GREEN);
     twtk_widget_set_font_color(pos_widget, TWTK_COLOR_BLUE);
-    twtk_widget_set_font_size(pos_widget, 20);
     twtk_widget_set_border_width(pos_widget, 5);
 
     twtk_event_notify("position-widget", _handler, pos_widget);
