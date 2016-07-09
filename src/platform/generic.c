@@ -49,13 +49,19 @@ static twtk_widget_t *_create_root(cairo_surface_t *surface)
     twtk_widget_t *r = twtk_widget_alloc(&_root_class_inf);
     assert(r);
 
-    r->viewport.pos = TWTK_VECTOR(0,0);
+    /* retrieve surface geometry */
+    {
+        cairo_t *ctx = cairo_create(surface);
+        double x1, y1, x2, y2;
+        cairo_clip_extents (ctx,
+            &r->viewport.pos.x,
+            &r->viewport.pos.y,
+            &r->viewport.size.x,
+            &r->viewport.size.y
+        );
+    }
 
     /** fixme: we should add surface-type independent functions in cairo **/
-    r->viewport.size = TWTK_VECTOR(
-        cairo_drm_surface_get_width(surface),
-        cairo_drm_surface_get_height(surface)
-    );
 
     twtk_widget_set_name(r, "<ROOT>");
     twtk_widget_set_background_color(r, TWTK_COLOR_BLACK);
