@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <twtk/platform.h>
 #include <twtk-private/drm.h>
+#include <twtk-private/xcb.h>
 #include <twtk/events.h>
 #include <twtk/widget.h>
 #include <twtk/evdev.h>
@@ -36,9 +37,31 @@ static inline int _setup_drm()
 }
 #endif
 
+#ifdef ENABLE_PLATFORM_XCB
+static inline int _setup_xcb()
+{
+    if (!getenv("DISPLAY"))
+        return -ENOENT;
+
+    twtk_platform_t *xcb_platform = twtk_platform_xcb_init();
+
+    if (xcb_platform == NULL)
+        return -EPERM;
+
+    twtk_platform_install(xcb_platform);
+
+    return 0;
+}
+#endif
+
 void twtk_platform_setup()
 {
     twtk_platform_init_dispatch();
+
+#ifdef ENABLE_PLATFORM_XCB
+    if (!_setup_xcb())
+        return;
+#endif
 
 #ifdef ENABLE_PLATFORM_DRM
     if (!_setup_drm())
