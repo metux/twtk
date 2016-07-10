@@ -2,9 +2,14 @@
 * core:
     * separate hierarchies: childs vs. frames
     * rethink message routing to su-widgets
-
-* window-widget:
-    * window decorations and buttons
+    * more efficient widget list -> use arrays instead of linked-list ?
+	--> use backref ?
 
 * misc widgets:
     * pixmap button
+
+* widget-list:
+    * rethink the name parameter
+	--> currently it just sets the widget's name
+	--> originally, the list entries were meant to hold the name on their own
+	    (so, we can have different names for childs vs subframes)
