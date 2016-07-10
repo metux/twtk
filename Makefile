@@ -20,6 +20,18 @@ cflags-$(CONFIG_PLATFORM_DRM) +=	\
     -DENABLE_PLATFORM_DRM
 
 
+## platform: XCB
+pkgconfig-$(CONFIG_PLATFORM_XCB) +=	\
+    xcb
+
+sources-$(CONFIG_PLATFORM_XCB) +=	\
+    src/platform/xcb.c			\
+    src/platform/xcb-util.c
+
+cflags-$(CONFIG_PLATFORM_XCB) +=	\
+    -DENABLE_PLATFORM_XCB
+
+
 ## common
 
 pkgconfig-y +=				\
@@ -71,6 +83,7 @@ CFLAGS += $(cflags-y) `$(PKG_CONFIG_CMD) --cflags $(pkgconfig-y)`
 # CFLAGS += -DENABLE_DEBUG_WIDGET_TEXT
 # CFLAGS += -DENABLE_DEBUG_PLATFORM_GENERIC
 # CFLAGS += -DENABLE_DEBUG_PLATFORM_DRM
+# CFLAGS += -DENABLE_DEBUG_PLATFORM_XCB
 
 HEADERS	:= $(shell find ./include -name "*.h")
 
