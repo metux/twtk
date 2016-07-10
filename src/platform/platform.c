@@ -1,8 +1,11 @@
 
+#ifdef ENABLE_DEBUG_PLATFORM
 #define _GNU_SOURCE
+#endif
 
 #include <assert.h>
 #include <stdio.h>
+#include <errno.h>
 #include <unistd.h>
 #include <twtk/platform.h>
 #include <twtk-private/drm.h>
@@ -10,6 +13,7 @@
 #include <twtk/widget.h>
 #include <twtk/evdev.h>
 #include <twtk-private/debug-widget.h>
+
 
 twtk_platform_t *_twtk_current_platform = NULL;
 
@@ -20,13 +24,26 @@ void twtk_platform_install(twtk_platform_t *platform)
     _twtk_current_platform = platform;
 }
 
-void twtk_platform_setup()
+#ifdef ENABLE_PLATFORM_DRM
+static inline int _setup_drm()
 {
     const char *mouse_device = getenv("TWTK_MOUSE_DEVICE");
 
     twtk_platform_install(twtk_platform_drm_init());
     twtk_evdev_mouse_start(mouse_device);
+
+    return 0;
+}
+#endif
+
+void twtk_platform_setup()
+{
     twtk_platform_init_dispatch();
+
+#ifdef ENABLE_PLATFORM_DRM
+    if (!_setup_drm())
+        return;
+#endif
 }
 
 void twtk_platform_finish()
