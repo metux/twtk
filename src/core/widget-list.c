@@ -54,7 +54,7 @@ void twtk_widget_list_add(twtk_widget_list_t *list, twtk_widget_t *widget, const
     assert(widget);
 
     // FIXME: should use free-list for more optimal allocation
-    twtk_widget_list_entry_t *ent = (twtk_widget_list_entry_t*)calloc(1,sizeof(twtk_widget_list_entry_t));
+    TWTK_NEW_OBJECT(twtk_widget_list_entry_t,ent);
 
     if (name)
     {

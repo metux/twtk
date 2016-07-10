@@ -26,7 +26,7 @@
 // FIXME: use an allocation cache
 twtk_widget_t *twtk_widget_alloc(twtk_widget_class_t *cls)
 {
-    twtk_widget_t *widget = calloc(1, sizeof(twtk_widget_t));
+    TWTK_NEW_OBJECT(twtk_widget_t,widget);
 
     TWTK_INIT_LOCK(widget);
 

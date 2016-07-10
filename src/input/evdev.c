@@ -342,7 +342,7 @@ static void *_mouse_thread(void *ptr)
 
 void twtk_evdev_mouse_start(const char* devname)
 {
-    struct evdev_state *state = calloc(1, sizeof(struct evdev_state));
+    TWTK_NEW_OBJECT(struct evdev_state, state);
 
     static int last_device_id = 0;
 
