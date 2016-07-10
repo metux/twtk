@@ -99,7 +99,7 @@ static twtk_widget_t *_create_root(twtk_platform_t *platform, cairo_surface_t *s
     /** fixme: we should add surface-type independent functions in cairo **/
 
     twtk_widget_set_name(r, "<ROOT>");
-    twtk_widget_set_background_color(r, TWTK_COLOR_BLACK);
+    twtk_widget_set_background_color(r, TWTK_COLOR_GREEN);
 
     return r;
 }
