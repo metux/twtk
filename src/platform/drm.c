@@ -18,6 +18,7 @@
 #include <malloc.h>
 #include <cairo-drm.h>
 #include <assert.h>
+#include <semaphore.h>
 
 #include <twtk/events.h>
 #include <twtk/widget.h>
@@ -178,15 +179,33 @@ int twtk_drm_initcursor(twtk_platform_drm_t *inf)
 static int _drm_destroy(twtk_platform_t *platform)
 {
     assert(platform);
-
-    twtk_platform_drm_t *drm_platform = (twtk_platform_drm_t*) platform;
-
-    // FIXME: should free the cursor
     cairo_surface_destroy(platform->surface);
 
+    twtk_platform_drm_t *drm_platform = (twtk_platform_drm_t*) platform;
+    sem_destroy(&drm_platform->mainloop_sem);
+
+    // FIXME: should free the cursor
     // FIXME: free the device
 
     free(platform);
+    return 0;
+}
+
+static int _drm_mainloop(twtk_platform_t *platform)
+{
+    assert(platform);
+    twtk_platform_drm_t *drm_platform = (twtk_platform_drm_t*) platform;
+    sem_wait(&drm_platform->mainloop_sem);
+
+    return 0;
+}
+
+static int _drm_stop(twtk_platform_t *platform)
+{
+    assert(platform);
+    twtk_platform_drm_t *drm_platform = (twtk_platform_drm_t*) platform;
+    sem_post(&drm_platform->mainloop_sem);
+
     return 0;
 }
 
@@ -206,6 +225,8 @@ twtk_platform_t *twtk_platform_drm_init()
 
     cairo_device_t *dev = cairo_surface_get_device(platform->base.surface);
 
+    sem_init(&platform->mainloop_sem, 0, 0);
+
     platform->fd = cairo_drm_device_get_fd(dev);
     platform->crtc_id = cairo_drm_surface_get_crtc_id(platform->base.surface);
 
@@ -213,6 +234,8 @@ twtk_platform_t *twtk_platform_drm_init()
     platform->base.op_get_root     = _twtk_platform_generic_get_root;
     platform->base.op_get_context  = _twtk_platform_generic_get_context;
     platform->base.op_free_context = _twtk_platform_generic_free_context;
+    platform->base.op_mainloop     = _drm_mainloop;
+    platform->base.op_stop         = _drm_stop;
 
     twtk_drm_initcursor(platform);
 
