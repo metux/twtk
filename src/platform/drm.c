@@ -192,7 +192,7 @@ static int _drm_destroy(twtk_platform_t *platform)
 
 twtk_platform_t *twtk_platform_drm_init()
 {
-    twtk_platform_drm_t *platform = (twtk_platform_drm_t *)calloc(1, sizeof(twtk_platform_drm_t));
+    TWTK_NEW_OBJECT(twtk_platform_drm_t, platform);
 
     if (!(platform->base.device = cairo_drm_device_default())) {
         _DEBUG("failed to open DRM device");
