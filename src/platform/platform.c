@@ -59,10 +59,20 @@ void twtk_platform_redraw()
 
 void twtk_platform_loop()
 {
-    while (1)
-    {
-	usleep(1000000);
-    }
+    if (!_twtk_current_platform)
+        return;
+
+    assert(_twtk_current_platform->op_mainloop);
+    _twtk_current_platform->op_mainloop(_twtk_current_platform);
+}
+
+void twtk_platform_stop()
+{
+    if (!_twtk_current_platform)
+        return;
+
+    assert(_twtk_current_platform->op_stop);
+    _twtk_current_platform->op_stop(_twtk_current_platform);
 }
 
 static inline int _is_dbg_event(twtk_event_t *event)
