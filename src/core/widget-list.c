@@ -48,18 +48,13 @@ void twtk_widget_list_fini(twtk_widget_list_t *list)
     TWTK_DESTROY_LOCK(list)
 }
 
-void twtk_widget_list_add(twtk_widget_list_t *list, twtk_widget_t *widget, const char* name)
+void twtk_widget_list_add(twtk_widget_list_t *list, twtk_widget_t *widget)
 {
     assert(list);
     assert(widget);
 
     // FIXME: should use free-list for more optimal allocation
     TWTK_NEW_OBJECT(twtk_widget_list_entry_t,ent);
-
-    if (name)
-    {
-        STRBUF_SET(widget->name, name);
-    }
 
     ent->widget = twtk_widget_ref(widget);
 

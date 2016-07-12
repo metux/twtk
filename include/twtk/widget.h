@@ -60,7 +60,7 @@ typedef int (*twtk_widget_op_set_str_t)(twtk_widget_t *widget, const char* name,
 typedef int (*twtk_widget_op_set_uint_t)(twtk_widget_t *widget, const char* name, uint32_t value);
 typedef int (*twtk_widget_op_set_float_t)(twtk_widget_t *widget, const char* name, double value);
 typedef int (*twtk_widget_op_set_color_t)(twtk_widget_t *widget, const char* name, twtk_color_t value);
-typedef int (*twtk_widget_op_insert_child_t)(twtk_widget_t *widget, twtk_widget_t* child, const char* name);
+typedef int (*twtk_widget_op_insert_child_t)(twtk_widget_t *widget, twtk_widget_t* child);
 
 struct __twtk_widget_class
 {
@@ -218,9 +218,9 @@ int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
  *
  * parameter target may be NULL
  */
-int  twtk_widget_set_parent(twtk_widget_t *widget, twtk_widget_t *target, const char *name)
+int  twtk_widget_set_parent(twtk_widget_t *widget, twtk_widget_t *target)
     __attribute__((nonnull(1)));
-int  twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target, const char *name)
+int  twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target)
     __attribute__((nonnull(1)));
 
 /**
