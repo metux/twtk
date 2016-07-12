@@ -109,7 +109,11 @@ void twtk_widget_add_child(twtk_widget_t *parent, twtk_widget_t *child, const ch
     assert(child);
     assert(child->parent == NULL);
     assert(child->frame == NULL);
-    twtk_widget_list_add(&parent->childs, child, name);
+
+    if (name)
+        twtk_widget_set_name(child, name);
+
+    twtk_widget_list_add(&parent->childs, child);
 
     /* add the child to a frame, so it becomes actually visible */
     TWTK_LOCK(parent);
@@ -125,12 +129,12 @@ void twtk_widget_add_child(twtk_widget_t *parent, twtk_widget_t *child, const ch
     if (parent->cls->op_insert_child)
     {
 	/* class has it's own insert method */
-	parent->cls->op_insert_child(parent, child, name);
+	parent->cls->op_insert_child(parent, child);
     }
     else
     {
 	/* default behaviour: add the child into the parent's frame */
-	twtk_widget_list_add(&parent->frames, child, name);
+	twtk_widget_list_add(&parent->frames, child);
 	child->frame = twtk_widget_ref(parent);
     }
 
@@ -428,7 +432,7 @@ int twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect)
 }
 
 // FIXME: need to lock widget
-int twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target, const char *name)
+int twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target)
 {
     if (widget == NULL)
         return 0;
@@ -444,7 +448,7 @@ int twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target, const ch
     /* default behaviour: add the child into the parent's frame */
     if (target)
     {
-        twtk_widget_list_add(&target->frames, widget, name);
+        twtk_widget_list_add(&target->frames, widget);
         widget->frame = twtk_widget_ref(target);
     }
 
@@ -452,7 +456,7 @@ int twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target, const ch
 }
 
 // FIXME: need to lock widget
-int twtk_widget_set_parent(twtk_widget_t *widget, twtk_widget_t *target, const char *name)
+int twtk_widget_set_parent(twtk_widget_t *widget, twtk_widget_t *target)
 {
     if (widget == NULL)
         return 0;
@@ -468,7 +472,7 @@ int twtk_widget_set_parent(twtk_widget_t *widget, twtk_widget_t *target, const c
     /* default behaviour: add the child into the parent's frame */
     if (target)
     {
-        twtk_widget_list_add(&target->childs, widget, name);
+        twtk_widget_list_add(&target->childs, widget);
         widget->parent = twtk_widget_ref(target);
     }
 

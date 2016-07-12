@@ -17,8 +17,8 @@ void twtk_widget_list_init(twtk_widget_list_t *list)
 void twtk_widget_list_fini(twtk_widget_list_t *list)
     __attribute__((nonnull(1)));
 
-void twtk_widget_list_add(twtk_widget_list_t *list, twtk_widget_t *widget, const char* name)
-    __attribute__((nonnull(1,2,3)));
+void twtk_widget_list_add(twtk_widget_list_t *list, twtk_widget_t *widget)
+    __attribute__((nonnull(1,2)));
 
 twtk_widget_t *twtk_widget_list_find_by_name(twtk_widget_list_t *list, const char* name)
     __attribute__((nonnull(1,2)));
