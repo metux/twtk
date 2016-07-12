@@ -78,3 +78,13 @@ twtk_widget_t *_twtk_platform_generic_get_root(twtk_platform_t *platform)
 
     return platform->root;
 }
+
+int _twtk_platform_generic_map_widget(twtk_platform_t *platform, twtk_widget_t *widget, twtk_widget_t *parent)
+{
+    assert(platform);
+    assert(widget);
+
+    twtk_widget_set_frame(widget, parent);
+
+    return 0;
+}

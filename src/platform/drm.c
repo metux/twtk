@@ -236,6 +236,7 @@ twtk_platform_t *twtk_platform_drm_init()
     platform->base.op_free_context = _twtk_platform_generic_free_context;
     platform->base.op_mainloop     = _drm_mainloop;
     platform->base.op_stop         = _drm_stop;
+    platform->base.op_map_widget   = _twtk_platform_generic_map_widget;
 
     twtk_drm_initcursor(platform);
 
