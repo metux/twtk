@@ -136,3 +136,13 @@ void twtk_platform_init_dispatch()
 {
     twtk_event_notify("dispatch", _dispatch_handler, NULL);
 }
+
+int twtk_platform_map_widget(twtk_widget_t *widget, twtk_widget_t *parent)
+{
+    assert(widget);
+    assert(_twtk_current_platform);
+    assert(_twtk_current_platform->op_map_widget);
+
+    return _twtk_current_platform->op_map_widget(
+        _twtk_current_platform, widget, parent);
+}

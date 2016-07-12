@@ -16,6 +16,7 @@
 #include <twtk/widget.h>
 #include <twtk/color.h>
 #include <twtk/events.h>
+#include <twtk/platform.h>
 #include <twtk/widget-list.h>
 #include <twtk-private/strutil.h>
 #include <twtk-private/debug.h>
@@ -113,36 +114,17 @@ void twtk_widget_add_child(twtk_widget_t *parent, twtk_widget_t *child, const ch
     if (name)
         twtk_widget_set_name(child, name);
 
-    twtk_widget_list_add(&parent->childs, child);
+    twtk_widget_set_parent(child, parent);
 
-    /* add the child to a frame, so it becomes actually visible */
-    TWTK_LOCK(parent);
-    TWTK_LOCK(child);
-
-    if (child->parent)
-        twtk_widget_unref(child->parent);
-
-    child->parent = twtk_widget_ref(parent);
-
-    /* FIXME: handle popups */
-
+    /* if the class doesnt have its own insert_child() method, just add
+       it into parent frame */
     if (parent->cls->op_insert_child)
-    {
-	/* class has it's own insert method */
-	parent->cls->op_insert_child(parent, child);
-    }
+        parent->cls->op_insert_child(parent, child);
     else
-    {
-	/* default behaviour: add the child into the parent's frame */
-	twtk_widget_list_add(&parent->frames, child);
-	child->frame = twtk_widget_ref(parent);
-    }
+        twtk_platform_map_widget(child, parent);
 
     twtk_widget_dirty(parent);
     twtk_widget_dirty(child);
-
-    TWTK_UNLOCK(child);
-    TWTK_UNLOCK(parent);
 }
 
 void twtk_widget_add_child_unref(twtk_widget_t *parent, twtk_widget_t *child, const char *name)
