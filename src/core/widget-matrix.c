@@ -38,7 +38,10 @@ cairo_matrix_t _twtk_widget_calc_inv_matrix(const twtk_widget_t *widget)
     return matrix;
 }
 
-int twtk_widget_translate_pos(
+/**
+ * translate a position from parent frame into widget coordinate system
+ */
+int twtk_widget_translate_pos_from_frame(
     const twtk_widget_t *widget,
     twtk_vector_t pos,
     twtk_vector_t *ret_pos)
@@ -55,4 +58,23 @@ int twtk_widget_translate_pos(
         pos,
         twtk_rect_by_vectors(TWTK_VECTOR(0,0), widget->viewport.size, 0)
     );
+}
+
+/**
+ * translate a position from widget coordinate system to parent frame
+ */
+int twtk_widget_translate_pos_to_frame(
+    const twtk_widget_t *widget,
+    twtk_vector_t pos,
+    twtk_vector_t *ret_pos)
+{
+    assert(widget);
+    assert(ret_pos);
+
+    cairo_matrix_t matrix = _twtk_widget_calc_matrix(widget);
+    cairo_matrix_transform_point(&matrix, &pos.x, &pos.y);
+
+    *ret_pos = pos;
+
+    return 1;
 }
