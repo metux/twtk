@@ -52,7 +52,6 @@ static twtk_widget_t *_create_root(cairo_surface_t *surface)
     /* retrieve surface geometry */
     {
         cairo_t *ctx = cairo_create(surface);
-        double x1, y1, x2, y2;
         cairo_clip_extents (ctx,
             &r->viewport.pos.x,
             &r->viewport.pos.y,

@@ -107,7 +107,7 @@ static int _op_set_uint(twtk_widget_t *widget, const char* name, uint32_t value)
     TWTK_WIDGET_SET_END
 }
 
-twtk_widget_t *twtk_image_widget_create(const char* fn, double x, double y, double w, double h)
+twtk_widget_t *twtk_image_widget_create(const char* fn, twtk_dim_t x, twtk_dim_t y, twtk_dim_t w, twtk_dim_t h)
 {
     cairo_surface_t *img = _twtk_ut_load_image_surface(fn);
 

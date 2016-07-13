@@ -12,7 +12,7 @@ typedef struct __twtk_fontspec twtk_fontspec_t;
 struct __twtk_fontspec
 {
     char *name;
-    float size;
+    twtk_dim_t size;
     cairo_font_slant_t slant;
     cairo_font_weight_t weight;
     twtk_color_t color;
@@ -27,7 +27,7 @@ int twtk_fontspec_fini(twtk_fontspec_t *fs)
 int twtk_fontspec_set_name(twtk_fontspec_t *fs, const char *name)
     __attribute__((nonnull(1,2)));
 
-int twtk_fontspec_set_size(twtk_fontspec_t *fs, float sz)
+int twtk_fontspec_set_size(twtk_fontspec_t *fs, twtk_dim_t sz)
     __attribute__((nonnull(1)));
 
 int twtk_fontspec_select_cr(const twtk_fontspec_t *fs, cairo_t *cr)
