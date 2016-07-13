@@ -364,10 +364,10 @@ void twtk_widget_rotate(twtk_widget_t *widget, twtk_dim_t a)
     }
 }
 
-void twtk_widget_vresize(twtk_widget_t *widget, twtk_dim_t w, twtk_dim_t h)
+void twtk_widget_vresize(twtk_widget_t *widget, twtk_vector_t size)
 {
     assert(widget);
-    widget->surface.size = TWTK_VECTOR(w, h);
+    widget->surface.size = size;
     twtk_widget_dirty(widget);
 }
 

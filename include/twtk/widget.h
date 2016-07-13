@@ -228,7 +228,15 @@ static inline void twtk_widget_resize_coords(twtk_widget_t *widget, twtk_dim_t x
 }
 
 void twtk_widget_rotate(twtk_widget_t *widget, twtk_dim_t a);
-void twtk_widget_vresize(twtk_widget_t *widget, twtk_dim_t w, twtk_dim_t h);
+
+void twtk_widget_vresize(twtk_widget_t *widget, twtk_vector_t size)
+    __attribute__((nonnull(1)));
+
+static inline void twtk_widget_vresize_coords(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y)
+{
+    twtk_widget_vresize(widget, TWTK_VECTOR(x, y));
+}
+
 int  twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
     __attribute__((nonnull(1,2)));
 
