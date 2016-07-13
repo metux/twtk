@@ -125,7 +125,7 @@ twtk_widget_t *twtk_image_widget_create(const char* fn, twtk_dim_t x, twtk_dim_t
     int img_w = cairo_image_surface_get_width (priv->image);
     int img_h = cairo_image_surface_get_height (priv->image);
 
-    widget->viewport.size = TWTK_VECTOR ((w==0) ? img_w : w, (h==0) ? img_h : h);
+    widget->viewport = twtk_rect_size_if_null_d(twtk_rect_by_coords(x,y,w,h,0), img_w, img_h);
 
     twtk_widget_move(widget, x, y);
     twtk_widget_vresize(widget, img_w, img_h);

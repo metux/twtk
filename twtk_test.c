@@ -71,13 +71,13 @@ static twtk_widget_t *_create_debug()
 
 static twtk_widget_t *_create_image_lara()
 {
-    twtk_widget_t *widget = twtk_image_widget_create("resources/001.jpg", 400, 100, 0, 0);
+    twtk_widget_t *widget = twtk_image_widget_create("resources/001.jpg", 400, 100, -1, -1);
     return widget;
 }
 
 static twtk_widget_t *_create_image_black()
 {
-    twtk_widget_t *widget = twtk_image_widget_create("resources/002.jpg", 50, 50, 0, 0);
+    twtk_widget_t *widget = twtk_image_widget_create("resources/002.jpg", 50, 50, -1, -1);
     return widget;
 }
 
@@ -92,7 +92,7 @@ static twtk_widget_t *_create_box2()
 
 static twtk_widget_t *_create_win()
 {
-    twtk_widget_t *img = twtk_image_widget_create("resources/002.jpg", 30, 30, 0, 0);
+    twtk_widget_t *img = twtk_image_widget_create("resources/002.jpg", 30, 30, -1, -1);
 
     twtk_widget_t *win = twtk_window_widget_create(1000, 400, 200, 200);
     twtk_widget_set_background_color(win, TWTK_COLOR_BLACK);
