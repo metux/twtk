@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <twtk/events.h>
 #include <twtk/widget.h>
-#include <twtk/widgets.h>
 #include <twtk/platform.h>
 #include <twtk/color.h>
 #include <twtk/widgets/text.h>
