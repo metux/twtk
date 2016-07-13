@@ -60,7 +60,7 @@ twtk_widget_t *twtk_window_widget_create(double x, double y, double w, double h)
     _priv_t *priv = (_priv_t *)(widget->priv);
 
     twtk_widget_move(widget, x, y);
-    twtk_widget_resize(widget, w, h);
+    twtk_widget_resize_coords(widget, w, h);
     twtk_widget_vresize(widget, w, h);
 
     return widget;
