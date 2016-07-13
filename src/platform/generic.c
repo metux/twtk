@@ -15,7 +15,6 @@
 #include <twtk-private/debug.h>
 #include <twtk-private/platform-generic.h>
 #include <twtk-private/widget.h>
-#include <twtk/widgets.h>
 #include <twtk/color.h>
 
 

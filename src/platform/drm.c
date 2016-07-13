@@ -22,7 +22,6 @@
 
 #include <twtk/events.h>
 #include <twtk/widget.h>
-#include <twtk/widgets.h>
 #include <twtk/color.h>
 #include <twtk-private/drm.h>
 #include <twtk-private/debug.h>
