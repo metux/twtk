@@ -15,6 +15,7 @@
 #include <twtk/widget.h>
 #include <twtk/types.h>
 #include <twtk/widget-helper.h>
+#include <twtk/widgets/image.h>
 #include <twtk-private/cairo_util.h>
 #include <twtk-private/strutil.h>
 #include <twtk-private/debug.h>
