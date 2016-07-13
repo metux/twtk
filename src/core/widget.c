@@ -308,11 +308,11 @@ static inline void _invalidate(twtk_widget_t *widget, twtk_rect_t o, twtk_rect_t
     twtk_widget_invalidate_rect(widget, n);
 }
 
-void twtk_widget_move(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y)
+void twtk_widget_move(twtk_widget_t *widget, twtk_vector_t pos)
 {
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
-    widget->viewport.pos = TWTK_VECTOR(x, y);
+    widget->viewport.pos = pos;
 
     /* invalidate our old and new region within our frame */
     if (widget->frame)
@@ -322,11 +322,11 @@ void twtk_widget_move(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y)
     }
 }
 
-void twtk_widget_move_rel(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y)
+void twtk_widget_move_rel(twtk_widget_t *widget, twtk_vector_t vec)
 {
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
-    widget->viewport.pos = twtk_vector_add(widget->viewport.pos, TWTK_VECTOR(x, y));
+    widget->viewport.pos = twtk_vector_add(widget->viewport.pos, vec);
 
     /* invalidate our old and new region within our frame */
     if (widget->frame)

@@ -46,7 +46,7 @@ static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_disp
     {
 	if (event->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_MIDDLE)
 	{
-	    twtk_widget_move_rel(widget, event->mouse.diff.x, event->mouse.diff.y);
+	    twtk_widget_move_rel(widget, event->mouse.diff);
 	    TWTK_WIDGET_OP_RETURN(TWTK_EVSTAT_CONSUMED | TWTK_EVSTAT_DIRTY);
 	}
     }
@@ -59,7 +59,7 @@ twtk_widget_t *twtk_window_widget_create(double x, double y, double w, double h)
     twtk_widget_t *widget = twtk_widget_alloc(&_class_inf);
     _priv_t *priv = (_priv_t *)(widget->priv);
 
-    twtk_widget_move(widget, x, y);
+    twtk_widget_move_coords(widget, x, y);
     twtk_widget_resize_coords(widget, w, h);
     twtk_widget_vresize(widget, w, h);
 
