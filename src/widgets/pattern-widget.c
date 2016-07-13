@@ -60,7 +60,7 @@ twtk_widget_t *twtk_pattern_widget_create(twtk_dim_t x, twtk_dim_t y, twtk_dim_t
     twtk_widget_t *widget = twtk_widget_alloc(&_class_inf);
 
     twtk_widget_move_coords(widget, x, y);
-    twtk_widget_vresize(widget, w, h);
+    twtk_widget_vresize_coords(widget, w, h);
 
     return widget;
 }
