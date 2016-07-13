@@ -142,7 +142,7 @@ twtk_widget_t *twtk_text_widget_create(const char* text, twtk_dim_t x, twtk_dim_
 
     twtk_fontspec_init_default(&priv->fontspec);
 
-    twtk_widget_move(widget, x, y);
+    twtk_widget_move_coords(widget, x, y);
     twtk_widget_resize_coords(widget, w, h);
     twtk_widget_vresize(widget, w, h);
 

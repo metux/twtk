@@ -46,7 +46,7 @@ static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_disp
     {
 	if (event->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_MIDDLE)
 	{
-	    twtk_widget_move_rel(widget, event->mouse.diff.x, event->mouse.diff.y);
+	    twtk_widget_move_rel(widget, event->mouse.diff);
 	    TWTK_WIDGET_OP_RETURN(TWTK_EVSTAT_CONSUMED | TWTK_EVSTAT_DIRTY);
 	}
     }
@@ -60,11 +60,11 @@ twtk_widget_t *twtk_movebox_widget_create(twtk_widget_t *child)
 
     twtk_rect_t rect = child->viewport;
 
-    twtk_widget_move(movebox, rect.pos.x, rect.pos.y);
+    twtk_widget_move(movebox, rect.pos);
     twtk_widget_resize(movebox, rect.size);
     twtk_widget_vresize(movebox, rect.size.x, rect.size.y);
 
-    twtk_widget_move(child, 0, 0);
+    twtk_widget_move_coords(child, 0, 0);
 
     twtk_widget_add_child(movebox, child, "sub0");
 

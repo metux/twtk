@@ -203,8 +203,21 @@ int  twtk_widget_set_text(twtk_widget_t *widget, const char* text);
 int  twtk_widget_set_str(twtk_widget_t *widget, const char *name, const char *value)
     __attribute__((nonnull(1,2)));
 
-void twtk_widget_move(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y);
-void twtk_widget_move_rel(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y);
+void twtk_widget_move(twtk_widget_t *widget, twtk_vector_t pos)
+    __attribute__((nonnull(1)));
+
+static inline void twtk_widget_move_coords(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y)
+{
+    twtk_widget_move(widget, TWTK_VECTOR(x, y));
+}
+
+void twtk_widget_move_rel(twtk_widget_t *widget, twtk_vector_t pos)
+    __attribute__((nonnull(1)));
+
+static inline void twtk_widget_move_rel_coords(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y)
+{
+    twtk_widget_move_rel(widget, TWTK_VECTOR(x, y));
+}
 
 void twtk_widget_resize(twtk_widget_t *widget, twtk_vector_t size)
     __attribute__((nonnull(1)));
