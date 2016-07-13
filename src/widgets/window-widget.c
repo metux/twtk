@@ -61,7 +61,7 @@ twtk_widget_t *twtk_window_widget_create(double x, double y, double w, double h)
 
     twtk_widget_move_coords(widget, x, y);
     twtk_widget_resize_coords(widget, w, h);
-    twtk_widget_vresize(widget, w, h);
+    twtk_widget_vresize_coords(widget, w, h);
 
     return widget;
 }

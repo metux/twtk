@@ -175,7 +175,7 @@ twtk_widget_t *twtk_button_widget_create(const char* fn, twtk_rect_t rect, const
     widget->viewport = rect;
 
     twtk_widget_move(widget, rect.pos);
-    twtk_widget_vresize(widget, rect.size.x, rect.size.y);
+    twtk_widget_vresize(widget, rect.size);
 
     return widget;
 }

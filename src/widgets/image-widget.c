@@ -129,7 +129,7 @@ twtk_widget_t *twtk_image_widget_create(const char* fn, twtk_dim_t x, twtk_dim_t
     widget->viewport = twtk_rect_size_if_null_d(twtk_rect_by_coords(x,y,w,h,0), img_w, img_h);
 
     twtk_widget_move_coords(widget, x, y);
-    twtk_widget_vresize(widget, img_w, img_h);
+    twtk_widget_vresize_coords(widget, img_w, img_h);
 
     priv->border_width = 1;
     priv->border_color = TWTK_COLOR_RED;
