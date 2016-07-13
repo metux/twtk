@@ -336,11 +336,11 @@ void twtk_widget_move_rel(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y)
     }
 }
 
-void twtk_widget_resize(twtk_widget_t *widget, twtk_dim_t w, twtk_dim_t h)
+void twtk_widget_resize(twtk_widget_t *widget, twtk_vector_t size)
 {
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
-    widget->viewport.size = TWTK_VECTOR(w, h);
+    widget->viewport.size = size;
 
     /* invalidate our old and new region within our frame */
     if (widget->frame)
