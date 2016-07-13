@@ -12,7 +12,9 @@
 #include <twtk/widget-helper.h>
 #include <twtk/platform.h>
 #include <twtk/widget.h>
+#include <twtk-private/debug.h>
 #include <twtk-private/platform-generic.h>
+#include <twtk-private/widget.h>
 #include <twtk/widgets.h>
 #include <twtk/color.h>
 
@@ -84,12 +86,48 @@ twtk_widget_t *_twtk_platform_generic_get_root(twtk_platform_t *platform)
     return platform->root;
 }
 
+static twtk_widget_t *_translate_to_root(
+    twtk_widget_t *widget,
+    twtk_vector_t pos,
+    twtk_vector_t *ret_pos)
+{
+    if (widget->frame == NULL)
+    {
+        _DEBUG("reached the top: %.0f:%.0f", pos.x, pos.y);
+        *ret_pos = pos;
+        return widget;
+    }
+
+    twtk_vector_t p2;
+    twtk_widget_translate_pos_to_frame(widget, pos, &p2);
+
+    _DEBUG("translated to parent: %0.f:%0.f", p2.x, p2.y);
+    return _translate_to_root(widget->parent, p2, ret_pos);
+}
+
 int _twtk_platform_generic_map_widget(twtk_platform_t *platform, twtk_widget_t *widget, twtk_widget_t *parent)
 {
     assert(platform);
     assert(widget);
 
-    twtk_widget_set_frame(widget, parent);
+    if (parent == NULL)
+        return twtk_widget_set_frame(widget, NULL);
+
+    if (widget->flags & TWTK_WIDGET_FLAG_POPUP)
+    {
+        twtk_vector_t newpos;
+
+        _DEBUG("popup window %0.f:%0.f", widget->viewport.pos.x, widget->viewport.pos.y);
+        twtk_widget_t *newparent = _translate_to_root(parent, widget->viewport.pos, &newpos);
+        widget->viewport.pos = newpos;
+
+        _DEBUG("  translated: %0.f:%0.f", newpos.x, newpos.y);
+        twtk_widget_set_frame(widget, newparent);
+    }
+    else
+    {
+        twtk_widget_set_frame(widget, parent);
+    }
 
     return 0;
 }
