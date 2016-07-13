@@ -71,13 +71,13 @@ static twtk_widget_t *_create_debug()
 
 static twtk_widget_t *_create_image_lara()
 {
-    twtk_widget_t *widget = twtk_image_widget_create("resources/001.jpg", 400, 100, 0, 0);
+    twtk_widget_t *widget = twtk_image_widget_create("resources/001.jpg", 400, 100, -1, -1);
     return widget;
 }
 
 static twtk_widget_t *_create_image_black()
 {
-    twtk_widget_t *widget = twtk_image_widget_create("resources/002.jpg", 50, 50, 0, 0);
+    twtk_widget_t *widget = twtk_image_widget_create("resources/002.jpg", 50, 50, -1, -1);
     return widget;
 }
 

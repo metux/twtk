@@ -42,7 +42,7 @@ static inline twtk_rect_t twtk_rect_by_coords(
 
 static inline twtk_rect_t twtk_rect_null()
 {
-    return (twtk_rect_t){ 0 };
+    return (twtk_rect_t){ .size = { .x = -1, .y = -1 } };
 }
 
 static inline char twtk_vector_in_rect(twtk_vector_t vec, twtk_rect_t rect)
@@ -52,6 +52,25 @@ static inline char twtk_vector_in_rect(twtk_vector_t vec, twtk_rect_t rect)
         (vec.x <= (rect.pos.x + rect.size.x)) &&
         (vec.y >= rect.pos.y) &&
         (vec.y <= (rect.pos.y + rect.size.y)));
+}
+
+/**
+ * set the rect size if null (-1,-1) - otherwise leave it untouched
+ */
+static inline twtk_rect_t twtk_rect_size_if_null_d(twtk_rect_t rect, twtk_dim_t x, twtk_dim_t y)
+{
+    if (rect.size.x == -1)
+        rect.size.x = x;
+
+    if (rect.size.y == -1)
+        rect.size.y = y;
+
+    return rect;
+}
+
+static inline twtk_rect_t twtk_rect_size_if_null_v(twtk_rect_t rect, twtk_vector_t vec)
+{
+    return twtk_rect_size_if_null_d(rect, vec.x, vec.y);
 }
 
 #endif /* __TWTK_RECT_H_ */
