@@ -1,4 +1,10 @@
 
+#ifdef ENABLE_DEBUG_PLATFORM_GENERIC
+#define ENABLE_DEBUG
+#endif
+
+#define _DEBUG_NAME	"platform-generic"
+
 #include <assert.h>
 #include <cairo.h>
 #include <cairo-drm.h>
