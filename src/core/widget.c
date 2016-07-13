@@ -279,12 +279,12 @@ int twtk_widget_set_font_color(twtk_widget_t *widget, twtk_color_t color)
     return twtk_widget_set_color(widget, "font-color", color);
 }
 
-int twtk_widget_set_font_size(twtk_widget_t *widget, double size)
+int twtk_widget_set_font_size(twtk_widget_t *widget, twtk_dim_t size)
 {
     return twtk_widget_set_float(widget, "font-size", size);
 }
 
-int twtk_widget_set_border_width(twtk_widget_t *widget, double size)
+int twtk_widget_set_border_width(twtk_widget_t *widget, twtk_dim_t size)
 {
     return twtk_widget_set_float(widget, "border-width", size);
 }
@@ -308,7 +308,7 @@ static inline void _invalidate(twtk_widget_t *widget, twtk_rect_t o, twtk_rect_t
     twtk_widget_invalidate_rect(widget, n);
 }
 
-void twtk_widget_move(twtk_widget_t *widget, double x, double y)
+void twtk_widget_move(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y)
 {
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
@@ -322,7 +322,7 @@ void twtk_widget_move(twtk_widget_t *widget, double x, double y)
     }
 }
 
-void twtk_widget_move_rel(twtk_widget_t *widget, double x, double y)
+void twtk_widget_move_rel(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y)
 {
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
@@ -336,7 +336,7 @@ void twtk_widget_move_rel(twtk_widget_t *widget, double x, double y)
     }
 }
 
-void twtk_widget_resize(twtk_widget_t *widget, double w, double h)
+void twtk_widget_resize(twtk_widget_t *widget, twtk_dim_t w, twtk_dim_t h)
 {
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
@@ -350,7 +350,7 @@ void twtk_widget_resize(twtk_widget_t *widget, double w, double h)
     }
 }
 
-void twtk_widget_rotate(twtk_widget_t *widget, double a)
+void twtk_widget_rotate(twtk_widget_t *widget, twtk_dim_t a)
 {
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
@@ -364,7 +364,7 @@ void twtk_widget_rotate(twtk_widget_t *widget, double a)
     }
 }
 
-void twtk_widget_vresize(twtk_widget_t *widget, double w, double h)
+void twtk_widget_vresize(twtk_widget_t *widget, twtk_dim_t w, twtk_dim_t h)
 {
     assert(widget);
     widget->surface.size = TWTK_VECTOR(w, h);

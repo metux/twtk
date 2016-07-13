@@ -48,7 +48,7 @@ int twtk_fontspec_set_name(twtk_fontspec_t *fs, const char *name)
     return 0;
 }
 
-int twtk_fontspec_set_size(twtk_fontspec_t *fs, float sz)
+int twtk_fontspec_set_size(twtk_fontspec_t *fs, twtk_dim_t sz)
 {
     assert(fs);
     fs->size = sz;

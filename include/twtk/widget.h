@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include <cairo.h>
+#include <twtk/types.h>
 #include <twtk/threads.h>
 #include <twtk/types.h>
 #include <twtk/vector.h>
@@ -191,8 +192,8 @@ int  twtk_widget_set_name(twtk_widget_t *widget, const char *name);
 int  twtk_widget_set_border_color(twtk_widget_t *widget, twtk_color_t color);
 int  twtk_widget_set_background_color(twtk_widget_t *widget, twtk_color_t color);
 int  twtk_widget_set_font_color(twtk_widget_t *widget, twtk_color_t color);
-int  twtk_widget_set_font_size(twtk_widget_t *widget, double size);
-int  twtk_widget_set_border_width(twtk_widget_t *widget, double size);
+int  twtk_widget_set_font_size(twtk_widget_t *widget, twtk_dim_t size);
+int  twtk_widget_set_border_width(twtk_widget_t *widget, twtk_dim_t size);
 int  twtk_widget_set_font_name(twtk_widget_t *widget, const char* n);
 int  twtk_widget_set_text(twtk_widget_t *widget, const char* text);
 
@@ -202,11 +203,11 @@ int  twtk_widget_set_text(twtk_widget_t *widget, const char* text);
 int  twtk_widget_set_str(twtk_widget_t *widget, const char *name, const char *value)
     __attribute__((nonnull(1,2)));
 
-void twtk_widget_move(twtk_widget_t *widget, double x, double y);
-void twtk_widget_move_rel(twtk_widget_t *widget, double x, double y);
-void twtk_widget_resize(twtk_widget_t *widget, double w, double h);
-void twtk_widget_rotate(twtk_widget_t *widget, double a);
-void twtk_widget_vresize(twtk_widget_t *widget, double w, double h);
+void twtk_widget_move(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y);
+void twtk_widget_move_rel(twtk_widget_t *widget, twtk_dim_t x, twtk_dim_t y);
+void twtk_widget_resize(twtk_widget_t *widget, twtk_dim_t w, twtk_dim_t h);
+void twtk_widget_rotate(twtk_widget_t *widget, twtk_dim_t a);
+void twtk_widget_vresize(twtk_widget_t *widget, twtk_dim_t w, twtk_dim_t h);
 int  twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
     __attribute__((nonnull(1,2)));
 

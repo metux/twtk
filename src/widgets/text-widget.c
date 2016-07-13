@@ -82,7 +82,7 @@ static int _op_paint(twtk_widget_t *widget, cairo_t *cr)
 	char *pch;
 	pch = strtok (buffer, "\n");
 
-	double offset = twtk_fontspec_get_size(&priv->fontspec) + priv->vspace;
+	twtk_dim_t offset = twtk_fontspec_get_size(&priv->fontspec) + priv->vspace;
 	while (pch)
 	{
 	    cairo_move_to(cr, priv->hspace, offset);
@@ -133,7 +133,7 @@ static int _op_set_uint(twtk_widget_t *widget, const char* name, uint32_t value)
     TWTK_WIDGET_SET_END
 }
 
-twtk_widget_t *twtk_text_widget_create(const char* text, double x, double y, double w, double h)
+twtk_widget_t *twtk_text_widget_create(const char* text, twtk_dim_t x, twtk_dim_t y, twtk_dim_t w, twtk_dim_t h)
 {
     twtk_widget_t *widget = twtk_widget_alloc(&_class_inf);
     _priv_t *priv = (_priv_t *)(widget->priv);

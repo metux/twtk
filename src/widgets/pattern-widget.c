@@ -55,7 +55,7 @@ static int _op_paint(twtk_widget_t *widget, cairo_t *cr)
     TWTK_WIDGET_OP_END(0);
 }
 
-twtk_widget_t *twtk_pattern_widget_create(double x, double y, double w, double h)
+twtk_widget_t *twtk_pattern_widget_create(twtk_dim_t x, twtk_dim_t y, twtk_dim_t w, twtk_dim_t h)
 {
     twtk_widget_t *widget = twtk_widget_alloc(&_class_inf);
 

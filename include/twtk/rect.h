@@ -11,13 +11,13 @@ struct __twtk_rect
 {
     twtk_vector_t pos;
     twtk_vector_t size;
-    double angle;
+    twtk_dim_t angle;
 };
 
 static inline twtk_rect_t twtk_rect_by_vectors(
     twtk_vector_t pos,
     twtk_vector_t size,
-    float angle)
+    twtk_dim_t angle)
 {
     return ((twtk_rect_t){
         .pos   = pos,
@@ -27,11 +27,11 @@ static inline twtk_rect_t twtk_rect_by_vectors(
 }
 
 static inline twtk_rect_t twtk_rect_by_coords(
-    double x1,
-    double y1,
-    double x2,
-    double y2,
-    double angle
+    twtk_dim_t x1,
+    twtk_dim_t y1,
+    twtk_dim_t x2,
+    twtk_dim_t y2,
+    twtk_dim_t angle
 ) {
     return twtk_rect_by_vectors(
         TWTK_VECTOR(x1, y1),

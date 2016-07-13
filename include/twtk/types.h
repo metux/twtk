@@ -16,6 +16,9 @@ typedef struct __twtk_widget_list_entry	twtk_widget_list_entry_t;
 
 typedef pthread_mutex_t			twtk_lock_t;
 
+/** dimension values **/
+typedef double				twtk_dim_t;
+
 #define TWTK_ALLOC_OBJECT(type)		\
     ((type*)calloc(sizeof(type),1))
 
