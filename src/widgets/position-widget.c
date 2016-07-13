@@ -6,6 +6,8 @@
 #include <twtk/widgets.h>
 #include <twtk/platform.h>
 #include <twtk/color.h>
+#include <twtk/widgets/text.h>
+
 
 static inline long _do_round(twtk_dim_t x)
 {
