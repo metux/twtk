@@ -66,31 +66,46 @@ static void _create_menu(twtk_widget_t *parent, twtk_menu_t *menu)
     return twtk_widget_add_child_unref(parent, mw, "mainmenu");
 }
 
-static twtk_widget_t *_create_red_box()
+static void _create_red_box(twtk_widget_t *parent)
 {
     twtk_widget_t *widget = twtk_text_widget_create(NULL, 0, 0, 100, 100);
     twtk_widget_set_border_color(widget, TWTK_COLOR_RED);
     twtk_widget_set_border_width(widget, 1);
-    return widget;
+
+    twtk_widget_add_child_unref(
+        parent,
+        twtk_window_widget_create(widget),
+        "red"
+    );
 }
 
-static twtk_widget_t *_create_blue_box()
+static void _create_blue_box(twtk_widget_t *parent)
 {
     twtk_widget_t *widget = twtk_text_widget_create(NULL, 0, 100, 100, 100);
     twtk_widget_set_border_color(widget, TWTK_COLOR_BLUE);
     twtk_widget_set_border_width(widget, 1);
-    return widget;
+
+    twtk_widget_add_child_unref(
+        parent,
+        twtk_window_widget_create(widget),
+        "blue"
+    );
 }
 
-static twtk_widget_t *_create_green_box()
+static void _create_green_box(twtk_widget_t *parent)
 {
     twtk_widget_t *widget = twtk_text_widget_create(NULL, 0, 200, 100, 100);
     twtk_widget_set_border_color(widget, TWTK_COLOR_GREEN);
     twtk_widget_set_border_width(widget, 1);
-    return widget;
+
+    twtk_widget_add_child_unref(
+        parent,
+        twtk_window_widget_create(widget),
+        "green"
+    );
 }
 
-static twtk_widget_t *_create_text_1()
+static void _create_text_1(twtk_widget_t *parent)
 {
     twtk_widget_t *widget = twtk_text_widget_create("Salamipizza\nWurstbrot", 500, 50, 300, 100);
     twtk_widget_set_font_name(widget, "Sans");
@@ -99,10 +114,15 @@ static twtk_widget_t *_create_text_1()
     twtk_widget_set_border_color(widget, TWTK_COLOR_BLACK);
     twtk_widget_set_border_width(widget, 1);
     twtk_widget_set_background_color(widget, TWTK_COLOR_YELLOW);
-    return widget;
+
+    twtk_widget_add_child_unref(
+        parent,
+        twtk_window_widget_create(widget),
+        "text-1"
+    );
 }
 
-static twtk_widget_t *_create_debug()
+static void _create_debug(twtk_widget_t *parent)
 {
     twtk_widget_t *widget = twtk_text_widget_create("+++", 500, 150, 300, 100);
     twtk_widget_set_font_name(widget, "Sans");
@@ -111,28 +131,48 @@ static twtk_widget_t *_create_debug()
     twtk_widget_set_border_width(widget, 1);
     twtk_widget_set_background_color(widget, TWTK_COLOR_YELLOW);
     twtk_debug_widget_install(widget);
-    return widget;
+
+    twtk_widget_add_child_unref(
+        parent,
+        twtk_window_widget_create(widget),
+        "debug"
+    );
 }
 
-static twtk_widget_t *_create_image_lara()
+static void _create_image_lara(twtk_widget_t *parent)
 {
     twtk_widget_t *widget = twtk_image_widget_create("resources/001.jpg", 400, 100, -1, -1);
-    return widget;
+
+    twtk_widget_add_child_unref(
+        parent,
+        twtk_window_widget_create(widget),
+        "image-lara"
+    );
 }
 
-static twtk_widget_t *_create_image_black()
+static void _create_image_black(twtk_widget_t *parent)
 {
     twtk_widget_t *widget = twtk_image_widget_create("resources/002.jpg", 50, 50, -1, -1);
-    return widget;
+
+    twtk_widget_add_child_unref(
+        parent,
+        twtk_window_widget_create(widget),
+        "image-black"
+    );
 }
 
-static twtk_widget_t *_create_box2()
+static void _create_box2(twtk_widget_t *parent)
 {
     twtk_widget_t *box = twtk_text_widget_create(NULL, 300, 500, 500, 500);
     twtk_widget_set_border_color(box, TWTK_COLOR_BLUE);
     twtk_widget_set_border_width(box, 5);
     twtk_widget_set_font_size(box, 24);
-    return box;
+
+    twtk_widget_add_child_unref(
+        parent,
+        twtk_window_widget_create(box),
+        "box2"
+    );
 }
 
 static void _init_boxes()
@@ -141,15 +181,14 @@ static void _init_boxes()
 
     twtk_widget_set_background_color(root, TWTK_COLOR_GREY);
 
-    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_red_box()),     "red");
-    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_blue_box()),    "blue");
-    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_green_box()),   "green");
-    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_text_1()),      "text-1");
-    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_image_lara()),  "image-lara");
-    twtk_widget_add_child_unref(root, twtk_movebox_widget_create(_create_image_black()), "image-black");
-    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_box2()),        "box2");
-    twtk_widget_add_child_unref(root, twtk_window_widget_create(_create_debug()),       "debug");
-
+    _create_red_box(root);
+    _create_blue_box(root);
+    _create_green_box(root);
+    _create_text_1(root);
+    _create_image_lara(root);
+    _create_image_black(root);
+    _create_box2(root);
+    _create_debug(root);
     _create_position(root);
     _create_menu(root, &menu_main);
 }
