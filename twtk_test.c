@@ -136,12 +136,11 @@ static void _create_win(twtk_widget_t *parent)
 {
     twtk_widget_t *img = twtk_image_widget_create("resources/002.jpg", 30, 30, -1, -1);
 
-    twtk_widget_t *win = twtk_window_widget_create(1000, 400, 200, 200);
+    twtk_widget_t *win = twtk_window_widget_create(img);
+    twtk_widget_move(win, TWTK_VECTOR(1000, 400));
     twtk_widget_set_background_color(win, TWTK_COLOR_BLACK);
     twtk_widget_set_border_color(win, TWTK_COLOR_BLACK);
     twtk_widget_set_border_width(win, 30);
-
-    twtk_widget_add_child(win, img, "image1");
 
     twtk_widget_add_child(parent, win, "win");
 }

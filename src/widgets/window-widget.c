@@ -54,14 +54,17 @@ static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_disp
     TWTK_WIDGET_OP_END(0);
 }
 
-twtk_widget_t *twtk_window_widget_create(double x, double y, double w, double h)
+twtk_widget_t *twtk_window_widget_create(twtk_widget_t *child)
 {
     twtk_widget_t *widget = twtk_widget_alloc(&_class_inf);
-    _priv_t *priv = (_priv_t *)(widget->priv);
 
-    twtk_widget_move_coords(widget, x, y);
-    twtk_widget_resize_coords(widget, w, h);
-    twtk_widget_vresize_coords(widget, w, h);
+    assert(child);
+    twtk_rect_t rect = child->viewport;
+
+    twtk_widget_set_viewport(widget, rect);
+    twtk_widget_vresize(widget, rect.size);
+    twtk_widget_move_coords(child, 0, 0);
+    twtk_widget_add_child(widget, child, "sub0");
 
     return widget;
 }
