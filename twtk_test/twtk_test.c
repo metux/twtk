@@ -32,7 +32,7 @@ static void _create_red_box(twtk_widget_t *parent)
 
     twtk_widget_add_child_unref(
         parent,
-        widget,
+        twtk_window_widget_create(widget),
         "red"
     );
 }
@@ -45,7 +45,7 @@ static void _create_blue_box(twtk_widget_t *parent)
 
     twtk_widget_add_child_unref(
         parent,
-        widget,
+        twtk_window_widget_create(widget),
         "blue"
     );
 }
@@ -58,7 +58,7 @@ static void _create_green_box(twtk_widget_t *parent)
 
     twtk_widget_add_child_unref(
         parent,
-        widget,
+        twtk_window_widget_create(widget),
         "green"
     );
 }
@@ -75,7 +75,7 @@ static void _create_text_1(twtk_widget_t *parent)
 
     twtk_widget_add_child_unref(
         parent,
-        widget,
+        twtk_window_widget_create(widget),
         "text-1"
     );
 }
@@ -92,7 +92,7 @@ static void _create_debug(twtk_widget_t *parent)
 
     twtk_widget_add_child_unref(
         parent,
-        widget,
+        twtk_window_widget_create(widget),
         "debug"
     );
 }
@@ -117,7 +117,7 @@ static void _create_image(twtk_widget_t *parent, twtk_dim_t x, twtk_dim_t y, con
 
     twtk_widget_add_child_unref(
         parent,
-        widget,
+        twtk_window_widget_create(widget),
         id
     );
 }
@@ -152,24 +152,9 @@ static void _create_box2(twtk_widget_t *parent)
 
     twtk_widget_add_child_unref(
         parent,
-        box,
+        twtk_window_widget_create(box),
         "box2"
     );
-}
-
-static void _create_win(twtk_widget_t *parent)
-{
-    twtk_widget_t *img = twtk_image_widget_create(
-        "resources/penguin2.png",
-        twtk_rect_by_coords(30, 30, -1, -1, 0));
-
-    twtk_widget_t *win = twtk_window_widget_create(img);
-    twtk_widget_move(win, TWTK_VECTOR(1000, 400));
-    twtk_widget_set_background_color(win, TWTK_COLOR_BLACK);
-    twtk_widget_set_border_color(win, TWTK_COLOR_BLACK);
-    twtk_widget_set_border_width(win, 30);
-
-    twtk_widget_add_child(parent, win, "win");
 }
 
 static void _init_boxes()
@@ -187,7 +172,6 @@ static void _init_boxes()
     _create_btn  (root, 600, 100, "btn-002",   "penguin2.png");
     _create_box2(root);
     _create_debug(root);
-    _create_win(root);
     _create_position(root);
 }
 
