@@ -42,7 +42,7 @@ static int _op_set_float(twtk_widget_t *widget, const char* name, double value);
 static int _op_set_str(twtk_widget_t *widget, const char* name, const char* value);
 static int _op_set_uint(twtk_widget_t *widget, const char* name, uint32_t value);
 
-static twtk_widget_class_t _class_inf = {
+static const twtk_widget_class_t _class_inf = {
     .magic        = MAGIC,
     .op_fini      = _op_fini,
     .op_paint     = _op_paint,

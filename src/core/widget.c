@@ -25,7 +25,7 @@
 #include <twtk-private/cairo_util.h>
 
 // FIXME: use an allocation cache
-twtk_widget_t *twtk_widget_alloc(twtk_widget_class_t *cls)
+twtk_widget_t *twtk_widget_alloc(const twtk_widget_class_t *cls)
 {
     TWTK_NEW_OBJECT(twtk_widget_t,widget);
 
