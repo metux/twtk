@@ -59,12 +59,9 @@ twtk_widget_t *twtk_movebox_widget_create(twtk_widget_t *child)
 
     twtk_rect_t rect = child->viewport;
 
-    twtk_widget_move(movebox, rect.pos);
-    twtk_widget_resize(movebox, rect.size);
+    twtk_widget_set_viewport(movebox, rect);
     twtk_widget_vresize(movebox, rect.size);
-
     twtk_widget_move_coords(child, 0, 0);
-
     twtk_widget_add_child(movebox, child, "sub0");
 
     return movebox;

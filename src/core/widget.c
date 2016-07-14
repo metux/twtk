@@ -322,18 +322,33 @@ void twtk_widget_move(twtk_widget_t *widget, twtk_vector_t pos)
     }
 }
 
+static void _invalidate_viewport(twtk_widget_t *widget, twtk_rect_t old_viewport)
+{
+    /* invalidate our old and new region within our frame */
+    if (widget->frame == NULL)
+        return;
+
+    twtk_widget_invalidate_rect(widget->frame, old_viewport);
+    twtk_widget_invalidate_rect(widget->frame, widget->viewport);
+}
+
 void twtk_widget_move_rel(twtk_widget_t *widget, twtk_vector_t vec)
 {
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.pos = twtk_vector_add(widget->viewport.pos, vec);
 
-    /* invalidate our old and new region within our frame */
-    if (widget->frame)
-    {
-        twtk_widget_invalidate_rect(widget->frame, old_viewport);
-        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
-    }
+    _invalidate_viewport(widget, old_viewport);
+}
+
+void twtk_widget_set_viewport(twtk_widget_t *widget, twtk_rect_t vp)
+{
+    assert(widget);
+
+    twtk_rect_t old_viewport = widget->viewport;
+    widget->viewport = vp;
+
+    _invalidate_viewport(widget, old_viewport);
 }
 
 void twtk_widget_resize(twtk_widget_t *widget, twtk_vector_t size)
@@ -342,12 +357,7 @@ void twtk_widget_resize(twtk_widget_t *widget, twtk_vector_t size)
     twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.size = size;
 
-    /* invalidate our old and new region within our frame */
-    if (widget->frame)
-    {
-        twtk_widget_invalidate_rect(widget->frame, old_viewport);
-        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
-    }
+    _invalidate_viewport(widget, old_viewport);
 }
 
 void twtk_widget_rotate(twtk_widget_t *widget, twtk_dim_t a)
@@ -356,12 +366,7 @@ void twtk_widget_rotate(twtk_widget_t *widget, twtk_dim_t a)
     twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.angle = M_PI/180*a;
 
-    /* invalidate our old and new region within our frame */
-    if (widget->frame)
-    {
-        twtk_widget_invalidate_rect(widget->frame, old_viewport);
-        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
-    }
+    _invalidate_viewport(widget, old_viewport);
 }
 
 void twtk_widget_vresize(twtk_widget_t *widget, twtk_vector_t size)
