@@ -95,6 +95,13 @@ static void _widget_clip_neigh(
     assert(widget);
     assert(cr);
 
+    /* if widget is transparent, dont clip out whats underneath */
+    if (!_twtk_ut_color_visible(widget->background_color))
+    {
+        _DEBUG("widget %s is transparent", widget->name);
+        return;
+    }
+
     /* the root window has no parent, thus no neighbours */
     if (widget->frame == NULL)
 	return;
