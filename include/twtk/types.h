@@ -19,6 +19,11 @@ typedef pthread_mutex_t			twtk_lock_t;
 /** dimension values **/
 typedef double				twtk_dim_t;
 
+static inline twtk_dim_t twtk_dim_max(twtk_dim_t a, twtk_dim_t b)
+{
+    return ((a > b) ? a : b);
+}
+
 #define TWTK_ALLOC_OBJECT(type)		\
     ((type*)calloc(sizeof(type),1))
 
