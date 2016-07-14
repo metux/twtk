@@ -167,14 +167,15 @@ twtk_widget_t *twtk_button_widget_create(const char* fn, twtk_rect_t rect, const
 
     priv->image = img;
 
-    rect = twtk_rect_size_if_null_d(
-        rect,
-        cairo_image_surface_get_width (priv->image),
-        cairo_image_surface_get_height (priv->image));
+    twtk_widget_set_viewport(
+        widget,
+        twtk_rect_size_if_null_d(
+            rect,
+            cairo_image_surface_get_width (priv->image),
+            cairo_image_surface_get_height (priv->image)
+        )
+    );
 
-    widget->viewport = rect;
-
-    twtk_widget_move(widget, rect.pos);
     twtk_widget_vresize(widget, rect.size);
 
     return widget;
