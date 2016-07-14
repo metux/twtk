@@ -30,7 +30,7 @@ typedef struct
 
 static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d);
 
-static twtk_widget_class_t _class_inf = {
+static const twtk_widget_class_t _class_inf = {
     .magic        = MAGIC,
     .op_event     = _op_event,
     .priv_size    = sizeof(_priv_t)

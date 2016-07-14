@@ -138,7 +138,7 @@ struct __twtk_widget
 
     twtk_color_t background_color;
 
-    twtk_widget_class_t *cls;
+    const twtk_widget_class_t *cls;
     void *priv;
     int refcnt;
     char *name;
@@ -153,7 +153,7 @@ struct __twtk_widget
     cairo_pattern_t *paint_cache;
 };
 
-twtk_widget_t *twtk_widget_alloc(twtk_widget_class_t *cls);
+twtk_widget_t *twtk_widget_alloc(const twtk_widget_class_t *cls);
 
 int twtk_widget_do_draw(twtk_widget_t *widget, cairo_t *cr);
 
