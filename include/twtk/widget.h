@@ -197,6 +197,28 @@ int  twtk_widget_set_border_width(twtk_widget_t *widget, twtk_dim_t size);
 int  twtk_widget_set_font_name(twtk_widget_t *widget, const char* n);
 int  twtk_widget_set_text(twtk_widget_t *widget, const char* text);
 
+
+/*
+ * set the widget's viewport within parent frame
+ */
+void twtk_widget_set_viewport(twtk_widget_t *widget, twtk_rect_t vp)
+    __attribute__((nonnull(1)));
+
+static inline void twtk_widget_set_viewport_coords(
+    twtk_widget_t *widget,
+    twtk_dim_t x,
+    twtk_dim_t y,
+    twtk_dim_t w,
+    twtk_dim_t h,
+    twtk_dim_t a
+)
+{
+    twtk_widget_set_viewport(
+        widget,
+        twtk_rect_by_coords(x, y, w, h, a)
+    );
+}
+
 /*
  * set an string attribute
  */
