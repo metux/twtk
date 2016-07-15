@@ -36,26 +36,24 @@ static inline const char *_widget_parent_name(twtk_widget_t* widget)
     return widget->parent->name;
 }
 
-/* clip-out a single frame */
-static void _widget_clip_frame(
-    twtk_widget_t *parent,
-    twtk_widget_t *frame,
-    cairo_t *cr)
+static void _clipout_rect(twtk_widget_t *outer, twtk_widget_t *inner, cairo_matrix_t *matrix, cairo_t *cr)
 {
-	/* first sub-path: the whole area */
-	cairo_new_sub_path(cr);
-	_twtk_ut_rect_to_vec(cr, parent->viewport.size);
-	cairo_close_path(cr);
+    /* first sub-path: the whole area */
+    cairo_new_sub_path(cr);
+    _twtk_ut_rect_to_vec(cr, outer->viewport.size);
+    cairo_close_path(cr);
 
-	/* second sub-path: the neighbor widget area */
-	cairo_new_sub_path(cr);
-	cairo_matrix_t w_matrix = _twtk_widget_calc_matrix(parent);
-	cairo_set_matrix(cr, &w_matrix);
-	_twtk_ut_rect(cr, frame->viewport);
-	cairo_close_path(cr);
+    /* second sub-path: the neighbor widget area */
+    cairo_new_sub_path(cr);
 
-	/* set the clip */
-	cairo_clip(cr);
+    if (matrix)
+        cairo_set_matrix(cr, matrix);
+
+    _twtk_ut_rect(cr, inner->viewport);
+    cairo_close_path(cr);
+
+    /* set the clip */
+    cairo_clip(cr);
 }
 
 /* clip-out all sub-windows */
@@ -79,7 +77,12 @@ static void _widget_clip_subs(
 	    _widget_name(walk->widget),
 	    _widget_name(widget));
 
-	_widget_clip_frame(widget, walk->widget, cr);
+        _clipout_rect(
+            widget,
+            walk->widget,
+            NULL,
+            cr
+        );
     }
 
     /* restore old settings */
@@ -122,7 +125,14 @@ static void _widget_clip_neigh(
 	    _widget_name(widget),
 	    _widget_parent_name(widget));
 
-	_widget_clip_frame(widget->frame, walk->widget, cr);
+        cairo_matrix_t m = _twtk_widget_calc_matrix(widget->frame);
+
+        _clipout_rect(
+            widget->frame,
+            walk->widget,
+            &m,
+            cr
+        );
     }
 
     assert(walk);
