@@ -28,7 +28,7 @@ static int _handler(twtk_event_t *ev, void *priv)
     twtk_widget_t *pos_widget = (twtk_widget_t*)priv;
 
     twtk_widget_set_str(pos_widget, "text", buffer);
-    twtk_platform_redraw_widget(pos_widget, "<pos>");
+    twtk_widget_dirty(pos_widget);
 }
 
 #define WIDGET_SIZE_X	250

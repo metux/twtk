@@ -79,14 +79,6 @@ void twtk_platform_finish()
     _twtk_current_platform->op_destroy(_twtk_current_platform);
 }
 
-// FIXME: this only works if the widget is root or 1st level
-void twtk_platform_redraw_widget(twtk_widget_t *widget, const char *name)
-{
-    assert(widget);
-    twtk_widget_dirty(widget);
-    twtk_platform_redraw();
-}
-
 void twtk_platform_redraw()
 {
     assert(_twtk_current_platform);

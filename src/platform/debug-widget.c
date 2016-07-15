@@ -24,5 +24,5 @@ void twtk_debug_widget_install(twtk_widget_t *widget)
 void twtk_debug_widget_redraw()
 {
     if (_twtk_debug_widget)
-        twtk_platform_redraw_widget(_twtk_debug_widget, "<debug>");
+        twtk_widget_dirty(_twtk_debug_widget);
 }

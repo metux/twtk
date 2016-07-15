@@ -4,8 +4,18 @@
 #include <stdlib.h>
 #include <cairo.h>
 #include <twtk/types.h>
+#include <twtk/rect.h>
 
 extern twtk_platform_t *_twtk_current_platform;
+
+typedef struct __twtk_platfom_generic_region _twtk_platform_generic_region_t;
+
+struct __twtk_platfom_generic_region
+{
+    twtk_rect_t rect;
+    cairo_matrix_t matrix;
+    _twtk_platform_generic_region_t *next;
+};
 
 struct __twtk_platform {
     cairo_surface_t *surface;
@@ -13,6 +23,8 @@ struct __twtk_platform {
     twtk_widget_t *root;
 
     pthread_mutex_t redraw_lock;
+
+    _twtk_platform_generic_region_t *regions;
 
     int            (*op_destroy)     (twtk_platform_t *platform);
     twtk_widget_t *(*op_get_root)    (twtk_platform_t *platform);
@@ -36,7 +48,6 @@ void twtk_platform_install(twtk_platform_t *platform);
 void twtk_platform_setup();
 void twtk_platform_finish();
 void twtk_platform_redraw();
-void twtk_platform_redraw_widget(twtk_widget_t *widget, const char *name);
 void twtk_platform_loop();
 void twtk_platform_init_dispatch();
 void twtk_platform_stop();

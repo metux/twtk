@@ -15,6 +15,7 @@
 #include <twtk/viewport.h>
 #include <twtk-private/debug.h>
 #include <twtk-private/platform-generic.h>
+#include <twtk-private/cairo_util.h>
 #include <twtk/color.h>
 
 
@@ -37,6 +38,11 @@ int _twtk_platform_generic_free_context(twtk_platform_t *pl, cairo_t *ctx)
 #define _WIDGET_PRIV_TYPE	_root_priv_t
 #define _WIDGET_CLASS_INF	_root_class_inf
 
+static int _op_invalidate_rect(twtk_widget_t *widget,
+                               twtk_rect_t rect,
+                               cairo_matrix_t *client_matrix)
+    __attribute__((nonnull(1,3)));
+
 typedef struct
 {
     twtk_platform_t *platform;
@@ -44,7 +50,8 @@ typedef struct
 
 static twtk_widget_class_t _root_class_inf = {
     .magic     = MAGIC,
-    .priv_size = sizeof(_root_priv_t)
+    .priv_size = sizeof(_root_priv_t),
+    .op_invalidate_rect = _op_invalidate_rect
 };
 
 static twtk_widget_t *_create_root(twtk_platform_t *platform, cairo_surface_t *surface)
@@ -83,7 +90,11 @@ twtk_widget_t *_twtk_platform_generic_get_root(twtk_platform_t *platform)
     assert(platform);
 
     if (platform->root == NULL)
+    {
         platform->root = _create_root(platform, platform->surface);
+        twtk_widget_dirty(platform->root);
+        platform->op_redraw(platform);
+    }
 
     return platform->root;
 }
@@ -134,6 +145,51 @@ int _twtk_platform_generic_map_widget(twtk_platform_t *platform, twtk_widget_t *
     return 0;
 }
 
+static void _clip_dirty(twtk_platform_t *platform, cairo_t *cr)
+{
+    if (platform->regions == NULL)
+    {
+        _DEBUG("no invalidated regions to clip");
+        return;
+    }
+
+    cairo_matrix_t old_matrix;
+    cairo_get_matrix(cr, &old_matrix);
+
+    _twtk_platform_generic_region_t* regions = platform->regions;
+
+    while (regions)
+    {
+        _twtk_platform_generic_region_t* r = regions;
+        regions = regions->next;
+
+        _DEBUG("clipping to invalidated region: %0.2f:%0.2f / %0.2f:%0.2f",
+            r->rect.pos.x, r->rect.pos.y, r->rect.size.x, r->rect.size.y);
+
+        cairo_set_matrix(cr, &r->matrix);
+        _twtk_ut_rect(cr, r->rect);
+    }
+
+    cairo_clip(cr);
+    cairo_set_matrix(cr, &old_matrix);
+}
+
+static void _clean_dirty(twtk_platform_t *platform)
+{
+    if (platform->regions == NULL)
+        return;
+
+    _twtk_platform_generic_region_t* regions = platform->regions;
+    platform->regions = NULL;
+
+    while (regions)
+    {
+        _twtk_platform_generic_region_t* r = regions;
+        regions = regions->next;
+        free(r);
+    }
+}
+
 int _twtk_platform_generic_redraw(twtk_platform_t *platform)
 {
     assert(platform);
@@ -154,6 +210,9 @@ int _twtk_platform_generic_redraw(twtk_platform_t *platform)
     twtk_widget_render(root, cr);
     assert(root->paint_cache);
 
+    /* clip to the regions that actually changed */
+    _clip_dirty(platform, cr);
+
     /* now do the final composition onto screen */
     cairo_save(cr);
     twtk_widget_render_prepare_frame(root, cr);
@@ -162,6 +221,8 @@ int _twtk_platform_generic_redraw(twtk_platform_t *platform)
     cairo_restore(cr);
 
     platform->op_free_context(platform, cr);
+
+    _clean_dirty(platform);
 
 out:
     pthread_mutex_unlock(&platform->redraw_lock);
@@ -181,4 +242,27 @@ int _twtk_platform_generic_init(twtk_platform_t *platform)
     platform->op_redraw       = _twtk_platform_generic_redraw;
 
     return 0;
+}
+
+static int _op_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect, cairo_matrix_t *client_matrix)
+{
+    assert(widget);
+    assert(client_matrix);
+    assert(widget->frame == NULL);
+    assert(widget->priv);
+
+    widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
+
+    _root_priv_t *priv = (_root_priv_t*)widget->priv;
+
+    _DEBUG("invalidate_rect: (ROOT)  widget=%10s rect=%4.0f:%4.0f:%4.0f:%4.0f/%4.0f",
+        widget->name, rect.pos.x, rect.pos.y, rect.size.x, rect.size.y, rect.angle);
+
+    _twtk_platform_generic_region_t *region = calloc(1,sizeof(_twtk_platform_generic_region_t));
+    region->matrix = *client_matrix;
+    region->rect = rect;
+    region->next = priv->platform->regions;
+    priv->platform->regions = region;
+
+    return 1;
 }
