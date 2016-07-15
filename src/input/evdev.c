@@ -10,6 +10,7 @@
 #include <libevdev-1.0/libevdev/libevdev.h>
 #include <twtk/evdev.h>
 #include <twtk/events.h>
+#include <twtk/platform.h>
 #include <twtk-private/debug.h>
 
 
@@ -323,7 +324,9 @@ void twtk_evdev_mouse_loop(struct evdev_state* state)
 	struct input_event ev;
 	if ((rc = libevdev_next_event(state->dev, LIBEVDEV_READ_FLAG_NORMAL, &ev)) == 0)
 	{
-	    if (!_handle_mouse_event(state, &ev))
+	    if (_handle_mouse_event(state, &ev))
+                twtk_platform_redraw();
+            else
 	    {
 		_DEBUG("Event: %-10s %-10s %5d",
 		    twtk_evdev_get_event_type_name(ev.type),

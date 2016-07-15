@@ -404,6 +404,7 @@ int twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dis
     return ret;
 }
 
+#ifdef ENABLE_CLIP_DIRTY
 static int _invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect, cairo_matrix_t *child_matrix)
 {
     widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
@@ -441,16 +442,21 @@ static int _invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect, cairo_matri
 
     return _invalidate_rect(widget->frame, rect, &trans_matrix);
 }
+#endif
 
 int twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect)
 {
     if (widget == NULL)
         return 0;
 
+#ifdef ENABLE_CLIP_DIRTY
     cairo_matrix_t matrix;
     cairo_matrix_init_identity(&matrix);
 
     _invalidate_rect(widget, rect, &matrix);
+#else
+    widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
+#endif
 
     return 0;
 }

@@ -192,7 +192,7 @@ int twtk_widget_render(twtk_widget_t *widget, cairo_t *cr)
     if (widget->paint_cache != NULL)
 	return 0;
 
-    _DEBUG("need to render: %s", widget->name);
+    _DEBUG("need to render: [%s] %s", widget->cls->name, widget->name);
 
     /* we'll have to re-render the widget */
     cairo_push_group (cr);

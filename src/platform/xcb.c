@@ -270,6 +270,7 @@ static int _xcb_mainloop(twtk_platform_t *platform)
     {
         _xcb_handle_event(xcb_platform, event);
         free(event);
+        twtk_platform_redraw();
         xcb_flush(xcb_platform->conn);
     }
 
