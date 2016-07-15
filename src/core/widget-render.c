@@ -126,13 +126,7 @@ static void _widget_clip_neigh(
 	    _widget_parent_name(widget));
 
         cairo_matrix_t m = _twtk_widget_calc_matrix(widget->frame);
-
-        _clipout_rect(
-            widget->frame,
-            walk->widget,
-            &m,
-            cr
-        );
+        _clipout_rect(widget->frame, walk->widget, NULL, cr);
     }
 
     assert(walk);
