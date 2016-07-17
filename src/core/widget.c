@@ -400,7 +400,8 @@ int twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect)
     // FIXME: clearly separate between content redrawn and recomposition
     widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
 
-    // FIXME
+    _twtk_platform_redraw_required = 1;
+
     return 0;
 }
 
