@@ -20,6 +20,7 @@
 pthread_mutex_t redraw_lock = PTHREAD_MUTEX_INITIALIZER;
 
 twtk_platform_t *_twtk_current_platform = NULL;
+int _twtk_platform_redraw_required;
 
 void twtk_platform_install(twtk_platform_t *platform)
 {
@@ -93,6 +94,10 @@ void twtk_platform_redraw()
     assert(_twtk_current_platform);
 
     pthread_mutex_lock(&redraw_lock);
+    if (!_twtk_platform_redraw_required)
+        goto out;
+
+    _twtk_platform_redraw_required = 0;
 
     twtk_widget_t *root = _twtk_current_platform->op_get_root(_twtk_current_platform);
     assert(root);
@@ -102,6 +107,7 @@ void twtk_platform_redraw()
     twtk_widget_do_draw(root, cr);
     _twtk_current_platform->op_free_context(_twtk_current_platform, cr);
 
+out:
     pthread_mutex_unlock(&redraw_lock);
 }
 
