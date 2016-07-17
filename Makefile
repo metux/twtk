@@ -42,10 +42,10 @@ sources-y +=				\
     src/core/threads.c			\
     src/core/fontspec.c			\
     src/core/widget.c			\
-    src/core/widget-matrix.c		\
     src/core/widget-render.c		\
     src/core/widget-list.c		\
     src/core/menu.c			\
+    src/core/viewport.c			\
     src/platform/generic.c		\
     src/platform/platform.c		\
     src/platform/debug-widget.c		\
