@@ -171,24 +171,6 @@ static void _widget_paint(twtk_widget_t *widget, cairo_t *cr)
     cairo_restore(cr);
 }
 
-/* compose widget onto parent's context */
-static void _widget_compose(twtk_widget_t *widget, cairo_t *cr)
-{
-    _DEBUG("composing \"%s\" onto \"%s\"",
-	widget->name,
-	(widget->parent ? widget->parent->name : "<NONE>"));
-
-    assert(cr);
-    assert(widget);
-    assert(widget->paint_cache);
-
-    cairo_save(cr);
-    twtk_widget_render_prepare_frame(widget, cr);
-    cairo_set_source (cr, widget->paint_cache);
-    cairo_paint (cr);
-    cairo_restore(cr);
-}
-
 static int _widget_render(twtk_widget_t *widget, cairo_t *cr)
 {
     assert(widget);
@@ -226,7 +208,20 @@ static int _widget_render(twtk_widget_t *widget, cairo_t *cr)
     {
 	twtk_widget_list_entry_t *ent;
 	for (ent = widget->frames.first; ent != NULL; ent = ent->next)
-	    _widget_compose(ent->widget, cr);
+	{
+            _DEBUG("composing \"%s\" onto \"%s\"",
+                ent->widget->name,
+                (ent->widget->parent ? ent->widget->parent->name : "<NONE>"));
+
+            assert(ent->widget);
+            assert(ent->widget->paint_cache);
+
+            cairo_save(cr);
+            twtk_widget_render_prepare_frame(ent->widget, cr);
+            cairo_set_source (cr, ent->widget->paint_cache);
+            cairo_paint (cr);
+            cairo_restore(cr);
+        }
     }
 
     widget->flags &= ~TWTK_WIDGET_FLAG_DIRTY;
@@ -249,7 +244,16 @@ int twtk_widget_do_draw(twtk_widget_t *widget, cairo_t* cr)
 
     /* now paint the whole image */
     _DEBUG("final compose: %s", widget->name);
-    _widget_compose(widget, cr);
+
+    assert(cr);
+    assert(widget);
+    assert(widget->paint_cache);
+
+    cairo_save(cr);
+    twtk_widget_render_prepare_frame(widget, cr);
+    cairo_set_source (cr, widget->paint_cache);
+    cairo_paint (cr);
+    cairo_restore(cr);
 
     return 0;
 }
