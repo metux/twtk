@@ -12,9 +12,9 @@
 #include <twtk/widget-helper.h>
 #include <twtk/platform.h>
 #include <twtk/widget.h>
+#include <twtk/viewport.h>
 #include <twtk-private/debug.h>
 #include <twtk-private/platform-generic.h>
-#include <twtk-private/widget.h>
 #include <twtk/color.h>
 
 
@@ -98,7 +98,7 @@ static twtk_widget_t *_translate_to_root(
     }
 
     twtk_vector_t p2;
-    twtk_widget_translate_pos_to_frame(widget, pos, &p2);
+    twtk_viewport_pos_to_frame(widget->viewport, pos, &p2);
 
     _DEBUG("translated to parent: %0.f:%0.f", p2.x, p2.y);
     return _translate_to_root(widget->parent, p2, ret_pos);

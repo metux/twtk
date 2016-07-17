@@ -14,8 +14,8 @@
 #include <twtk/widget.h>
 #include <twtk/color.h>
 #include <twtk/events.h>
+#include <twtk/viewport.h>
 #include <twtk/widget-list.h>
-#include <twtk-private/widget.h>
 #include <twtk-private/debug.h>
 #include <twtk-private/debug-widget.h>
 #include <twtk-private/cairo_util.h>
@@ -125,7 +125,8 @@ static void _widget_clip_neigh(
 	    _widget_name(widget),
 	    _widget_parent_name(widget));
 
-        cairo_matrix_t m = _twtk_widget_calc_matrix(widget->frame);
+        cairo_matrix_t m;
+        twtk_viewport_matrix(widget->frame->viewport, &m);
         _clipout_rect(widget->frame, walk->widget, NULL, cr);
     }
 
@@ -142,7 +143,8 @@ static void _widget_prepare_frame(
 {
     _widget_clip_neigh(widget, cr);
 
-    cairo_matrix_t matrix = _twtk_widget_calc_matrix(widget);
+    cairo_matrix_t matrix;
+    twtk_viewport_matrix(widget->viewport, &matrix);
     cairo_set_matrix(cr, &matrix);
     _twtk_ut_rect_to_vec(cr, widget->viewport.size);
     cairo_clip(cr);

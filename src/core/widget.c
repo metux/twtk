@@ -14,6 +14,7 @@
 #include <assert.h>
 #include <twtk/threads.h>
 #include <twtk/widget.h>
+#include <twtk/viewport.h>
 #include <twtk/color.h>
 #include <twtk/events.h>
 #include <twtk/platform.h>
@@ -21,7 +22,6 @@
 #include <twtk-private/strutil.h>
 #include <twtk-private/debug.h>
 #include <twtk-private/debug-widget.h>
-#include <twtk-private/widget.h>
 #include <twtk-private/cairo_util.h>
 
 // FIXME: use an allocation cache

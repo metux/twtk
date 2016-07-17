@@ -13,9 +13,9 @@
 #include <twtk/threads.h>
 #include <twtk/widget.h>
 #include <twtk/widget-list.h>
+#include <twtk/viewport.h>
 #include <twtk-private/strutil.h>
 #include <twtk-private/debug.h>
-#include <twtk-private/widget.h>
 
 
 void twtk_widget_list_init(twtk_widget_list_t *list)
@@ -120,7 +120,7 @@ int twtk_widget_list_find_pos(
 	assert(walk);
 	assert(walk->widget);
 	_DEBUG("find_pos: trying: %-15s ", walk->widget->name);
-	if (twtk_widget_translate_pos_from_frame(walk->widget, pos, ret_pos))
+	if (twtk_viewport_pos_from_frame(walk->widget->viewport, pos, ret_pos))
 	{
 	    _DEBUG("find_pos: match:  %-15s pos=[%4.0f:%4.0f]",
 		walk->widget->name,
