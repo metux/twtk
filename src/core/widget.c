@@ -299,20 +299,6 @@ int twtk_widget_set_text(twtk_widget_t *widget, const char* text)
     return twtk_widget_set_str(widget, "text", text);
 }
 
-void twtk_widget_move(twtk_widget_t *widget, twtk_vector_t pos)
-{
-    assert(widget);
-    twtk_rect_t old_viewport = widget->viewport;
-    widget->viewport.pos = pos;
-
-    /* invalidate our old and new region within our frame */
-    if (widget->frame)
-    {
-        twtk_widget_invalidate_rect(widget->frame, old_viewport);
-        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
-    }
-}
-
 static void _invalidate_viewport(twtk_widget_t *widget, twtk_rect_t old_viewport)
 {
     /* invalidate our old and new region within our frame */
@@ -321,6 +307,15 @@ static void _invalidate_viewport(twtk_widget_t *widget, twtk_rect_t old_viewport
 
     twtk_widget_invalidate_rect(widget->frame, old_viewport);
     twtk_widget_invalidate_rect(widget->frame, widget->viewport);
+}
+
+void twtk_widget_move(twtk_widget_t *widget, twtk_vector_t pos)
+{
+    assert(widget);
+    twtk_rect_t old_viewport = widget->viewport;
+    widget->viewport.pos = pos;
+
+    _invalidate_viewport(widget, old_viewport);
 }
 
 void twtk_widget_move_rel(twtk_widget_t *widget, twtk_vector_t vec)
