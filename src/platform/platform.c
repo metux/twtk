@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <twtk/platform.h>
 #include <twtk-private/drm.h>
 #include <twtk-private/xcb.h>
@@ -15,6 +16,8 @@
 #include <twtk/evdev.h>
 #include <twtk-private/debug-widget.h>
 
+
+pthread_mutex_t redraw_lock = PTHREAD_MUTEX_INITIALIZER;
 
 twtk_platform_t *_twtk_current_platform = NULL;
 
@@ -89,14 +92,17 @@ void twtk_platform_redraw()
 {
     assert(_twtk_current_platform);
 
+    pthread_mutex_lock(&redraw_lock);
+
     twtk_widget_t *root = _twtk_current_platform->op_get_root(_twtk_current_platform);
-    if (!root)
-	return;
+    assert(root);
 
     cairo_t *cr = _twtk_current_platform->op_get_context(_twtk_current_platform);
     assert(cr);
     twtk_widget_do_draw(root, cr);
     _twtk_current_platform->op_free_context(_twtk_current_platform, cr);
+
+    pthread_mutex_unlock(&redraw_lock);
 }
 
 void twtk_platform_loop()
