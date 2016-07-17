@@ -299,15 +299,6 @@ int twtk_widget_set_text(twtk_widget_t *widget, const char* text)
     return twtk_widget_set_str(widget, "text", text);
 }
 
-static inline void _invalidate(twtk_widget_t *widget, twtk_rect_t o, twtk_rect_t n)
-{
-    if (widget->frame == NULL)
-        return;
-
-    twtk_widget_invalidate_rect(widget, o);
-    twtk_widget_invalidate_rect(widget, n);
-}
-
 void twtk_widget_move(twtk_widget_t *widget, twtk_vector_t pos)
 {
     assert(widget);
