@@ -2,6 +2,7 @@
 #define __TWTK_MENU_H_
 
 #include <twtk/types.h>
+#include <twtk/util.h>
 
 struct __twtk_menu_entry
 {
@@ -22,7 +23,7 @@ struct __twtk_menu
     twtk_menu_t _symbol = { \
         .id = _id, \
         .entries = _entries, \
-        .count = ARRAY_SIZE(_entries) \
+        .count = TWTK_ARRAY_SIZE(_entries) \
     };
 
 #define TWTK_DECLARE_MENU_STATIC_ENTRY(_id, _text) \
