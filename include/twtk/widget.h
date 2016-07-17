@@ -296,6 +296,12 @@ void twtk_widget_render_prepare_frame(twtk_widget_t *widget, cairo_t *cr)
     __attribute__((nonnull(1,2)));
 
 /**
+ * render a widget and put the generated pattern into paint_cache
+ */
+int twtk_widget_render(twtk_widget_t *widget, cairo_t *cr)
+    __attribute__((nonnull(1,2)));
+
+/**
  * Add child and then de-reference
  *
  * Useful for chaining like this:

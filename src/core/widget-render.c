@@ -171,7 +171,7 @@ static void _widget_paint(twtk_widget_t *widget, cairo_t *cr)
     cairo_restore(cr);
 }
 
-static int _widget_render(twtk_widget_t *widget, cairo_t *cr)
+int twtk_widget_render(twtk_widget_t *widget, cairo_t *cr)
 {
     assert(widget);
 
@@ -181,7 +181,7 @@ static int _widget_render(twtk_widget_t *widget, cairo_t *cr)
     {
 	twtk_widget_list_entry_t *ent;
 	for (ent = widget->frames.first; ent != NULL; ent = ent->next)
-	    ret |= _widget_render(ent->widget, cr);
+	    ret |= twtk_widget_render(ent->widget, cr);
     }
 
     if (ret && widget->paint_cache)
@@ -240,7 +240,7 @@ int twtk_widget_do_draw(twtk_widget_t *widget, cairo_t* cr)
 
     /* render the widget and all its subs */
     _DEBUG("recursive render: %s", widget->name);
-    _widget_render(widget, cr);
+    twtk_widget_render(widget, cr);
 
     /* now paint the whole image */
     _DEBUG("final compose: %s", widget->name);
