@@ -290,6 +290,12 @@ int  twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect);
 void twtk_widget_add_child(twtk_widget_t *parent, twtk_widget_t *child, const char* name);
 
 /**
+ * prepare a context for rendering a widget into its frame
+ */
+void twtk_widget_render_prepare_frame(twtk_widget_t *widget, cairo_t *cr)
+    __attribute__((nonnull(1,2)));
+
+/**
  * Add child and then de-reference
  *
  * Useful for chaining like this:
