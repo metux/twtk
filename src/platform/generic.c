@@ -42,6 +42,7 @@ static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_disp
 
 typedef struct
 {
+    twtk_platform_t *platform;
 } _root_priv_t;
 
 static twtk_widget_class_t _root_class_inf = {
@@ -49,12 +50,17 @@ static twtk_widget_class_t _root_class_inf = {
     .priv_size = sizeof(_root_priv_t)
 };
 
-static twtk_widget_t *_create_root(cairo_surface_t *surface)
+static twtk_widget_t *_create_root(twtk_platform_t *platform, cairo_surface_t *surface)
 {
     assert(surface);
+    assert(platform);
 
     twtk_widget_t *r = twtk_widget_alloc(&_root_class_inf);
     assert(r);
+    assert(r->priv);
+
+    _root_priv_t *priv = (_root_priv_t*)r->priv;
+    priv->platform = platform;
 
     /* retrieve surface geometry */
     {
@@ -80,7 +86,7 @@ twtk_widget_t *_twtk_platform_generic_get_root(twtk_platform_t *platform)
     assert(platform);
 
     if (platform->root == NULL)
-        platform->root = _create_root(platform->surface);
+        platform->root = _create_root(platform, platform->surface);
 
     return platform->root;
 }
