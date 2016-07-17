@@ -81,20 +81,22 @@ void twtk_platform_finish()
 void twtk_platform_redraw_widget(twtk_widget_t *widget, const char *name)
 {
     assert(widget);
-    assert(_twtk_current_platform);
-    cairo_t *cr = _twtk_current_platform->op_get_context(_twtk_current_platform);
-    assert(cr);
-    twtk_widget_do_draw(widget, cr);
-    _twtk_current_platform->op_free_context(_twtk_current_platform, cr);
+    twtk_widget_dirty(widget);
+    twtk_platform_redraw();
 }
 
 void twtk_platform_redraw()
 {
+    assert(_twtk_current_platform);
+
     twtk_widget_t *root = _twtk_current_platform->op_get_root(_twtk_current_platform);
     if (!root)
 	return;
 
-    twtk_platform_redraw_widget(root, "<root>");
+    cairo_t *cr = _twtk_current_platform->op_get_context(_twtk_current_platform);
+    assert(cr);
+    twtk_widget_do_draw(root, cr);
+    _twtk_current_platform->op_free_context(_twtk_current_platform, cr);
 }
 
 void twtk_platform_loop()
