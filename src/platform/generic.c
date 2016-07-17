@@ -37,9 +37,6 @@ int _twtk_platform_generic_free_context(twtk_platform_t *pl, cairo_t *ctx)
 #define _WIDGET_PRIV_TYPE	_root_priv_t
 #define _WIDGET_CLASS_INF	_root_class_inf
 
-static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
-    __attribute__((nonnull(1,2)));
-
 typedef struct
 {
     twtk_platform_t *platform;
