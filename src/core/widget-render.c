@@ -137,9 +137,7 @@ static void _widget_clip_neigh(
     cairo_set_matrix(cr, &save_matrix);
 }
 
-static void _widget_prepare_frame(
-    twtk_widget_t *widget,
-    cairo_t *cr)
+void twtk_widget_render_prepare_frame(twtk_widget_t *widget, cairo_t *cr)
 {
     _widget_clip_neigh(widget, cr);
 
@@ -185,7 +183,7 @@ static void _widget_compose(twtk_widget_t *widget, cairo_t *cr)
     assert(widget->paint_cache);
 
     cairo_save(cr);
-    _widget_prepare_frame(widget, cr);
+    twtk_widget_render_prepare_frame(widget, cr);
     cairo_set_source (cr, widget->paint_cache);
     cairo_paint (cr);
     cairo_restore(cr);
