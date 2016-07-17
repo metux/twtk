@@ -25,6 +25,4 @@
 #define STRBUF_CMPSTR(buf, str)			\
     (strcmp(STRBUF_VALUE(buf), (str==NULL) ? "" : str)==0)
 
-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-
 #endif
