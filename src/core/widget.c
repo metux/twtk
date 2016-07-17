@@ -384,21 +384,54 @@ int twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dis
     return ret;
 }
 
+static int _invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect, cairo_matrix_t *child_matrix)
+{
+    widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
+
+    if (widget->cls->op_invalidate_rect)
+    {
+        if (widget->cls->op_invalidate_rect(widget, rect, child_matrix))
+            return 1;
+    }
+
+    if (widget->frame == NULL)
+    {
+        _DEBUG("invalidate_rect: (root)  widget=%10s rect=%4.0f:%4.0f:%4.0f:%4.0f/%4.0f",
+            widget->name, rect.pos.x, rect.pos.y, rect.size.x, rect.size.y, rect.angle);
+
+        return 0;
+    }
+
+    // FIXME: atomic operations ?
+    // FIXME: clearly separate between content redrawn and recomposition
+
+    cairo_matrix_t widget_matrix;
+    twtk_viewport_matrix(widget->viewport, &widget_matrix);
+
+    cairo_matrix_t trans_matrix;
+    cairo_matrix_multiply (&trans_matrix, child_matrix, &widget_matrix);
+
+#ifdef ENABLE_DEBUG
+    twtk_dim_t new_x = rect.pos.x;
+    twtk_dim_t new_y = rect.pos.y;
+    cairo_matrix_transform_point(&trans_matrix, &new_x, &new_y);
+
+    _DEBUG("invalidate_rect: (child) widget=%10s rect=%4.0f:%4.0f:%4.0f:%4.0f/%4.0f => %4.0f:%4.0f",
+            widget->name, rect.pos.x, rect.pos.y, rect.size.x, rect.size.y, rect.angle, new_x, new_y);
+#endif
+
+    return _invalidate_rect(widget->frame, rect, &trans_matrix);
+}
+
 int twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect)
 {
     if (widget == NULL)
         return 0;
 
-    _DEBUG("invalidate_rect: widget=%s rect=%f:%f:%f:%f/%f",
-        rect.pos.x,
-        rect.pos.y,
-        rect.size.x,
-        rect.size.y,
-        rect.angle);
+    cairo_matrix_t matrix;
+    cairo_matrix_init_identity(&matrix);
 
-    // FIXME: atomic operations ?
-    // FIXME: clearly separate between content redrawn and recomposition
-    widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
+    _invalidate_rect(widget, rect, &matrix);
 
     _twtk_platform_redraw_required = 1;
 
