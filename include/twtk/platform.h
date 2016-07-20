@@ -6,7 +6,6 @@
 #include <twtk/types.h>
 
 extern twtk_platform_t *_twtk_current_platform;
-extern int _twtk_platform_redraw_required;
 
 struct __twtk_platform {
     cairo_surface_t *surface;

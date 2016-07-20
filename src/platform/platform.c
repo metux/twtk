@@ -19,7 +19,6 @@
 
 
 twtk_platform_t *_twtk_current_platform = NULL;
-int _twtk_platform_redraw_required;
 
 void twtk_platform_install(twtk_platform_t *platform)
 {
@@ -93,13 +92,12 @@ void twtk_platform_redraw()
     assert(_twtk_current_platform);
 
     pthread_mutex_lock(&_twtk_current_platform->redraw_lock);
-    if (!_twtk_platform_redraw_required)
-        goto out;
-
-    _twtk_platform_redraw_required = 0;
 
     twtk_widget_t *root = _twtk_current_platform->op_get_root(_twtk_current_platform);
     assert(root);
+
+    if (!(root->flags & TWTK_WIDGET_FLAG_DIRTY))
+        goto out;
 
     cairo_t *cr = _twtk_current_platform->op_get_context(_twtk_current_platform);
     assert(cr);

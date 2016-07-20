@@ -433,8 +433,6 @@ int twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect)
 
     _invalidate_rect(widget, rect, &matrix);
 
-    _twtk_platform_redraw_required = 1;
-
     return 0;
 }
 
