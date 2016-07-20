@@ -229,6 +229,8 @@ twtk_platform_t *twtk_platform_drm_init()
     platform->fd = cairo_drm_device_get_fd(dev);
     platform->crtc_id = cairo_drm_surface_get_crtc_id(platform->base.surface);
 
+    _twtk_lock_init(&platform->base.redraw_lock);
+
     platform->base.op_destroy      = _drm_destroy;
     platform->base.op_get_root     = _twtk_platform_generic_get_root;
     platform->base.op_get_context  = _twtk_platform_generic_get_context;

@@ -18,8 +18,6 @@
 #include <twtk-private/debug-widget.h>
 
 
-pthread_mutex_t redraw_lock = PTHREAD_MUTEX_INITIALIZER;
-
 twtk_platform_t *_twtk_current_platform = NULL;
 int _twtk_platform_redraw_required;
 
@@ -94,7 +92,7 @@ void twtk_platform_redraw()
 {
     assert(_twtk_current_platform);
 
-    pthread_mutex_lock(&redraw_lock);
+    pthread_mutex_lock(&_twtk_current_platform->redraw_lock);
     if (!_twtk_platform_redraw_required)
         goto out;
 
@@ -121,7 +119,7 @@ void twtk_platform_redraw()
     _twtk_current_platform->op_free_context(_twtk_current_platform, cr);
 
 out:
-    pthread_mutex_unlock(&redraw_lock);
+    pthread_mutex_unlock(&_twtk_current_platform->redraw_lock);
 }
 
 void twtk_platform_loop()
