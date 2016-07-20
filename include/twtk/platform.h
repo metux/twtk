@@ -13,6 +13,8 @@ struct __twtk_platform {
     cairo_device_t *device;
     twtk_widget_t *root;
 
+    pthread_mutex_t redraw_lock;
+
     int            (*op_destroy)     (twtk_platform_t *platform);
     twtk_widget_t *(*op_get_root)    (twtk_platform_t *platform);
     cairo_t       *(*op_get_context) (twtk_platform_t *platform);

@@ -419,6 +419,8 @@ twtk_platform_t *twtk_platform_xcb_init()
         return NULL;
     }
 
+    _twtk_lock_init(&xcb_platform->base.redraw_lock);
+
     xcb_platform->base.op_mainloop     = _xcb_mainloop;
     xcb_platform->base.op_stop         = _xcb_stop;
     xcb_platform->base.op_destroy      = _xcb_destroy;
