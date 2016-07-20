@@ -73,6 +73,7 @@ libs-y +=				\
 LIBS   += $(libs-y)   `$(PKG_CONFIG_CMD) --libs   $(pkgconfig-y)`
 CFLAGS += $(cflags-y) `$(PKG_CONFIG_CMD) --cflags $(pkgconfig-y)`
 
+# CFLAGS += -DENABLE_WIDGET_CLIPPING
 # CFLAGS += -DENABLE_DEBUG_FONTSPEC
 # CFLAGS += -DENABLE_DEBUG_WIDGET
 # CFLAGS += -DENABLE_DEBUG_WIDGET_LIST
