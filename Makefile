@@ -86,6 +86,8 @@ CFLAGS += $(cflags-y) `$(PKG_CONFIG_CMD) --cflags $(pkgconfig-y)`
 # CFLAGS += -DENABLE_DEBUG_PLATFORM_GENERIC
 # CFLAGS += -DENABLE_DEBUG_PLATFORM_DRM
 # CFLAGS += -DENABLE_DEBUG_PLATFORM_XCB
+CFLAGS += -DNDEBUG
+
 
 HEADERS	:= $(shell find ./include -name "*.h")
 
