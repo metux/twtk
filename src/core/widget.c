@@ -446,6 +446,7 @@ int twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target)
     if (widget->frame)
     {
         twtk_widget_list_remove_by_ref(&widget->frame->frames, widget);
+        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
         twtk_widget_unref(widget->frame);
         widget->frame = NULL;
     }
