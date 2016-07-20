@@ -134,6 +134,40 @@ int _twtk_platform_generic_map_widget(twtk_platform_t *platform, twtk_widget_t *
     return 0;
 }
 
+int _twtk_platform_generic_redraw(twtk_platform_t *platform)
+{
+    assert(platform);
+
+    pthread_mutex_lock(&platform->redraw_lock);
+
+    twtk_widget_t *root = platform->op_get_root(platform);
+    assert(root);
+
+    if (!(root->flags & TWTK_WIDGET_FLAG_DIRTY))
+        goto out;
+
+    cairo_t *cr = _twtk_current_platform->op_get_context(platform);
+    assert(cr);
+
+    /* render the root widget and all it's children */
+    _DEBUG("rendering root: %s", root->name);
+    twtk_widget_render(root, cr);
+    assert(root->paint_cache);
+
+    /* now do the final composition onto screen */
+    cairo_save(cr);
+    twtk_widget_render_prepare_frame(root, cr);
+    cairo_set_source(cr, root->paint_cache);
+    cairo_paint(cr);
+    cairo_restore(cr);
+
+    platform->op_free_context(platform, cr);
+
+out:
+    pthread_mutex_unlock(&platform->redraw_lock);
+    return 0;
+}
+
 int _twtk_platform_generic_init(twtk_platform_t *platform)
 {
     assert(platform);
@@ -144,6 +178,7 @@ int _twtk_platform_generic_init(twtk_platform_t *platform)
     platform->op_get_context  = _twtk_platform_generic_get_context;
     platform->op_free_context = _twtk_platform_generic_free_context;
     platform->op_map_widget   = _twtk_platform_generic_map_widget;
+    platform->op_redraw       = _twtk_platform_generic_redraw;
 
     return 0;
 }

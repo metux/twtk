@@ -90,34 +90,8 @@ void twtk_platform_redraw_widget(twtk_widget_t *widget, const char *name)
 void twtk_platform_redraw()
 {
     assert(_twtk_current_platform);
-
-    pthread_mutex_lock(&_twtk_current_platform->redraw_lock);
-
-    twtk_widget_t *root = _twtk_current_platform->op_get_root(_twtk_current_platform);
-    assert(root);
-
-    if (!(root->flags & TWTK_WIDGET_FLAG_DIRTY))
-        goto out;
-
-    cairo_t *cr = _twtk_current_platform->op_get_context(_twtk_current_platform);
-    assert(cr);
-
-    /* render the root widget and all it's children */
-    _DEBUG("rendering root: %s", root->name);
-    twtk_widget_render(root, cr);
-    assert(root->paint_cache);
-
-    /* now do the final composition onto screen */
-    cairo_save(cr);
-    twtk_widget_render_prepare_frame(root, cr);
-    cairo_set_source(cr, root->paint_cache);
-    cairo_paint(cr);
-    cairo_restore(cr);
-
-    _twtk_current_platform->op_free_context(_twtk_current_platform, cr);
-
-out:
-    pthread_mutex_unlock(&_twtk_current_platform->redraw_lock);
+    assert(_twtk_current_platform->op_redraw);
+    _twtk_current_platform->op_redraw(_twtk_current_platform);
 }
 
 void twtk_platform_loop()
