@@ -403,6 +403,8 @@ twtk_platform_t *twtk_platform_xcb_init()
 
     assert(_connect(xcb_platform) == 0);
 
+    _twtk_platform_generic_init(&xcb_platform->base);
+
     xcb_rectangle_t rect;
     xcbutil_get_workspace_area(xcb_platform->conn, xcb_platform->screen->root, 0, &rect);
 
@@ -419,15 +421,9 @@ twtk_platform_t *twtk_platform_xcb_init()
         return NULL;
     }
 
-    _twtk_lock_init(&xcb_platform->base.redraw_lock);
-
     xcb_platform->base.op_mainloop     = _xcb_mainloop;
     xcb_platform->base.op_stop         = _xcb_stop;
     xcb_platform->base.op_destroy      = _xcb_destroy;
-    xcb_platform->base.op_get_root     = _twtk_platform_generic_get_root;
-    xcb_platform->base.op_get_context  = _twtk_platform_generic_get_context;
-    xcb_platform->base.op_free_context = _twtk_platform_generic_free_context;
-    xcb_platform->base.op_map_widget   = _twtk_platform_generic_map_widget;
 
     return &xcb_platform->base;
 }

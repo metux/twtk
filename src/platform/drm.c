@@ -212,6 +212,8 @@ twtk_platform_t *twtk_platform_drm_init()
 {
     TWTK_NEW_OBJECT(twtk_platform_drm_t, platform);
 
+    _twtk_platform_generic_init(&platform->base);
+
     if (!(platform->base.device = cairo_drm_device_default())) {
         _DEBUG("failed to open DRM device");
         return NULL;
@@ -232,12 +234,8 @@ twtk_platform_t *twtk_platform_drm_init()
     _twtk_lock_init(&platform->base.redraw_lock);
 
     platform->base.op_destroy      = _drm_destroy;
-    platform->base.op_get_root     = _twtk_platform_generic_get_root;
-    platform->base.op_get_context  = _twtk_platform_generic_get_context;
-    platform->base.op_free_context = _twtk_platform_generic_free_context;
     platform->base.op_mainloop     = _drm_mainloop;
     platform->base.op_stop         = _drm_stop;
-    platform->base.op_map_widget   = _twtk_platform_generic_map_widget;
 
     twtk_drm_initcursor(platform);
 

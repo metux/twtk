@@ -133,3 +133,17 @@ int _twtk_platform_generic_map_widget(twtk_platform_t *platform, twtk_widget_t *
 
     return 0;
 }
+
+int _twtk_platform_generic_init(twtk_platform_t *platform)
+{
+    assert(platform);
+
+    _twtk_lock_init(&platform->redraw_lock);
+
+    platform->op_get_root     = _twtk_platform_generic_get_root;
+    platform->op_get_context  = _twtk_platform_generic_get_context;
+    platform->op_free_context = _twtk_platform_generic_free_context;
+    platform->op_map_widget   = _twtk_platform_generic_map_widget;
+
+    return 0;
+}
