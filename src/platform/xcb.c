@@ -401,14 +401,17 @@ twtk_platform_t *twtk_platform_xcb_init()
 {
     TWTK_NEW_OBJECT(twtk_platform_xcb_t,xcb_platform);
 
-    assert(_connect(xcb_platform) == 0);
+    int ret = _connect(xcb_platform);
+
+    assert(ret == 0);
 
     _twtk_platform_generic_init(&xcb_platform->base);
 
     xcb_rectangle_t rect;
     xcbutil_get_workspace_area(xcb_platform->conn, xcb_platform->screen->root, 0, &rect);
 
-    assert(_create_window(xcb_platform, rect, &xcb_platform->window) == 0);
+    ret = _create_window(xcb_platform, rect, &xcb_platform->window);
+    assert(ret == 0);
 
     if (!(xcb_platform->base.surface = cairo_xcb_surface_create(
             xcb_platform->conn,
