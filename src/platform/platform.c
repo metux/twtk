@@ -14,6 +14,7 @@
 #include <twtk/events.h>
 #include <twtk/widget.h>
 #include <twtk/evdev.h>
+#include <twtk-private/debug.h>
 #include <twtk-private/debug-widget.h>
 
 
@@ -104,7 +105,19 @@ void twtk_platform_redraw()
 
     cairo_t *cr = _twtk_current_platform->op_get_context(_twtk_current_platform);
     assert(cr);
-    twtk_widget_do_draw(root, cr);
+
+    /* render the root widget and all it's children */
+    _DEBUG("rendering root: %s", root->name);
+    twtk_widget_render(root, cr);
+    assert(root->paint_cache);
+
+    /* now do the final composition onto screen */
+    cairo_save(cr);
+    twtk_widget_render_prepare_frame(root, cr);
+    cairo_set_source(cr, root->paint_cache);
+    cairo_paint(cr);
+    cairo_restore(cr);
+
     _twtk_current_platform->op_free_context(_twtk_current_platform, cr);
 
 out:

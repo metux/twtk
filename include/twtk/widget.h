@@ -168,8 +168,6 @@ struct __twtk_widget
 
 twtk_widget_t *twtk_widget_alloc(const twtk_widget_class_t *cls);
 
-int twtk_widget_do_draw(twtk_widget_t *widget, cairo_t *cr);
-
 #define TWTK_WIDGET_PRIV(widget, type)	\
     ((type)(widget->priv))
 

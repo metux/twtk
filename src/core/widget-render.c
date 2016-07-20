@@ -231,29 +231,3 @@ int twtk_widget_render(twtk_widget_t *widget, cairo_t *cr)
 
     return ret;
 }
-
-// FIXME: redraw should be made asynchronous
-int twtk_widget_do_draw(twtk_widget_t *widget, cairo_t* cr)
-{
-    if (widget == NULL)
-	return -EFAULT;
-
-    /* render the widget and all its subs */
-    _DEBUG("recursive render: %s", widget->name);
-    twtk_widget_render(widget, cr);
-
-    /* now paint the whole image */
-    _DEBUG("final compose: %s", widget->name);
-
-    assert(cr);
-    assert(widget);
-    assert(widget->paint_cache);
-
-    cairo_save(cr);
-    twtk_widget_render_prepare_frame(widget, cr);
-    cairo_set_source (cr, widget->paint_cache);
-    cairo_paint (cr);
-    cairo_restore(cr);
-
-    return 0;
-}
