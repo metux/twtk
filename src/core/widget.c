@@ -315,6 +315,8 @@ void twtk_widget_move(twtk_widget_t *widget, twtk_vector_t pos)
     twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.pos = pos;
 
+    widget->flags &= ~(TWTK_WIDGET_FLAG_HAS_MATRIX | TWTK_WIDGET_FLAG_HAS_INV_MATRIX);
+
     _invalidate_viewport(widget, old_viewport);
 }
 
@@ -323,6 +325,8 @@ void twtk_widget_move_rel(twtk_widget_t *widget, twtk_vector_t vec)
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.pos = twtk_vector_add(widget->viewport.pos, vec);
+
+    widget->flags &= ~(TWTK_WIDGET_FLAG_HAS_MATRIX | TWTK_WIDGET_FLAG_HAS_INV_MATRIX);
 
     _invalidate_viewport(widget, old_viewport);
 }
@@ -333,6 +337,8 @@ void twtk_widget_set_viewport(twtk_widget_t *widget, twtk_rect_t vp)
 
     twtk_rect_t old_viewport = widget->viewport;
     widget->viewport = vp;
+
+    widget->flags &= ~(TWTK_WIDGET_FLAG_HAS_MATRIX | TWTK_WIDGET_FLAG_HAS_INV_MATRIX);
 
     _invalidate_viewport(widget, old_viewport);
 }
@@ -351,6 +357,8 @@ void twtk_widget_rotate(twtk_widget_t *widget, twtk_dim_t a)
     assert(widget);
     twtk_rect_t old_viewport = widget->viewport;
     widget->viewport.angle = M_PI/180*a;
+
+    widget->flags &= ~(TWTK_WIDGET_FLAG_HAS_MATRIX | TWTK_WIDGET_FLAG_HAS_INV_MATRIX);
 
     _invalidate_viewport(widget, old_viewport);
 }
@@ -405,11 +413,10 @@ static int _invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect, cairo_matri
     // FIXME: atomic operations ?
     // FIXME: clearly separate between content redrawn and recomposition
 
-    cairo_matrix_t widget_matrix;
-    twtk_viewport_matrix(widget->viewport, &widget_matrix);
+    cairo_matrix_t *widget_matrix = twtk_viewport_matrix(widget);
 
     cairo_matrix_t trans_matrix;
-    cairo_matrix_multiply (&trans_matrix, child_matrix, &widget_matrix);
+    cairo_matrix_multiply (&trans_matrix, child_matrix, widget_matrix);
 
 #ifdef ENABLE_DEBUG
     twtk_dim_t new_x = rect.pos.x;
@@ -457,6 +464,8 @@ int twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target)
         twtk_widget_list_add(&target->frames, widget);
         widget->frame = twtk_widget_ref(target);
     }
+
+    widget->flags &= ~(TWTK_WIDGET_FLAG_HAS_MATRIX | TWTK_WIDGET_FLAG_HAS_INV_MATRIX);
 
     return 0;
 }

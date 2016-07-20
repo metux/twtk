@@ -125,8 +125,6 @@ static void _widget_clip_neigh(
 	    _widget_name(widget),
 	    _widget_parent_name(widget));
 
-        cairo_matrix_t m;
-        twtk_viewport_matrix(widget->frame->viewport, &m);
         _clipout_rect(widget->frame, walk->widget, NULL, cr);
     }
 
@@ -143,9 +141,8 @@ void twtk_widget_render_prepare_frame(twtk_widget_t *widget, cairo_t *cr)
     _widget_clip_neigh(widget, cr);
 #endif
 
-    cairo_matrix_t matrix;
-    twtk_viewport_matrix(widget->viewport, &matrix);
-    cairo_set_matrix(cr, &matrix);
+    cairo_matrix_t *matrix = twtk_viewport_matrix(widget);
+    cairo_set_matrix(cr, matrix);
     _twtk_ut_rect_to_vec(cr, widget->viewport.size);
     cairo_clip(cr);
 }

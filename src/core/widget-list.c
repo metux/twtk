@@ -120,7 +120,7 @@ int twtk_widget_list_find_pos(
 	assert(walk);
 	assert(walk->widget);
 	_DEBUG("find_pos: trying: %-15s ", walk->widget->name);
-	if (twtk_viewport_pos_from_frame(walk->widget->viewport, pos, ret_pos))
+	if (twtk_viewport_pos_from_frame(walk->widget, pos, ret_pos))
 	{
 	    _DEBUG("find_pos: match:  %-15s pos=[%4.0f:%4.0f]",
 		walk->widget->name,

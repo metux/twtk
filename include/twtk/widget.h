@@ -13,6 +13,8 @@
 
 #define TWTK_WIDGET_FLAG_DIRTY	1 << 0
 #define TWTK_WIDGET_FLAG_POPUP	1 << 1
+#define TWTK_WIDGET_FLAG_HAS_MATRIX		1 << 2
+#define TWTK_WIDGET_FLAG_HAS_INV_MATRIX		1 << 3
 
 /**
  * widget event handler return mask
@@ -164,6 +166,10 @@ struct __twtk_widget
 
     /* render cache */
     cairo_pattern_t *paint_cache;
+
+    /* matrix cache */
+    cairo_matrix_t matrix;
+    cairo_matrix_t inv_matrix;
 };
 
 twtk_widget_t *twtk_widget_alloc(const twtk_widget_class_t *cls);
