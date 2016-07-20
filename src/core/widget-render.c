@@ -139,7 +139,9 @@ static void _widget_clip_neigh(
 
 void twtk_widget_render_prepare_frame(twtk_widget_t *widget, cairo_t *cr)
 {
+#ifdef ENABLE_WIDGET_CLIPPING
     _widget_clip_neigh(widget, cr);
+#endif
 
     cairo_matrix_t matrix;
     twtk_viewport_matrix(widget->viewport, &matrix);
@@ -199,7 +201,9 @@ int twtk_widget_render(twtk_widget_t *widget, cairo_t *cr)
     cairo_push_group (cr);
 
     cairo_save(cr);
+#ifdef ENABLE_WIDGET_CLIPPING
     _widget_clip_subs(widget, cr);
+#endif
     _widget_fill_background(widget, cr);
     _widget_paint(widget, cr);
     cairo_restore(cr);
