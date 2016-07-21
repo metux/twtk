@@ -24,6 +24,8 @@
 #include <twtk-private/debug-widget.h>
 #include <twtk-private/cairo_util.h>
 
+static int widget_count = 0;
+
 // FIXME: use an allocation cache
 twtk_widget_t *twtk_widget_alloc(const twtk_widget_class_t *cls)
 {
@@ -38,6 +40,11 @@ twtk_widget_t *twtk_widget_alloc(const twtk_widget_class_t *cls)
     widget->flags = TWTK_WIDGET_FLAG_DIRTY;
     twtk_widget_list_init(&widget->childs);
     twtk_widget_list_init(&widget->frames);
+
+    widget_count++;
+
+    _DEBUG("twtk_widget_alloc() total: %d", widget_count);
+
     return widget;
 }
 
@@ -137,7 +144,9 @@ void twtk_widget_destroy(twtk_widget_t *widget)
 {
     assert(widget);
 
-    _DEBUG("freeing widget (class: %s)", widget->cls->name);
+    widget_count--;
+
+    _DEBUG("freeing widget \"%s\" (class: %s) - total: %d", widget->name, widget->cls->name, widget_count);
 
     twtk_widget_list_fini (&widget->frames);
     twtk_widget_list_fini (&widget->childs);
