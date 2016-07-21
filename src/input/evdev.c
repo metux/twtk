@@ -325,8 +325,7 @@ void twtk_evdev_mouse_loop(struct evdev_state* state)
 	if ((rc = libevdev_next_event(state->dev, LIBEVDEV_READ_FLAG_NORMAL, &ev)) == 0)
 	{
 	    if (_handle_mouse_event(state, &ev))
-            {
-            }
+                twtk_platform_redraw();
             else
 	    {
 		_DEBUG("Event: %-10s %-10s %5d",

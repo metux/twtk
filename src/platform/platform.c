@@ -134,6 +134,7 @@ static int _dispatch_handler(twtk_event_t *event, void *priv)
 	{
 	    /* we need to redraw */
 	    // FIXME: redraw'ing the whole screen isn't actually efficient
+	    twtk_platform_redraw();
 	}
 
 	if (_is_dbg_event(event))
