@@ -5,6 +5,8 @@
 #define ENABLE_DEBUG
 #endif
 
+#define _BSD_SOURCE
+
 #include <unistd.h>
 #include <stdint.h>
 #include <inttypes.h>
@@ -196,7 +198,12 @@ static int _drm_mainloop(twtk_platform_t *platform)
 {
     assert(platform);
     twtk_platform_drm_t *drm_platform = (twtk_platform_drm_t*) platform;
-    sem_wait(&drm_platform->mainloop_sem);
+
+    while (drm_platform->mainloop_running)
+    {
+        usleep(1000000/100);
+        platform->op_redraw(platform);
+    }
 
     return 0;
 }
@@ -206,6 +213,7 @@ static int _drm_stop(twtk_platform_t *platform)
     assert(platform);
     twtk_platform_drm_t *drm_platform = (twtk_platform_drm_t*) platform;
     sem_post(&drm_platform->mainloop_sem);
+    drm_platform->mainloop_running = 0;
 
     return 0;
 }
@@ -233,6 +241,7 @@ twtk_platform_t *twtk_platform_drm_init()
     cairo_device_t *dev = cairo_surface_get_device(platform->base.surface);
 
     sem_init(&platform->mainloop_sem, 0, 0);
+    platform->mainloop_running = 1;
 
     platform->fd = cairo_drm_device_get_fd(dev);
     platform->crtc_id = cairo_drm_surface_get_crtc_id(platform->base.surface);
