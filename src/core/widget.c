@@ -222,7 +222,10 @@ static int _dispatch_mouse(twtk_widget_t *parent, twtk_event_t *event)
         int ret = twtk_widget_event(parent, event, TWTK_EVENT_DISPATCH_BEFORE);
 
         if (ret & TWTK_EVSTAT_CONSUMED)
+        {
+            twtk_widget_unref(child);
             return ret;
+        }
 
         /** position points into a subframe - pass it there **/
         twtk_event_t ev = *event;
