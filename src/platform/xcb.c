@@ -49,8 +49,6 @@ static int _xcb_destroy(twtk_platform_t *platform)
     twtk_platform_xcb_t *xcb_platform = (twtk_platform_xcb_t*) platform;
 
     // FIXME: should free the cursor
-    cairo_surface_destroy(platform->surface);
-
     cairo_surface_finish(platform->surface);
     cairo_surface_destroy(platform->surface);
     xcb_disconnect(xcb_platform->conn);
