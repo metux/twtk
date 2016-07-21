@@ -19,6 +19,7 @@ struct __twtk_platfom_generic_region
 
 struct __twtk_platform {
     cairo_surface_t *surface;
+    cairo_surface_t *temp_surface;
     cairo_device_t *device;
     twtk_widget_t *root;
 
@@ -29,7 +30,9 @@ struct __twtk_platform {
     int            (*op_destroy)     (twtk_platform_t *platform);
     twtk_widget_t *(*op_get_root)    (twtk_platform_t *platform);
     cairo_t       *(*op_get_context) (twtk_platform_t *platform);
+    cairo_t       *(*op_get_temp_context) (twtk_platform_t *platform);
     int            (*op_free_context)(twtk_platform_t *platform, cairo_t *cr);
+    int            (*op_free_temp_context)(twtk_platform_t *platform, cairo_t *cr);
     int            (*op_mainloop)    (twtk_platform_t *platform);
     int            (*op_stop)        (twtk_platform_t *platform);
     int            (*op_map_widget)  (twtk_platform_t *platform, twtk_widget_t *widget, twtk_widget_t *parent);

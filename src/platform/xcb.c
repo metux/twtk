@@ -431,6 +431,8 @@ twtk_platform_t *twtk_platform_xcb_init()
         return NULL;
     }
 
+    xcb_platform->base.temp_surface    = cairo_recording_surface_create (CAIRO_FORMAT_ARGB32, NULL);
+
     xcb_platform->base.op_mainloop     = _xcb_mainloop;
     xcb_platform->base.op_stop         = _xcb_stop;
     xcb_platform->base.op_destroy      = _xcb_destroy;
