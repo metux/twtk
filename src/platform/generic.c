@@ -28,7 +28,21 @@ cairo_t *_twtk_platform_generic_get_context(twtk_platform_t *pl)
     return cairo_create(pl->surface);
 }
 
+cairo_t *_twtk_platform_generic_get_temp_context(twtk_platform_t *pl)
+{
+    assert(pl);
+    return cairo_create(pl->temp_surface);
+}
+
 int _twtk_platform_generic_free_context(twtk_platform_t *pl, cairo_t *ctx)
+{
+    assert(pl);
+    assert(ctx);
+    cairo_destroy(ctx);
+    return 1;
+}
+
+int _twtk_platform_generic_free_temp_context(twtk_platform_t *pl, cairo_t *ctx)
 {
     assert(pl);
     assert(ctx);
@@ -200,11 +214,13 @@ int _twtk_platform_generic_flush(twtk_platform_t *platform)
     return 0;
 }
 
-static int _render_root(twtk_widget_t *widget, cairo_t *cr, twtk_platform_t *platform)
+static int _render_root(twtk_widget_t *widget, cairo_t *target_cr, twtk_platform_t *platform)
 {
     assert(widget);
 
     int ret = widget->flags & TWTK_WIDGET_FLAG_DIRTY;
+
+    cairo_t *cr = platform->op_get_temp_context(platform);
 
     struct timespec start;
     clock_gettime(CLOCK_MONOTONIC, &start);
@@ -256,15 +272,17 @@ static int _render_root(twtk_widget_t *widget, cairo_t *cr, twtk_platform_t *pla
     widget->flags &= ~TWTK_WIDGET_FLAG_DIRTY;
     widget->paint_cache = cairo_pop_group (cr);
 
+    platform->op_free_temp_context(platform, cr);
+
     struct timespec after_rootrender;
     clock_gettime(CLOCK_MONOTONIC, &after_rootrender);
 
     /* clip to the regions that actually changed */
-    _clip_dirty(platform, cr);
+    _clip_dirty(platform, target_cr);
 
     /* now do the final composition onto screen */
-    cairo_set_source(cr, widget->paint_cache);
-    cairo_paint(cr);
+    cairo_set_source(target_cr, widget->paint_cache);
+    cairo_paint(target_cr);
 
     struct timespec after_composite;
     clock_gettime(CLOCK_MONOTONIC, &after_composite);
@@ -313,7 +331,9 @@ int _twtk_platform_generic_init(twtk_platform_t *platform)
 
     platform->op_get_root     = _twtk_platform_generic_get_root;
     platform->op_get_context  = _twtk_platform_generic_get_context;
+    platform->op_get_temp_context  = _twtk_platform_generic_get_temp_context;
     platform->op_free_context = _twtk_platform_generic_free_context;
+    platform->op_free_temp_context = _twtk_platform_generic_free_context;
     platform->op_map_widget   = _twtk_platform_generic_map_widget;
     platform->op_redraw       = _twtk_platform_generic_redraw;
     platform->op_flush        = _twtk_platform_generic_flush;
