@@ -12,6 +12,7 @@ typedef struct
 
     twtk_widget_t *root;
     sem_t mainloop_sem;
+    char mainloop_running;
     int fd;
     uint32_t crtc_id;
     uint32_t cursor_bo;
