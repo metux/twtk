@@ -179,6 +179,7 @@ static int _drm_destroy(twtk_platform_t *platform)
 {
     assert(platform);
     cairo_surface_destroy(platform->surface);
+    cairo_surface_destroy(platform->temp_surface);
 
     twtk_platform_drm_t *drm_platform = (twtk_platform_drm_t*) platform;
     sem_destroy(&drm_platform->mainloop_sem);
@@ -223,6 +224,10 @@ twtk_platform_t *twtk_platform_drm_init()
         _DEBUG("failed to allocate surface");
         return NULL;
     }
+
+    platform->base.temp_surface = cairo_recording_surface_create (CAIRO_FORMAT_ARGB32, NULL);
+
+    assert(platform->base.temp_surface);
 
     cairo_device_t *dev = cairo_surface_get_device(platform->base.surface);
 
