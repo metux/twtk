@@ -142,6 +142,8 @@ int twtk_widget_list_find_pos(
 
 static int __remove_by_ref(twtk_widget_list_t *list, twtk_widget_t *widget)
 {
+    twtk_widget_list_entry_t *old = NULL;
+
     /** special case: empty list **/
     if (list->first == NULL)
         return -ENOENT;
@@ -152,33 +154,31 @@ static int __remove_by_ref(twtk_widget_list_t *list, twtk_widget_t *widget)
         if (list->first->widget != widget)
             return -ENOENT;
 
-        twtk_widget_unref(widget);
-        free(list->first);
+        old = list->first;
         list->first = NULL;
         list->last = NULL;
-        return 0;
+
+        goto free_old;
     }
 
     /** special case: first element **/
     if (list->first->widget == widget)
     {
-        twtk_widget_list_entry_t *old = list->first;
-        twtk_widget_unref(old->widget);
+        old = list->first;
         list->first = old->next;
         list->first->prev = NULL;
-        free(old);
-        return 0;
+
+        goto free_old;
     }
 
     /** special case: last element **/
     if (list->last->widget == widget)
     {
-        twtk_widget_list_entry_t *old = list->last;
-        twtk_widget_unref(old->widget);
+        old = list->last;
         old->prev->next = NULL;
         list->last = old->prev;
-        free(old);
-        return 0;
+
+        goto free_old;
     }
 
     twtk_widget_list_entry_t *walk;
@@ -186,8 +186,7 @@ static int __remove_by_ref(twtk_widget_list_t *list, twtk_widget_t *widget)
     {
         if (walk->next->widget == NULL)
         {
-            twtk_widget_list_entry_t *old = walk->next;
-            twtk_widget_unref(old->widget);
+            old = walk->next;
 
             old->next->prev = walk;
             walk->next = old->next;
@@ -195,11 +194,16 @@ static int __remove_by_ref(twtk_widget_list_t *list, twtk_widget_t *widget)
             if (walk->next == NULL)
                 list->last = walk;
 
-            return 0;
+            goto free_old;
         }
     }
 
     return -ENOENT;
+
+free_old:
+    twtk_widget_unref(widget);
+    free(old);
+    return 0;
 }
 
 int twtk_widget_list_remove_by_ref(twtk_widget_list_t *list, twtk_widget_t *widget)
