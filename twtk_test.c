@@ -211,6 +211,7 @@ int main(void)
 
     _init_boxes();
 
+    twtk_platform_redraw();
     twtk_platform_loop();
     twtk_platform_finish();
 
