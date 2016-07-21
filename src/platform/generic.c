@@ -3,9 +3,12 @@
 #define ENABLE_DEBUG
 #endif
 
+#define _GNU_SOURCE
+
 #define _DEBUG_NAME	"platform-generic"
 
 #include <assert.h>
+#include <time.h>
 #include <cairo.h>
 #include <cairo-drm.h>
 #include <twtk/types.h>
@@ -197,6 +200,85 @@ int _twtk_platform_generic_flush(twtk_platform_t *platform)
     return 0;
 }
 
+static int _render_root(twtk_widget_t *widget, cairo_t *cr, twtk_platform_t *platform)
+{
+    assert(widget);
+
+    int ret = widget->flags & TWTK_WIDGET_FLAG_DIRTY;
+
+    struct timespec start;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+
+    // trigger repaint of sub's
+    {
+        twtk_widget_list_entry_t *ent;
+        for (ent = widget->frames.first; ent != NULL; ent = ent->next)
+            ret |= twtk_widget_render(ent->widget, cr);
+    }
+
+    struct timespec after_subrender;
+    clock_gettime(CLOCK_MONOTONIC, &after_subrender);
+
+    cairo_pattern_destroy(widget->paint_cache);
+    widget->paint_cache = NULL;
+
+    cairo_push_group (cr);
+
+    /* clip to the regions that actually changed */
+    _clip_dirty(platform, cr);
+
+    _twtk_ut_set_rgba(cr, widget->background_color);
+    _twtk_ut_rect_to_vec(cr, widget->viewport.size);
+
+    cairo_fill (cr);
+
+    _clip_dirty(platform, cr);
+    /* paint the childs on their given positions */
+    {
+        twtk_widget_list_entry_t *ent;
+        for (ent = widget->frames.first; ent != NULL; ent = ent->next)
+        {
+            _DEBUG("composing \"%s\" onto \"%s\"",
+                ent->widget->name,
+                (ent->widget->parent ? ent->widget->parent->name : "<NONE>"));
+
+            assert(ent->widget);
+            assert(ent->widget->paint_cache);
+
+            cairo_save(cr);
+            twtk_widget_render_prepare_frame(ent->widget, cr);
+            cairo_set_source (cr, ent->widget->paint_cache);
+            cairo_paint (cr);
+            cairo_restore(cr);
+        }
+    }
+
+    widget->flags &= ~TWTK_WIDGET_FLAG_DIRTY;
+    widget->paint_cache = cairo_pop_group (cr);
+
+    struct timespec after_rootrender;
+    clock_gettime(CLOCK_MONOTONIC, &after_rootrender);
+
+    /* clip to the regions that actually changed */
+    _clip_dirty(platform, cr);
+
+    /* now do the final composition onto screen */
+    cairo_set_source(cr, widget->paint_cache);
+    cairo_paint(cr);
+
+    struct timespec after_composite;
+    clock_gettime(CLOCK_MONOTONIC, &after_composite);
+
+    _DEBUG("timing: subrender=%8ld us - rootrender=%8ld us - comp=%8ld us\n",
+        (after_subrender.tv_nsec - start.tv_nsec)/1000,
+        (after_rootrender.tv_nsec - after_subrender.tv_nsec)/1000,
+        (after_composite.tv_nsec - after_rootrender.tv_nsec)/1000);
+
+    _clean_dirty(platform);
+
+    return ret;
+}
+
 int _twtk_platform_generic_redraw(twtk_platform_t *platform)
 {
     assert(platform);
@@ -214,22 +296,9 @@ int _twtk_platform_generic_redraw(twtk_platform_t *platform)
 
     /* render the root widget and all it's children */
     _DEBUG("rendering root: %s", root->name);
-    twtk_widget_render(root, cr);
-    assert(root->paint_cache);
-
-    /* clip to the regions that actually changed */
-    _clip_dirty(platform, cr);
-
-    /* now do the final composition onto screen */
-    cairo_save(cr);
-    twtk_widget_render_prepare_frame(root, cr);
-    cairo_set_source(cr, root->paint_cache);
-    cairo_paint(cr);
-    cairo_restore(cr);
+    _render_root(root, cr, platform);
 
     platform->op_free_context(platform, cr);
-
-    _clean_dirty(platform);
 
 out:
     pthread_mutex_unlock(&platform->redraw_lock);
