@@ -7,7 +7,9 @@ LIBDIR          ?= $(PREFIX)/lib
 PKGCONFIGDIR    ?= $(LIBDIR)/pkgconfig
 PKG_CONFIG      ?= pkg-config
 PKG_CONFIG_PATH ?= $(PKGCONFIGDIR)
-PKG_CONFIG_CMD  := PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) $(PKG_CONFIG)
+
+_ppath := $(shell echo "$(PKG_CONFIG_PATH)" | sed -e 's~ ~:~g')
+PKG_CONFIG_CMD  := PKG_CONFIG_PATH=$(_ppath) $(PKG_CONFIG)
 
 ## platform: DRM
 pkgconfig-$(CONFIG_PLATFORM_DRM) +=	\
@@ -70,8 +72,8 @@ libs-y +=				\
     -pthread				\
     -lm
 
-LIBS   += $(libs-y)   `$(PKG_CONFIG_CMD) --libs   $(pkgconfig-y)`
-CFLAGS += $(cflags-y) `$(PKG_CONFIG_CMD) --cflags $(pkgconfig-y)`
+LIBS   += $(libs-y)   $(shell $(PKG_CONFIG_CMD) --libs   $(pkgconfig-y))
+CFLAGS += $(cflags-y) $(shell $(PKG_CONFIG_CMD) --cflags $(pkgconfig-y))
 
 # CFLAGS += -DENABLE_WIDGET_CLIPPING
 # CFLAGS += -DENABLE_DEBUG_FONTSPEC
@@ -99,7 +101,7 @@ dump:
 	@echo "PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)"
 	@echo "pkgconfig-y=$(pkgconfig-y)"
 	@echo "CFLAGS=$(CFLAGS)"
-	echo "LIBS=$(LIBS)"
+	@echo "LIBS=$(LIBS)"
 
 clean:
 	@rm -f twtk_test
