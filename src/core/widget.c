@@ -401,8 +401,16 @@ void twtk_widget_dirty(twtk_widget_t *widget)
     // FIXME: atomic operations ?
     widget->flags |= TWTK_WIDGET_FLAG_DIRTY;
 
-    if (widget->frame)
-        twtk_widget_invalidate_rect(widget->frame, widget->viewport);
+    twtk_widget_invalidate_rect(
+        widget,
+        twtk_rect_by_coords(
+            0,
+            0,
+            widget->viewport.size.x,
+            widget->viewport.size.y,
+            0
+        )
+    );
 }
 
 int twtk_widget_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
