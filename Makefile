@@ -34,6 +34,19 @@ cflags-$(CONFIG_PLATFORM_XCB) +=	\
     -DENABLE_PLATFORM_XCB
 
 
+## cairo extras that havent been mainlined yet
+sources-$(CONFIG_CAIROEXTRA_JPEG) +=	\
+    src/cairoextra/cairo-jpeg.c
+
+includes-$(CONFIG_CAIROEXTRA_JPEG) +=	\
+    src/cairoextra
+
+cflags-$(CONFIG_CAIROEXTRA_JPEG) +=	\
+    $(CONFIG_PKG_JPEG_CFLAGS)
+
+libs-$(CONFIG_CAIROEXTRA_JPEG) +=	\
+    $(CONFIG_PKG_JPEG_LIBS)
+
 ## common
 
 pkgconfig-y +=				\
@@ -62,8 +75,9 @@ sources-y +=				\
     src/widgets/pattern-widget.c	\
     twtk_test.c				\
 
+includes-y += include
+
 cflags-y +=				\
-    -Iinclude				\
     -std=c99				\
     -pthread
 
@@ -74,6 +88,8 @@ libs-y +=				\
 
 LIBS   += $(libs-y)   $(shell $(PKG_CONFIG_CMD) --libs   $(pkgconfig-y))
 CFLAGS += $(cflags-y) $(shell $(PKG_CONFIG_CMD) --cflags $(pkgconfig-y))
+
+CFLAGS += $(addprefix -I,$(includes-y))
 
 # CFLAGS += -DENABLE_WIDGET_CLIPPING
 # CFLAGS += -DENABLE_DEBUG_FONTSPEC
