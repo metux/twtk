@@ -145,6 +145,7 @@ static void _init_widgets()
 
     // create the command receiver
     receiver = twtk_widget_alloc(&_receiver_class_inf);
+    twtk_widget_set_name(receiver, "receiver");
 
     // penguin photo
     _create_image(root, 100,  25, "image-001", "resources/001.jpg");
