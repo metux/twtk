@@ -382,6 +382,19 @@ void twtk_widget_vresize(twtk_widget_t *widget, twtk_vector_t size)
     twtk_widget_dirty(widget);
 }
 
+twtk_vector_t twtk_widget_get_vsize(twtk_widget_t *widget)
+{
+    if (widget == NULL)
+        return TWTK_VECTOR(-1,-1);
+
+    twtk_vector_t vec;
+    TWTK_LOCK(widget);
+    vec = widget->surface.size;
+    TWTK_UNLOCK(widget);
+
+    return vec;
+}
+
 void twtk_widget_dirty(twtk_widget_t *widget)
 {
     assert(widget);

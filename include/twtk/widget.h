@@ -283,7 +283,14 @@ int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
     __attribute__((nonnull(1,2)));
 
 /**
- * low level functions for managing parent and frame references
+ * retrieve a widget's virtual size. this doesn't necessarily reflect the currently
+ * visible size.
+ */
+twtk_vector_t twtk_widget_get_vsize(twtk_widget_t *widget)
+    __attribute__((nonnull(1)));
+
+/**
+ * low level functions for managing parent, frame references
  *
  * parameter target may be NULL
  */
