@@ -34,6 +34,7 @@ struct __twtk_platform {
     int            (*op_stop)        (twtk_platform_t *platform);
     int            (*op_map_widget)  (twtk_platform_t *platform, twtk_widget_t *widget, twtk_widget_t *parent);
     int            (*op_redraw)      (twtk_platform_t *platform);
+    int            (*op_flush)       (twtk_platform_t *platform);
 };
 
 static inline twtk_widget_t *twtk_platform_get_root()
@@ -51,6 +52,7 @@ void twtk_platform_redraw();
 void twtk_platform_loop();
 void twtk_platform_init_dispatch();
 void twtk_platform_stop();
+void twtk_platform_flush();
 
 int  twtk_platform_map_widget(twtk_widget_t *widget, twtk_widget_t *parent)
     __attribute__((nonnull(1)));

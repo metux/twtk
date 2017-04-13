@@ -277,6 +277,14 @@ static int _xcb_mainloop(twtk_platform_t *platform)
     return 0;
 }
 
+static int _xcb_flush(twtk_platform_t *platform)
+{
+    assert(platform);
+    twtk_platform_xcb_t *xcb_platform = (twtk_platform_xcb_t*) platform;
+    xcb_flush(xcb_platform->conn);
+    return 0;
+}
+
 static int _xcb_stop(twtk_platform_t *platform)
 {
     assert(platform);
@@ -426,6 +434,7 @@ twtk_platform_t *twtk_platform_xcb_init()
     xcb_platform->base.op_mainloop     = _xcb_mainloop;
     xcb_platform->base.op_stop         = _xcb_stop;
     xcb_platform->base.op_destroy      = _xcb_destroy;
+    xcb_platform->base.op_flush        = _xcb_flush;
 
     return &xcb_platform->base;
 }
