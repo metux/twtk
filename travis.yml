@@ -1,0 +1,31 @@
+
+language: C
+
+script: make
+
+compiler:
+    - gcc
+    - clang
+
+matrix:
+  include:
+    # Note that the first compiler in the matrix must be gcc, so that the
+    # coverity_scan branch hack below works correctly.
+    - compiler: gcc
+      os: linux
+      env: FOO=1
+    - compiler: clang
+      os: linux
+
+addons:
+  apt:
+    # List of whitelisted in travis packages for ubuntu-precise can be found here:
+    #   https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
+    # List of whitelisted in travis apt-sources:
+    #   https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.7
+    packages:
+      - libcairo2-dev
+      - clang-3.7
