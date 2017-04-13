@@ -1,2 +1,4 @@
 image.png
 twtk_test
+*.o
+*.a

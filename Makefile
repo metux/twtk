@@ -7,6 +7,7 @@ LIBDIR          ?= $(PREFIX)/lib
 PKGCONFIGDIR    ?= $(LIBDIR)/pkgconfig
 PKG_CONFIG      ?= pkg-config
 PKG_CONFIG_PATH ?= $(PKGCONFIGDIR)
+AR              ?= ar
 
 _ppath := $(shell echo "$(PKG_CONFIG_PATH)" | sed -e 's~ ~:~g')
 PKG_CONFIG_CMD  := PKG_CONFIG_PATH=$(_ppath) $(PKG_CONFIG)
@@ -72,8 +73,7 @@ sources-y +=				\
     src/widgets/image-widget.c		\
     src/widgets/window-widget.c		\
     src/widgets/position-widget.c	\
-    src/widgets/pattern-widget.c	\
-    twtk_test.c				\
+    src/widgets/pattern-widget.c
 
 includes-y += include
 
@@ -110,8 +110,11 @@ CFLAGS += -DNDEBUG
 
 HEADERS	:= $(shell find ./include -name "*.h")
 
+LIBTWTK_OBJS := $(sources-y:.c=.o)
+LIBTWTK_NAME := twtk
+LIBTWTK_A    := lib$(LIBTWTK_NAME).a
 
-all:	twtk_test
+all:	twtk_test lib$(LIBTWTK_NAME).a
 
 dump:
 	@echo "PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)"
@@ -120,10 +123,15 @@ dump:
 	@echo "LIBS=$(LIBS)"
 
 clean:
-	@rm -f twtk_test
+	@rm -f twtk_test screen_test
+	@find -name "*.o" -delete
+	@find -name "*.a" -delete
 
-twtk_test:	$(sources-y) $(HEADERS)
-	@$(CC) $(sources-y) -o $@ $(CFLAGS) $(LIBS)
+$(LIBTWTK_A):	$(LIBTWTK_OBJS)
+	$(AR) crD $@ $(LIBTWTK_OBJS)
+
+twtk_test:	twtk_test.c $(LIBTWTK_A) $(HEADERS)
+	@$(CC) $< -o $@ $(CFLAGS) $(LIBTWTK_A) $(LIBS)
 
 run:	twtk_test
 	@LD_LIBRARY_PATH=/home/nekrad/.usr/cairo/lib TWTK_MOUSE_DEVICE="$(CONFIG_MOUSE_DEVICE)" CAIRO_DRM_BASIC_FORCE=1 ./twtk_test
