@@ -96,25 +96,18 @@ static void _create_debug(twtk_widget_t *parent)
     );
 }
 
-static void _create_image_001(twtk_widget_t *parent)
+static void _create_image(twtk_widget_t *parent, twtk_dim_t x, twtk_dim_t y, const char* id, const char *fn)
 {
-    twtk_widget_t *widget = twtk_image_widget_create("resources/001.jpg", 400, 100, -1, -1);
+    assert(fn);
+    assert(id);
+    assert(parent);
+
+    twtk_widget_t *widget = twtk_image_widget_create(fn, x, y, -1, -1);
 
     twtk_widget_add_child_unref(
         parent,
         widget,
-        "image-001"
-    );
-}
-
-static void _create_image_002(twtk_widget_t *parent)
-{
-    twtk_widget_t *widget = twtk_image_widget_create("resources/002.jpg", 50, 50, -1, -1);
-
-    twtk_widget_add_child_unref(
-        parent,
-        widget,
-        "image-002"
+        id
     );
 }
 
@@ -155,8 +148,8 @@ static void _init_boxes()
     _create_blue_box(root);
     _create_green_box(root);
     _create_text_1(root);
-    _create_image_001(root);
-    _create_image_002(root);
+    _create_image(root, 400, 100, "image-001", "resources/001.jpg");
+    _create_image(root,  50,  50, "image-002", "resources/002.jpg");
     _create_box2(root);
     _create_debug(root);
     _create_win(root);
