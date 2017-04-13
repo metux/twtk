@@ -40,6 +40,17 @@ static inline twtk_rect_t twtk_rect_by_coords(
     );
 }
 
+static inline twtk_rect_t twtk_rect_by_pos(
+    twtk_dim_t x,
+    twtk_dim_t y
+) {
+    return twtk_rect_by_vectors(
+        TWTK_VECTOR(x, y),
+        TWTK_VECTOR(-1, -1),
+        0
+    );
+}
+
 static inline twtk_rect_t twtk_rect_null()
 {
     return (twtk_rect_t){ .size = { .x = -1, .y = -1 } };
