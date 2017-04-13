@@ -108,14 +108,14 @@ static int _op_set_uint(twtk_widget_t *widget, const char* name, uint32_t value)
     TWTK_WIDGET_SET_END
 }
 
-twtk_widget_t *twtk_image_widget_create(const char* fn, twtk_dim_t x, twtk_dim_t y, twtk_dim_t w, twtk_dim_t h)
+twtk_widget_t *twtk_image_widget_create(const char* fn, twtk_rect_t rect)
 {
     cairo_surface_t *img = _twtk_ut_load_image_surface(fn);
 
     if (img == NULL)
     {
-	_DEBUG("failed to load image: \"%s\"", fn);
-	return NULL;
+        _DEBUG("failed to load image: \"%s\"", fn);
+        return NULL;
     }
 
     twtk_widget_t *widget = twtk_widget_alloc(&_class_inf);
@@ -126,9 +126,9 @@ twtk_widget_t *twtk_image_widget_create(const char* fn, twtk_dim_t x, twtk_dim_t
     int img_w = cairo_image_surface_get_width (priv->image);
     int img_h = cairo_image_surface_get_height (priv->image);
 
-    widget->viewport = twtk_rect_size_if_null_d(twtk_rect_by_coords(x,y,w,h,0), img_w, img_h);
+    widget->viewport = twtk_rect_size_if_null_d(rect, img_w, img_h);
 
-    twtk_widget_move_coords(widget, x, y);
+    twtk_widget_move_coords(widget, rect.pos.x, rect.pos.y);
     twtk_widget_vresize_coords(widget, img_w, img_h);
 
     priv->border_width = 1;

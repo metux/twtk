@@ -102,7 +102,8 @@ static void _create_image(twtk_widget_t *parent, twtk_dim_t x, twtk_dim_t y, con
     assert(id);
     assert(parent);
 
-    twtk_widget_t *widget = twtk_image_widget_create(fn, x, y, -1, -1);
+    twtk_widget_t *widget = twtk_image_widget_create(fn,
+        twtk_rect_by_coords(x, y, -1, -1, 0));
 
     twtk_widget_add_child_unref(
         parent,
@@ -127,7 +128,9 @@ static void _create_box2(twtk_widget_t *parent)
 
 static void _create_win(twtk_widget_t *parent)
 {
-    twtk_widget_t *img = twtk_image_widget_create("resources/002.jpg", 30, 30, -1, -1);
+    twtk_widget_t *img = twtk_image_widget_create(
+        "resources/002.jpg",
+        twtk_rect_by_coords(30, 30, -1, -1, 0));
 
     twtk_widget_t *win = twtk_window_widget_create(img);
     twtk_widget_move(win, TWTK_VECTOR(1000, 400));
