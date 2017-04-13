@@ -146,7 +146,7 @@ static void _create_box2(twtk_widget_t *parent)
 static void _create_win(twtk_widget_t *parent)
 {
     twtk_widget_t *img = twtk_image_widget_create(
-        "resources/002.jpg",
+        "resources/penguin2.png",
         twtk_rect_by_coords(30, 30, -1, -1, 0));
 
     twtk_widget_t *win = twtk_window_widget_create(img);
@@ -168,9 +168,9 @@ static void _init_boxes()
     _create_blue_box(root);
     _create_green_box(root);
     _create_text_1(root);
-    _create_image(root, 400, 100, "image-001", "resources/001.jpg");
-    _create_image(root,  50,  50, "image-002", "resources/002.jpg");
-    _create_btn(root, 600, 100, "btn-002", "resources/002.jpg");
+    _create_image(root, 400, 100, "image-001", "resources/penguin1.png");
+    _create_image(root,  50,  50, "image-002", "resources/penguin2.png");
+    _create_btn  (root, 600, 100, "btn-002",   "resources/penguin2.png");
     _create_box2(root);
     _create_debug(root);
     _create_win(root);
