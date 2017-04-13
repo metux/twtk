@@ -192,6 +192,11 @@ static void _clean_dirty(twtk_platform_t *platform)
     }
 }
 
+int _twtk_platform_generic_flush(twtk_platform_t *platform)
+{
+    return 0;
+}
+
 int _twtk_platform_generic_redraw(twtk_platform_t *platform)
 {
     assert(platform);
@@ -228,7 +233,7 @@ int _twtk_platform_generic_redraw(twtk_platform_t *platform)
 
 out:
     pthread_mutex_unlock(&platform->redraw_lock);
-    return 0;
+    return platform->op_flush(platform);
 }
 
 int _twtk_platform_generic_init(twtk_platform_t *platform)
@@ -242,6 +247,7 @@ int _twtk_platform_generic_init(twtk_platform_t *platform)
     platform->op_free_context = _twtk_platform_generic_free_context;
     platform->op_map_widget   = _twtk_platform_generic_map_widget;
     platform->op_redraw       = _twtk_platform_generic_redraw;
+    platform->op_flush        = _twtk_platform_generic_flush;
 
     return 0;
 }
