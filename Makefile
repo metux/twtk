@@ -85,7 +85,8 @@ includes-y += include
 
 cflags-y +=				\
     -std=c99				\
-    -pthread
+    -pthread				\
+    -lrt
 
 libs-y +=				\
     -levdev				\
@@ -121,7 +122,7 @@ LIBTWTK_OBJS := $(sources-y:.c=.o)
 LIBTWTK_NAME := twtk
 LIBTWTK_A    := lib$(LIBTWTK_NAME).a
 
-all:	twtk_test lib$(LIBTWTK_NAME).a
+all:	twtk_test screen_test lib$(LIBTWTK_NAME).a
 
 dump:
 	@echo "PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)"
@@ -138,6 +139,9 @@ $(LIBTWTK_A):	$(LIBTWTK_OBJS)
 	$(AR) crD $@ $(LIBTWTK_OBJS)
 
 twtk_test:	twtk_test.c $(LIBTWTK_A) $(HEADERS)
+	@$(CC) $< -o $@ $(CFLAGS) $(LIBTWTK_A) $(LIBS)
+
+screen_test:	screen_test.c $(LIBTWTK_A) $(HEADERS)
 	@$(CC) $< -o $@ $(CFLAGS) $(LIBTWTK_A) $(LIBS)
 
 run:	twtk_test

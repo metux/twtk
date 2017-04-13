@@ -8,6 +8,7 @@
 #include <twtk/color.h>
 #include <twtk/widgets/button.h>
 #include <twtk/menu.h>
+#include <twtk/widgets/button.h>
 #include <twtk/widgets/image.h>
 #include <twtk/widgets/text.h>
 #include <twtk/widgets/position.h>
