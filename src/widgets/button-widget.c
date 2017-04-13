@@ -110,19 +110,7 @@ static int _op_event_mouse(twtk_widget_t *widget, twtk_event_t *event, twtk_even
             {
                 _DEBUG("click up @ %f:%f", event->mouse.pos.x, event->mouse.pos.y);
                 priv->down = 0;
-
-                if (widget->parent)
-                {
-                    _DEBUG("sending button push event");
-                    twtk_event_t ev = { 0 };
-                    ev.type = TWTK_EVENT_ACTION;
-                    ev.action.action = TWTK_EVENT_ACTION_PUSH;
-                    ev.action.widget = twtk_widget_ref(widget);
-                    ev.action.signal = priv->signal;
-                    twtk_widget_event(widget->parent, &ev, TWTK_EVENT_DISPATCH_DIRECT);
-                    twtk_widget_unref(ev.action.widget);
-                }
-
+                twtk_widget_notify_action(widget, TWTK_EVENT_ACTION_PUSH, priv->signal);
                 TWTK_WIDGET_OP_RETURN(TWTK_EVSTAT_CONSUMED | TWTK_EVSTAT_DIRTY);
             }
         break;
