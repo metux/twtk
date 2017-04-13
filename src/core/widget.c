@@ -573,6 +573,9 @@ int twtk_widget_notify(twtk_widget_t *widget, twtk_event_t *event)
 
 int twtk_widget_notify_action(twtk_widget_t *widget, twtk_event_action_type_t at, const char* name)
 {
+    printf("sending notify: from \"%s\" -> \"%s\n",
+        widget->name, name);
+
     twtk_event_t ev = {
         .type          = TWTK_EVENT_ACTION,
         .action.action = at,
