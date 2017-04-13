@@ -6,6 +6,7 @@
 #include <twtk/widget.h>
 #include <twtk/platform.h>
 #include <twtk/color.h>
+#include <twtk/widgets/button.h>
 #include <twtk/widgets/image.h>
 #include <twtk/widgets/text.h>
 #include <twtk/widgets/position.h>
@@ -112,6 +113,22 @@ static void _create_image(twtk_widget_t *parent, twtk_dim_t x, twtk_dim_t y, con
     );
 }
 
+static void _create_btn(twtk_widget_t *parent, twtk_dim_t x, twtk_dim_t y, const char* id, const char *fn)
+{
+    assert(fn);
+    assert(id);
+    assert(parent);
+
+    twtk_widget_t *widget = twtk_button_widget_create(fn,
+        twtk_rect_by_coords(x, y, -1, -1, 0), "sig1");
+
+    twtk_widget_add_child_unref(
+        parent,
+        widget,
+        id
+    );
+}
+
 static void _create_box2(twtk_widget_t *parent)
 {
     twtk_widget_t *box = twtk_text_widget_create(NULL, 300, 500, 500, 500);
@@ -153,6 +170,7 @@ static void _init_boxes()
     _create_text_1(root);
     _create_image(root, 400, 100, "image-001", "resources/001.jpg");
     _create_image(root,  50,  50, "image-002", "resources/002.jpg");
+    _create_btn(root, 600, 100, "btn-002", "resources/002.jpg");
     _create_box2(root);
     _create_debug(root);
     _create_win(root);
