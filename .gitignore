@@ -2,4 +2,5 @@ image.png
 *.o
 *.a
 *.auto.mk
+screen_test/screen_test
 twtk_test/twtk_test
