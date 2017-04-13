@@ -10,6 +10,7 @@
 #include <twtk/rect.h>
 #include <twtk/color.h>
 #include <twtk/widget-list.h>
+#include <twtk/events.h>
 
 #define TWTK_WIDGET_FLAG_DIRTY	1 << 0
 #define TWTK_WIDGET_FLAG_POPUP	1 << 1
@@ -160,6 +161,7 @@ struct __twtk_widget
 
     twtk_widget_t *parent;
     twtk_widget_t *frame;
+    twtk_widget_t *controller;
 
     twtk_widget_list_t childs;
     twtk_widget_list_t frames;
@@ -283,6 +285,20 @@ int twtk_widget_dispatch(twtk_widget_t *parent, twtk_event_t *event)
     __attribute__((nonnull(1,2)));
 
 /**
+ * let an widget notify its controller / parent.
+ * if no explicit controller is sent, the event goes to the parent
+ * usually for use within an widget (eg. button, menu, ...)
+ */
+int twtk_widget_notify(twtk_widget_t *widget, twtk_event_t *event)
+    __attribute__((nonnull(1,2)));
+
+/**
+ * notify an action to the widget's controller
+ */
+int twtk_widget_notify_action(twtk_widget_t *widget, twtk_event_action_type_t at, const char* name)
+    __attribute__((nonnull(1,3)));
+
+/**
  * retrieve a widget's virtual size. this doesn't necessarily reflect the currently
  * visible size.
  */
@@ -290,13 +306,15 @@ twtk_vector_t twtk_widget_get_vsize(twtk_widget_t *widget)
     __attribute__((nonnull(1)));
 
 /**
- * low level functions for managing parent, frame references
+ * low level functions for managing parent, frame and controller references
  *
  * parameter target may be NULL
  */
 int  twtk_widget_set_parent(twtk_widget_t *widget, twtk_widget_t *target)
     __attribute__((nonnull(1)));
 int  twtk_widget_set_frame(twtk_widget_t *widget, twtk_widget_t *target)
+    __attribute__((nonnull(1)));
+int  twtk_widget_set_controller(twtk_widget_t *widget, twtk_widget_t *target)
     __attribute__((nonnull(1)));
 
 /**

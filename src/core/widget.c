@@ -524,3 +524,52 @@ int twtk_widget_set_parent(twtk_widget_t *widget, twtk_widget_t *target)
 
     return 0;
 }
+
+int twtk_widget_set_controller(twtk_widget_t *widget, twtk_widget_t *target)
+{
+    if (widget == NULL)
+        return 0;
+
+    TWTK_LOCK(widget);
+
+    /** drop old controller, if existing **/
+    if (widget->controller)
+    {
+        twtk_widget_unref(widget->controller);
+        widget->controller = NULL;
+    }
+
+    if (target)
+    {
+        widget->parent = twtk_widget_ref(target);
+    }
+
+    TWTK_UNLOCK(widget);
+
+    return 0;
+}
+
+int twtk_widget_notify(twtk_widget_t *widget, twtk_event_t *event)
+{
+    assert(widget);
+    assert(event);
+
+    // assuming pointer sz equals the native word size,
+    // this should be atomic
+    twtk_widget_t *recv = widget->controller;
+    if (!recv) recv = widget->parent;
+    if (!recv) return 0;
+
+    return twtk_widget_event(recv, event, TWTK_EVENT_DISPATCH_DIRECT);
+}
+
+int twtk_widget_notify_action(twtk_widget_t *widget, twtk_event_action_type_t at, const char* name)
+{
+    twtk_event_t ev = {
+        .type          = TWTK_EVENT_ACTION,
+        .action.action = at,
+        .action.widget = widget,
+        .action.signal = name
+    };
+    return twtk_widget_notify(widget, &ev);
+}
