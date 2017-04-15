@@ -35,7 +35,7 @@ typedef struct
     twtk_color_t border_color;
     int border_width;
     cairo_surface_t *image;
-    const char *signal;
+    char *signal;
     char down:1;
 } _priv_t;
 
@@ -56,6 +56,7 @@ static int _op_fini(twtk_widget_t *widget)
 {
     TWTK_WIDGET_OP_BEGIN
     cairo_surface_destroy(priv->image);
+    STRBUF_FREE(priv->signal);
     TWTK_WIDGET_OP_END(0);
 }
 
@@ -154,6 +155,7 @@ twtk_widget_t *twtk_button_widget_create(const char* fn, twtk_rect_t rect, const
     _priv_t *priv = (_priv_t*)(widget->priv);
 
     priv->image = img;
+    STRBUF_SET(priv->signal, signal);
 
     twtk_widget_set_viewport(
         widget,
