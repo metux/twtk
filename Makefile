@@ -78,7 +78,6 @@ sources-y +=				\
 includes-y += include
 
 cflags-y +=				\
-    -std=c99				\
     -pthread
 
 libs-y +=				\
