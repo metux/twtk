@@ -38,7 +38,8 @@ int twtk_menu_widget_op_paint(twtk_widget_t *widget, cairo_t *cr)
         cairo_stroke (cr);
     }
 
-    for (int x=0; x<priv->entry_count; x++)
+    int x;
+    for (x=0; x<priv->entry_count; x++)
     {
         twtk_rect_t rect = priv->entries[x].rect;
         const twtk_menu_widget_mode_style_t *mode = ((priv->hover_entry == x) ?

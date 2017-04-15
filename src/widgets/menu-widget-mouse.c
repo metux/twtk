@@ -33,7 +33,8 @@ static bool _update_hover(twtk_widget_t *widget, twtk_menu_widget_priv_t *priv, 
     }
 
     /** look for another entry we might be in now **/
-    for (int x=0; x<priv->entry_count; x++)
+    int x;
+    for (x=0; x<priv->entry_count; x++)
     {
         if (twtk_vector_in_rect(event->mouse.pos, priv->entries[x].rect))
         {

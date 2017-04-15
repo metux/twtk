@@ -26,7 +26,8 @@ static void _scandim(
     twtk_vector_t *r_padding
 )
 {
-    for (int x=0; x<priv->entry_count; x++)
+    int x;
+    for (x=0; x<priv->entry_count; x++)
     {
         cairo_text_extents_t ext;
         twtk_fontspec_text_extents(&mode->fontspec, priv->menu->entries[x].text, &ext);
@@ -70,7 +71,8 @@ int twtk_menu_widget_update_boxes(twtk_widget_t *widget)
     twtk_dim_t bbox_w[cnt];
     twtk_dim_t pad_y = 0;
 
-    for (int x=0; x<cnt; x++)
+    int x;
+    for (x=0; x<cnt; x++)
         bbox_w[cnt] = 0;
 
     twtk_vector_t vsize = TWTK_VECTOR(priv->border_width, 0);
@@ -78,7 +80,7 @@ int twtk_menu_widget_update_boxes(twtk_widget_t *widget)
     _scandim(&priv->style->plain, priv, (twtk_dim_t *)&bbox_w, &vsize.y, &priv->text_padding);
     _scandim(&priv->style->hover, priv, (twtk_dim_t *)&bbox_w, &vsize.y, &priv->text_padding);
 
-    for (int x=0; x<cnt; x++)
+    for (x=0; x<cnt; x++)
     {
         priv->entries[x].rect = twtk_rect_by_coords(vsize.x, priv->border_width, bbox_w[x], vsize.y, 0);
 
