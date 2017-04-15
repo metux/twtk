@@ -114,7 +114,6 @@ CFLAGS += $(addprefix -I,$(includes-y))
 CFLAGS += -DENABLE_CLIP_DIRTY
 CFLAGS += -DNDEBUG
 
-
 HEADERS	:= $(shell find ./include -name "*.h")
 
 LIBTWTK_OBJS := $(sources-y:.c=.o)

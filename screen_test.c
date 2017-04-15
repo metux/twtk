@@ -130,7 +130,10 @@ static void _create_btn(twtk_widget_t *parent, twtk_dim_t x, twtk_dim_t y, const
     assert(id);
     assert(parent);
 
-    twtk_widget_t *w = twtk_button_widget_create(fn, twtk_rect_by_pos(x, y), "sig1");
+    twtk_widget_t *w = twtk_button_widget_create(
+        twtk_str_literal(fn),
+        twtk_rect_by_pos(x, y),
+        twtk_str_literal("sig1"));
     twtk_widget_add_child_unref(parent, w, id);
 }
 
