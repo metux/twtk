@@ -1,4 +1,5 @@
 image.png
-twtk_test
 *.o
 *.a
+*.auto.mk
+twtk_test/twtk_test
