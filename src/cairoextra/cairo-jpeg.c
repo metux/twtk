@@ -63,11 +63,7 @@ cairo_status_t cairo_image_surface_write_to_jpeg(cairo_surface_t *sfc, const cha
    jpeg_stdio_dest(&cinfo, outfile);
    cinfo.image_width = cairo_image_surface_get_width(sfc);
    cinfo.image_height = cairo_image_surface_get_height(sfc);
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-   cinfo.in_color_space = JCS_EXT_BGRX;
-#else
-   cinfo.in_color_space = JCS_EXT_XRGB;
-#endif
+   cinfo.in_color_space = JCS_RGB;
    cinfo.input_components = 4;
    jpeg_set_defaults(&cinfo);
    jpeg_set_quality(&cinfo, quality, TRUE);
@@ -133,11 +129,7 @@ cairo_surface_t *cairo_image_surface_create_from_jpeg(const char *filename)
    jpeg_mem_src(&cinfo, data, len);
    (void) jpeg_read_header(&cinfo, TRUE);
 
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-   cinfo.out_color_space = JCS_EXT_BGRA;
-#else
-   cinfo.out_color_space = JCS_EXT_ARGB;
-#endif
+   cinfo.out_color_space = JCS_RGB;
 
    // start decompressor
    (void) jpeg_start_decompress(&cinfo);
