@@ -147,6 +147,7 @@ int twtk_drm_initcursor(twtk_platform_drm_t *inf)
     if (ptr == MAP_FAILED)
     {
 	_DEBUG("initcursor mmap() failed: %s", strerror(errno));
+	return -1;
     }
 
     inf->cursor_mapped = ptr;
