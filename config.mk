@@ -8,6 +8,9 @@ CONFIG_PKG_JPEG_LIBS   ?= -ljpeg
 
 CONFIG_PIXMAP_DIR      ?= $(DATADIR)/pixmaps/twtk
 
+CONFIG_MOUSE_DEVICE    ?= /dev/input/by-id/usb-1bcf_USB_Optical_Mouse-event-mouse
+PKG_CONFIG_PATH        += /home/nekrad/.usr/cairo/lib/pkgconfig
+
 ## additional debug flags - for hacking only
 # CFLAGS += -DENABLE_WIDGET_CLIPPING
 # CFLAGS += -DENABLE_DEBUG_FONTSPEC
