@@ -1,7 +1,9 @@
 
 #include <string.h>
 #include <cairo.h>
+#ifdef ENABLE_IMAGE_JPEG
 #include <cairo-jpeg.h>
+#endif
 #include <twtk-private/cairo_util.h>
 #include <twtk-private/debug.h>
 
@@ -15,11 +17,13 @@ cairo_surface_t *_twtk_ut_load_image_surface(const char* fn)
     if (fn == NULL)
         return NULL;
 
+#ifdef ENABLE_IMAGE_JPEG
     if (_twtk_ut_is_ext(fn, ".jpg")  ||
         _twtk_ut_is_ext(fn, ".JPG")  ||
         _twtk_ut_is_ext(fn, ".jpeg") ||
         _twtk_ut_is_ext(fn, ".JPEG"))
         return cairo_image_surface_create_from_jpeg(fn);
+#endif
 
     if (_twtk_ut_is_ext(fn, ".png") ||
         _twtk_ut_is_ext(fn, ".PNG"))

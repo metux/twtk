@@ -9,7 +9,6 @@
 #include <errno.h>
 #include <string.h>
 #include <cairo.h>
-#include <cairo-jpeg.h>
 #include <math.h>
 #include <assert.h>
 #include <twtk/events.h>

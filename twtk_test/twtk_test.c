@@ -97,13 +97,22 @@ static void _create_debug(twtk_widget_t *parent)
     );
 }
 
+static int _imgpath(char *buffer, int sz, const char *name) {
+    snprintf(buffer, sz, "%s/%s", PIXMAP_DIR, name);
+}
+
 static void _create_image(twtk_widget_t *parent, twtk_dim_t x, twtk_dim_t y, const char* id, const char *fn)
 {
     assert(fn);
     assert(id);
     assert(parent);
 
-    twtk_widget_t *widget = twtk_image_widget_create(fn,
+    char buffer[4096];
+    _imgpath(buffer, sizeof(buffer), fn);
+
+    printf("filename: %s\n", buffer);
+
+    twtk_widget_t *widget = twtk_image_widget_create(buffer,
         twtk_rect_by_coords(x, y, -1, -1, 0));
 
     twtk_widget_add_child_unref(
@@ -119,7 +128,12 @@ static void _create_btn(twtk_widget_t *parent, twtk_dim_t x, twtk_dim_t y, const
     assert(id);
     assert(parent);
 
-    twtk_widget_t *widget = twtk_button_widget_create(fn,
+    char buffer[4096];
+    _imgpath(buffer, sizeof(buffer), fn);
+
+    printf("filename: %s\n", buffer);
+
+    twtk_widget_t *widget = twtk_button_widget_create(buffer,
         twtk_rect_by_coords(x, y, -1, -1, 0), "sig1");
 
     twtk_widget_add_child_unref(
@@ -168,9 +182,9 @@ static void _init_boxes()
     _create_blue_box(root);
     _create_green_box(root);
     _create_text_1(root);
-    _create_image(root, 400, 100, "image-001", "resources/penguin1.png");
-    _create_image(root,  50,  50, "image-002", "resources/penguin2.png");
-    _create_btn  (root, 600, 100, "btn-002",   "resources/penguin2.png");
+    _create_image(root, 400, 100, "image-001", "penguin1.png");
+    _create_image(root,  50,  50, "image-002", "penguin2.png");
+    _create_btn  (root, 600, 100, "btn-002",   "penguin2.png");
     _create_box2(root);
     _create_debug(root);
     _create_win(root);
