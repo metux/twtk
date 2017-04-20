@@ -223,6 +223,8 @@ struct evdev_state
     pthread_t			thread;
     twtk_vector_t		last_position;
     twtk_event_mouse_button_t	last_buttons;
+    int                         mt_tracking_id;
+    char                        is_mt;
     int				fd;
     int				id;
     struct libevdev		*dev;
@@ -237,6 +239,44 @@ static inline twtk_event_mouse_button_t evcode_to_button(uint16_t code)
 	case BTN_RIGHT:		return TWTK_EVENT_MOUSE_BUTTON_RIGHT;
 	default:		return 0;
     }
+}
+
+static void set_mt(struct evdev_state *state)
+{
+    if (state->is_mt) return;
+    state->is_mt = 1;
+    state->mt_tracking_id = -1;
+    _DEBUG("detected multitouch");
+}
+
+static int handle_mouse_btn(struct evdev_state *state, twtk_event_mouse_button_t btn, int down)
+{
+    twtk_event_t event = {
+        .type = TWTK_EVENT_MOUSE,
+        .device = state->id,
+        .mouse = {
+            .button = btn,
+            .pos = state->last_position
+        }
+    };
+
+    event.mouse.button = btn;
+    event.mouse.pos = state->last_position;
+
+    if (down)
+    {
+        state->last_buttons |= event.mouse.button;
+        event.mouse.event = TWTK_EVENT_MOUSE_BTN_DOWN;
+    }
+    else
+    {
+        state->last_buttons &= ~event.mouse.button;
+        event.mouse.event = TWTK_EVENT_MOUSE_BTN_UP;
+    }
+
+    event.mouse.all_buttons = state->last_buttons;
+
+    return twtk_event_raise(&event);
 }
 
 static int _handle_mouse_event(struct evdev_state *state, struct input_event *ev)
@@ -269,25 +309,59 @@ static int _handle_mouse_event(struct evdev_state *state, struct input_event *ev
 	    return twtk_event_raise(&event);
 	}
 
-	case EV_KEY:
-	{
-	    event.mouse.button = evcode_to_button(ev->code);
-	    event.mouse.pos = state->last_position;
+        case EV_ABS:
+        {
+            event.mouse.event = TWTK_EVENT_MOUSE_MOVE;
+            event.mouse.pos = state->last_position;
+            event.mouse.all_buttons = state->last_buttons;
 
-	    if (ev->value)
-	    {
-		state->last_buttons |= event.mouse.button;
-		event.mouse.event = TWTK_EVENT_MOUSE_BTN_DOWN;
-	    }
-	    else
-	    {
-		state->last_buttons &= ~event.mouse.button;
-		event.mouse.event = TWTK_EVENT_MOUSE_BTN_UP;
-	    }
+            switch (ev->code)
+            {
+                case ABS_X:
+                    event.mouse.pos.x     = ev->value;
+                break;
+                case ABS_Y:
+                    event.mouse.pos.y     = ev->value;
+                break;
+                case ABS_MT_POSITION_X:
+                    set_mt(state);
+                    _DEBUG("ABS_MT_POSITION_X: %d", ev->value);
+                    event.mouse.pos.x     = ev->value;
+                break;
+                case ABS_MT_POSITION_Y:
+                    set_mt(state);
+                    _DEBUG("ABS_MT_POSITION_Y: %d", ev->value);
+                    event.mouse.pos.y     = ev->value;
+                break;
+                case ABS_MT_TRACKING_ID:
+                    set_mt(state);
+                    _DEBUG("tracking id: %d", ev->value);
+                    if (ev->value == -1) {
+                        state->mt_tracking_id = ev->value;
+                        return handle_mouse_btn(state, TWTK_EVENT_MOUSE_BUTTON_LEFT, 0);
+                    }
+                    else if (state->mt_tracking_id == -1) {
+                        state->mt_tracking_id = ev->value;
+                        return handle_mouse_btn(state, TWTK_EVENT_MOUSE_BUTTON_LEFT, 1);
+                    }
+                    else {
+                        _DEBUG("WARNING: new tracking ID while old unclosed");
+                        state->mt_tracking_id = ev->value;
+                    }
+                break;
+                default:
+                    _DEBUG("unhandled ABS: %s", twtk_evdev_get_event_code_name(ev->type, ev->code));
+                    return 0;
+            }
 
-	    event.mouse.all_buttons = state->last_buttons;
-	    return twtk_event_raise(&event);
-	}
+            event.mouse.diff = twtk_vector_sub(event.mouse.pos, state->last_position);
+            state->last_position = event.mouse.pos;
+
+            return twtk_event_raise(&event);
+        }
+
+        case EV_KEY:
+            return handle_mouse_btn(state, evcode_to_button(ev->code), ev->value);
 
 	case EV_SYN:
 	    return 1;	/* ignore it */
@@ -311,6 +385,7 @@ static int _handle_mouse_event(struct evdev_state *state, struct input_event *ev
 	}
 
 	default:
+            _DEBUG("unhandled event: %s", twtk_evdev_get_event_code_name(ev->type, ev->code));
 	    return 0;
     }
 
@@ -369,12 +444,6 @@ void twtk_evdev_mouse_start(const char* devname)
         libevdev_get_id_bustype(state->dev),
         libevdev_get_id_vendor(state->dev),
         libevdev_get_id_product(state->dev));
-
-    if (!libevdev_has_event_type(state->dev, EV_REL) ||
-        !libevdev_has_event_code(state->dev, EV_KEY, BTN_LEFT)) {
-	    _DEBUG("This device does not look like a mouse");
-	    return;
-    }
 
     int res = pthread_create(&state->thread, NULL, _mouse_thread, state);
     if (!res)
