@@ -70,7 +70,7 @@ static void twtk_dump_event_mouse (twtk_event_t *ev)
 	ev->mouse.diff.y,
 	(ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_LEFT)   ? "L" : " ",
 	(ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_MIDDLE) ? "M" : " ",
-	(ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_RIGHT)  ? "M" : " ");
+	(ev->mouse.all_buttons & TWTK_EVENT_MOUSE_BUTTON_RIGHT)  ? "R" : " ");
 
     switch (ev->mouse.event)
     {
