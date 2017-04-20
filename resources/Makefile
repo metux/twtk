@@ -10,8 +10,7 @@ pixmaps = \
     penguin2.png \
     button-abort.png \
     button-cross-20x20.png \
-    button-cross-80x80.png \
-    button-cross.png
+    button-cross-80x80.png
 
 all:
 
