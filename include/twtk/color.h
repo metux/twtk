@@ -36,5 +36,6 @@ struct __twtk_color
 #define TWTK_COLOR_GREY         ((twtk_color_t)TWTK_COLORVAL_GREY)
 #define TWTK_COLOR_YELLOW       ((twtk_color_t)TWTK_COLORVAL_YELLOW)
 #define TWTK_COLOR_BROWN        ((twtk_color_t)TWTK_COLORVAL_BROWN)
+#define TWTK_COLOR_TRANSPARENT  ((twtk_color_t){0})
 
 #endif /* __TWTK_TYPES_H_ */
