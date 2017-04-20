@@ -177,6 +177,7 @@ static void _create_btn(twtk_widget_t *parent, twtk_dim_t x, twtk_dim_t y, const
         twtk_rect_by_pos(x, y),
         id // using btn id as signal id
     );
+    twtk_widget_set_border_width(w, 25);
     twtk_widget_set_controller(w, receiver);
     twtk_widget_add_child_unref(parent, w, id);
 }
