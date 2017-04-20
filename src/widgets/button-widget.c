@@ -40,14 +40,17 @@ typedef struct
 
 static int _op_fini(twtk_widget_t *widget);
 static int _op_paint(twtk_widget_t *widget, cairo_t *cr);
-
 static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d);
+static int _op_set_float(twtk_widget_t *widget, const char* name, double value);
+static int _op_set_uint(twtk_widget_t *widget, const char* name, uint32_t value);
 
 static const twtk_widget_class_t _class_inf = {
     .magic        = MAGIC,
     .op_fini      = _op_fini,
     .op_event     = _op_event,
     .op_paint     = _op_paint,
+    .op_set_float = _op_set_float,
+    .op_set_uint  = _op_set_uint,
     .priv_size    = sizeof(_priv_t)
 };
 
@@ -73,7 +76,7 @@ static int _op_paint(twtk_widget_t *widget, cairo_t *cr)
     if (priv->down)
     {
         _twtk_ut_set_rgba (cr, FRAME_COLOR);
-        cairo_set_line_width (cr, FRAME_SIZE);
+        cairo_set_line_width (cr, priv->border_width);
         _twtk_ut_rect_to_vec (cr, widget->viewport.size);
         cairo_stroke (cr);
     }
@@ -140,6 +143,20 @@ static int _op_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_disp
     return 0;
 }
 
+static int _op_set_float(twtk_widget_t *widget, const char* name, double value)
+{
+    TWTK_WIDGET_SET_BEGIN
+    TWTK_WIDGET_SET_FLOAT_ATTR("border-width",  border_width);
+    TWTK_WIDGET_SET_END
+}
+
+static int _op_set_uint(twtk_widget_t *widget, const char* name, uint32_t value)
+{
+    TWTK_WIDGET_SET_BEGIN
+    TWTK_WIDGET_SET_INT_ATTR("border-width",    border_width);
+    TWTK_WIDGET_SET_END
+}
+
 twtk_widget_t *twtk_button_widget_create(const char* fn, twtk_rect_t rect, const char *signal)
 {
     cairo_surface_t *img = _twtk_ut_load_image_surface(fn);
@@ -154,6 +171,7 @@ twtk_widget_t *twtk_button_widget_create(const char* fn, twtk_rect_t rect, const
     _priv_t *priv = (_priv_t*)(widget->priv);
 
     priv->image = img;
+    priv->border_width = FRAME_SIZE;
     STRBUF_SET(priv->signal, signal);
 
     twtk_widget_set_viewport(
