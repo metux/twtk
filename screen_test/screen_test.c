@@ -195,9 +195,6 @@ static void _init_widgets()
     receiver = twtk_widget_alloc(&_receiver_class_inf);
     twtk_widget_set_name(receiver, "receiver");
 
-    // penguin photo
-    _create_image(root, 100,  25, "image-penguin1", "penguin1.png");
-
     // pengiuin comic
     _create_image(root,  10, 100, "image-penguin2", "penguin2.png");
 
