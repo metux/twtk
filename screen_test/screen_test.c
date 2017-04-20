@@ -199,7 +199,6 @@ static void _init_widgets()
     // pengiuin comic
     _create_image(root,  10, 100, "image-penguin2", "penguin2.png");
 
-    _create_debug(root);
     _create_position(root);
 
     _create_btn(root, 0,            0,            BTN_TOP_LEFT,     "button-cross-80x80.png");
