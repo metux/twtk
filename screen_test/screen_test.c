@@ -42,6 +42,28 @@ int stat_btn_top_right    = 0;
 int stat_btn_bottom_left  = 0;
 int stat_btn_bottom_right = 0;
 
+twtk_widget_t *btnstat = NULL;
+
+static void create_btnstat()
+{
+    if (btnstat) return;
+
+    btnstat = twtk_text_widget_create("", 600, 100, 300, 200);
+    twtk_widget_set_font_name(btnstat, "SansBold");
+    twtk_widget_set_font_size(btnstat, 32);
+    twtk_widget_set_font_color(btnstat, TWTK_COLOR_RED);
+    twtk_widget_set_border_color(btnstat, TWTK_COLOR_TRANSPARENT);
+    twtk_widget_set_border_width(btnstat, 0);
+    twtk_widget_set_background_color(btnstat, TWTK_COLOR_TRANSPARENT);
+    twtk_widget_add_child_unref(twtk_platform_get_root(), btnstat, "btnstat");
+}
+
+static int finished()
+{
+    return (stat_btn_top_left && stat_btn_top_right &&
+        stat_btn_bottom_left && stat_btn_bottom_right);
+}
+
 /** command receiver **/
 static int _recv_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_dispatch_t d)
 {
@@ -58,14 +80,30 @@ static int _recv_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_di
         else if (strcmp(event->action.signal, BTN_BOTTOM_RIGHT)==0)
             stat_btn_bottom_right = 1;
         else if (strcmp(event->action.signal, BTN_ABORT)==0)
-            exit(1);
+        {
+            if (finished()) {
+                printf("OK\n");
+                exit(0);
+            } else {
+                printf("FAILED\n");
+                exit(1);
+            }
+        }
         else
             printf("unknown action signal received: %s\n", event->action.signal);
     }
 
-    if (stat_btn_top_left && stat_btn_top_right &&
-        stat_btn_bottom_left && stat_btn_bottom_right)
-        exit(0);
+    static char buffer[4096];
+    snprintf(buffer, sizeof(buffer), "%s\n%s\n%s\n%s\n%s",
+        (stat_btn_top_left     ? "TOP LEFT"       : ""),
+        (stat_btn_top_right    ? "TOP RIGHT"      : ""),
+        (stat_btn_bottom_left  ? "BOTTOM LEFT"    : ""),
+        (stat_btn_bottom_right ? "BOTTOM RIGHT"   : ""),
+        (finished()            ? "== FINISHED ==" : "")
+    );
+
+    create_btnstat();
+    twtk_widget_set_text(btnstat, buffer);
 
     return 0;
 }
