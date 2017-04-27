@@ -1,7 +1,7 @@
 
 include ./config.mk
 
-SUBDIRS = src resources twtk_test screen_test pngview
+SUBDIRS = src resources twtk_test screen_test pngview colortest
 
 all:
 	@for d in $(SUBDIRS) ; do $(MAKE) -C $$d all ; done
