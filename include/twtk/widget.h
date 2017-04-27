@@ -65,6 +65,7 @@ typedef int (*twtk_widget_op_set_uint_t)(twtk_widget_t *widget, const char* name
 typedef int (*twtk_widget_op_set_float_t)(twtk_widget_t *widget, const char* name, double value);
 typedef int (*twtk_widget_op_set_color_t)(twtk_widget_t *widget, const char* name, twtk_color_t value);
 typedef int (*twtk_widget_op_insert_child_t)(twtk_widget_t *widget, twtk_widget_t* child);
+typedef int (*twtk_widget_op_remove_child_t)(twtk_widget_t *widget, twtk_widget_t* child);
 typedef int (*twtk_widget_op_invalidate_rect_t)(twtk_widget_t *widget, twtk_rect_t rect, cairo_matrix_t *child_matrix)
     __attribute__((nonnull(1)));
 
@@ -116,6 +117,13 @@ struct __twtk_widget_class
      * the function is only called if the child is a popup
      */
     twtk_widget_op_insert_child_t op_insert_child;
+
+    /**
+     * remove an (just removed) child from a frame
+     * it the vector is NULL, the engine will use the widget itself as frame
+     * the function is only called if the child is a popup
+     */
+    twtk_widget_op_remove_child_t op_remove_child;
 
     /**
      * report a region to be invalidated (repainted in next cycle)
@@ -330,6 +338,12 @@ int  twtk_widget_invalidate_rect(twtk_widget_t *widget, twtk_rect_t rect);
  * The child widget's refcount will be increased.
  */
 void twtk_widget_add_child(twtk_widget_t *parent, twtk_widget_t *child, const char* name);
+
+/**
+ * Remove child widget
+ * The child widget's refcount will be decreased.
+ */
+void twtk_widget_remove_child(twtk_widget_t *parent, twtk_widget_t *child);
 
 /**
  * prepare a context for rendering a widget into its frame

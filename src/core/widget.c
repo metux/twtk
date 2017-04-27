@@ -123,7 +123,7 @@ void twtk_widget_add_child(twtk_widget_t *parent, twtk_widget_t *child, const ch
 
     twtk_widget_set_parent(child, parent);
 
-    /* if the class doesnt have its own insert_child() method, just add
+    /* if the parent's class doesnt have its own insert_child() method, just add
        it into parent frame */
     if (parent->cls->op_insert_child)
         parent->cls->op_insert_child(parent, child);
@@ -132,6 +132,34 @@ void twtk_widget_add_child(twtk_widget_t *parent, twtk_widget_t *child, const ch
 
     twtk_widget_dirty(parent);
     twtk_widget_dirty(child);
+}
+
+void twtk_widget_remove_child(twtk_widget_t *parent, twtk_widget_t *child)
+{
+    assert(child);
+    assert(child->parent != NULL);
+    assert(child->frame != NULL);
+
+    if (parent == NULL)
+        parent = child->parent;
+
+    twtk_widget_ref(child);
+    twtk_widget_ref(parent);
+    twtk_widget_set_parent(child, NULL);
+
+    /* if the parent's class doesnt have its own insert_child() method, just add
+       it into parent frame */
+    if (parent->cls->op_remove_child)
+        parent->cls->op_remove_child(parent, child);
+    else
+        twtk_platform_map_widget(child, NULL);
+
+    twtk_widget_dirty(parent);
+    twtk_widget_dirty(child);
+    twtk_widget_unref(child);
+    twtk_widget_unref(parent);
+
+    twtk_platform_redraw();
 }
 
 void twtk_widget_add_child_unref(twtk_widget_t *parent, twtk_widget_t *child, const char *name)
