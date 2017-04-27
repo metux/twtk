@@ -16,5 +16,5 @@ include $(src_root)/mk/prog.mk
 
 install:
 	@mkdir -p $(DESTDIR)$(BINDIR)
-	@cp screen_test $(DESTDIR)$(BINDIR)
-	@chmod +x $(DESTDIR)$(BINDIR)/screen_test
+	@cp $(prog_name) $(DESTDIR)$(BINDIR)
+	@chmod +x $(DESTDIR)$(BINDIR)/$(prog_name)
