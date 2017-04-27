@@ -6,3 +6,4 @@ screen_test/screen_test
 twtk_test/twtk_test
 pngview/twtk-pngview
 colortest/twtk-colortest
+touchtest/twtk-touchtest
