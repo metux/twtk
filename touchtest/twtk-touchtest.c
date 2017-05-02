@@ -142,12 +142,18 @@ static void _init_btnpos()
 {
     twtk_vector_t ssz = twtk_widget_get_vsize(twtk_platform_get_root());
 
-    button_inf[ID_TOP_LEFT].rect     = twtk_rect_by_pos(0,            0);
-    button_inf[ID_TOP_RIGHT].rect    = twtk_rect_by_pos(ssz.x-BTN_SZ, 0);
-    button_inf[ID_BOTTOM_RIGHT].rect = twtk_rect_by_pos(ssz.x-BTN_SZ, ssz.y-BTN_SZ);
-    button_inf[ID_BOTTOM_LEFT].rect  = twtk_rect_by_pos(0,            ssz.y-BTN_SZ);
+    button_inf[ID_TOP_LEFT].rect     = twtk_rect_by_coords(0,                       0, BTN_SZ, BTN_SZ, 0);
+    button_inf[ID_TOP_RIGHT].rect    = twtk_rect_by_coords(ssz.x-BTN_SZ,            0, BTN_SZ, BTN_SZ, 0);
+    button_inf[ID_BOTTOM_RIGHT].rect = twtk_rect_by_coords(ssz.x-BTN_SZ, ssz.y-BTN_SZ, BTN_SZ, BTN_SZ, 0);
+    button_inf[ID_BOTTOM_LEFT].rect  = twtk_rect_by_coords(0,            ssz.y-BTN_SZ, BTN_SZ, BTN_SZ, 0);
 
-    button_inf[ID_ABORT].rect        = twtk_rect_by_pos((ssz.x - BTN_ABORT_SZ)/2, (ssz.y - BTN_ABORT_SZ)/2);
+    button_inf[ID_ABORT].rect        = twtk_rect_by_coords(
+        (ssz.x - BTN_ABORT_SZ)/2,
+        (ssz.y - BTN_ABORT_SZ)/2,
+        BTN_ABORT_SZ,
+        BTN_ABORT_SZ,
+        0
+    );
 }
 
 static void _init_widgets()
