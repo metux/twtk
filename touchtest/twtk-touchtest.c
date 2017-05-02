@@ -4,58 +4,69 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <twtk/util.h>
 #include <twtk/widget.h>
 #include <twtk/platform.h>
 #include <twtk/color.h>
 #include <twtk/events.h>
+#include <twtk/rect.h>
 #include <twtk/widgets/button.h>
 #include <twtk/widgets/position.h>
 
-#define NUM_BUTTONS	5
-#define WALK_BUTTONS	4
-
-#define BTN_SZ		80
-#define BTN_ABORT_SZ	160
-
-#define ID_TOP_LEFT	0
-#define ID_TOP_RIGHT	1
-#define ID_BOTTOM_RIGHT	2
-#define ID_BOTTOM_LEFT	3
-#define ID_ABORT	4
 
 typedef struct {
     const char    *name;
     const char    *img1;
     const char    *img2;
-    twtk_rect_t   rect;
+    twtk_vector_t size;
+    twtk_vector_t pos;
     twtk_widget_t *widget;
 } btninf_t;
 
-btninf_t button_inf[NUM_BUTTONS] = {
-    {
+enum {
+    ID_TOP_LEFT       = 0,
+    ID_TOP_RIGHT      = 1,
+    ID_BOTTOM_RIGHT   = 2,
+    ID_BOTTOM_LEFT    = 3,
+    WALK_BUTTONS      = 4,
+    ID_ABORT          = 4,
+};
+
+enum {
+    BTN_CORNER_SZ     = 80,
+    BTN_ABORT_SZ      = 160,
+};
+
+btninf_t button_inf[] = {
+    [ID_TOP_LEFT] = {
         .name = "btn-top-left",
         .img1 = "button-1-red-80x80.png",
-        .img2 = "button-1-green-80x80.png"
+        .img2 = "button-1-green-80x80.png",
+        .size = TWTK_VECTOR(BTN_CORNER_SZ, BTN_CORNER_SZ),
     },
-    {
+    [ID_TOP_RIGHT] = {
         .name = "btn-top-right",
         .img1 = "button-2-red-80x80.png",
-        .img2 = "button-2-green-80x80.png"
+        .img2 = "button-2-green-80x80.png",
+        .size = TWTK_VECTOR(BTN_CORNER_SZ, BTN_CORNER_SZ),
     },
-    {
+    [ID_BOTTOM_RIGHT] = {
         .name = "btn-bottom-right",
         .img1 = "button-3-red-80x80.png",
-        .img2 = "button-3-green-80x80.png"
+        .img2 = "button-3-green-80x80.png",
+        .size = TWTK_VECTOR(BTN_CORNER_SZ, BTN_CORNER_SZ),
     },
-    {
+    [ID_BOTTOM_LEFT] = {
         .name = "btn-bottom-left",
         .img1 = "button-4-red-80x80.png",
-        .img2 = "button-4-green-80x80.png"
+        .img2 = "button-4-green-80x80.png",
+        .size = TWTK_VECTOR(BTN_CORNER_SZ, BTN_CORNER_SZ),
     },
-    {
+    [ID_ABORT] = {
         .name = "btn-abort",
         .img1 = "button-abort.png",
-        .img2 = "button-okay.png"
+        .img2 = "button-okay.png",
+        .size = TWTK_VECTOR(BTN_ABORT_SZ, BTN_ABORT_SZ),
     }
 };
 
@@ -72,7 +83,7 @@ static twtk_widget_t* make_button(int idx, char dn)
 
     twtk_widget_t *w = twtk_button_widget_create(
         buffer,
-        button_inf[idx].rect,
+        twtk_rect_by_vectors(button_inf[idx].pos, button_inf[idx].size, 0),
         button_inf[idx].name // using btn name as signal id
     );
 
@@ -108,7 +119,7 @@ static int _recv_event(twtk_widget_t *widget, twtk_event_t *event, twtk_event_di
 
     if (event->type == TWTK_EVENT_ACTION) {
         int x;
-        for (x=0; x<NUM_BUTTONS; x++) {
+        for (x=0; x<TWTK_ARRAY_SIZE(button_inf); x++) {
             if (strcmp(event->action.signal, button_inf[x].name)==0) {
                 if (x == btn_count) {
                     _switch_btn(x);
@@ -142,17 +153,14 @@ static void _init_btnpos()
 {
     twtk_vector_t ssz = twtk_widget_get_vsize(twtk_platform_get_root());
 
-    button_inf[ID_TOP_LEFT].rect     = twtk_rect_by_coords(0,                       0, BTN_SZ, BTN_SZ, 0);
-    button_inf[ID_TOP_RIGHT].rect    = twtk_rect_by_coords(ssz.x-BTN_SZ,            0, BTN_SZ, BTN_SZ, 0);
-    button_inf[ID_BOTTOM_RIGHT].rect = twtk_rect_by_coords(ssz.x-BTN_SZ, ssz.y-BTN_SZ, BTN_SZ, BTN_SZ, 0);
-    button_inf[ID_BOTTOM_LEFT].rect  = twtk_rect_by_coords(0,            ssz.y-BTN_SZ, BTN_SZ, BTN_SZ, 0);
+    button_inf[ID_TOP_LEFT].pos     = TWTK_VECTOR(0, 0);
+    button_inf[ID_TOP_RIGHT].pos    = TWTK_VECTOR(ssz.x-BTN_CORNER_SZ, 0);
+    button_inf[ID_BOTTOM_RIGHT].pos = TWTK_VECTOR(ssz.x-BTN_CORNER_SZ, ssz.y-BTN_CORNER_SZ);
+    button_inf[ID_BOTTOM_LEFT].pos  = TWTK_VECTOR(0, ssz.y-BTN_CORNER_SZ);
 
-    button_inf[ID_ABORT].rect        = twtk_rect_by_coords(
+    button_inf[ID_ABORT].pos        = TWTK_VECTOR(
         (ssz.x - BTN_ABORT_SZ)/2,
-        (ssz.y - BTN_ABORT_SZ)/2,
-        BTN_ABORT_SZ,
-        BTN_ABORT_SZ,
-        0
+        (ssz.y - BTN_ABORT_SZ)/2
     );
 }
 
@@ -175,7 +183,7 @@ static void _init_widgets()
     );
 
     int x;
-    for (x=0; x<NUM_BUTTONS; x++)
+    for (x=0; x<TWTK_ARRAY_SIZE(button_inf); x++)
         _create_btn(x);
 }
 
