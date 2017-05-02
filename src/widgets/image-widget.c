@@ -65,8 +65,7 @@ static int _op_paint(twtk_widget_t *widget, cairo_t *cr)
     assert (cr);
     assert (priv->image);
 
-    cairo_set_source_surface (cr, priv->image, 0, 0);
-    cairo_paint (cr);
+    _twtk_ut_paint_surface(cr, priv->image, TWTK_VECTOR_ZERO);
 
     /* paint border */
     if (priv->border_color.alpha)

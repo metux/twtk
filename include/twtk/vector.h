@@ -12,6 +12,7 @@ struct __twtk_vector
 };
 
 #define TWTK_VECTOR(_x,_y)	((twtk_vector_t){ .x = _x, .y = _y })
+#define TWTK_VECTOR_ZERO	((twtk_vector_t){ .x =  0, .y =  0 })
 
 static inline twtk_vector_t twtk_vector_mul(twtk_vector_t vec, twtk_dim_t factor)
 {

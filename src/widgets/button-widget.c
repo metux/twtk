@@ -69,10 +69,8 @@ static int _op_paint(twtk_widget_t *widget, cairo_t *cr)
     TWTK_WIDGET_OP_BEGIN
 
     assert (cr);
-    assert (priv->image);
 
-    cairo_set_source_surface (cr, priv->image, 0, 0);
-    cairo_paint (cr);
+    _twtk_ut_paint_surface(cr, priv->image, TWTK_VECTOR_ZERO);
 
     /* paint border */
     if (priv->down)
@@ -169,12 +167,6 @@ static int _op_set_uint(twtk_widget_t *widget, const char* name, uint32_t value)
 twtk_widget_t *twtk_button_widget_create(const char* fn, twtk_rect_t rect, const char *signal)
 {
     cairo_surface_t *img = _twtk_ut_load_image_surface(fn);
-
-    if (img == NULL)
-    {
-        _DEBUG("failed to load image: \"%s\"", fn);
-        return NULL;
-    }
 
     twtk_widget_t *widget = twtk_widget_alloc(&_class_inf);
     _priv_t *priv = (_priv_t*)(widget->priv);
